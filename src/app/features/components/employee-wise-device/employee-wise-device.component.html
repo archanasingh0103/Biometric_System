@@ -1,0 +1,246 @@
+<div class="page-container">
+  <div class="data-card">
+    <!-- HEADER -->
+    <div class="card-header-bar">
+      <div class="header-row">
+        <div class="header-title-group">
+          <div class="header-icon-wrap">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+
+          <h5 class="header-title">Employee Wise Device</h5>
+        </div>
+
+        <span class="count-badge">
+          {{ startValue }} - {{ lastValue }} of {{ pagesize.count }} devices
+        </span>
+
+        <pagination-controls
+          id="empId"
+          (pageChange)="onTablePageChange($event)"
+        >
+        </pagination-controls>
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+      <div class="filter-left">
+        <div class="filter-group">
+          <label>Employee</label>
+
+          <select
+            class="select-styled"
+            [(ngModel)]="selectedEmployeeCode"
+            (change)="onSelectEmployee($event)"
+          >
+            <option value="">Select Employee</option>
+
+            <option
+              *ngFor="let emp of employeewithDevice"
+              [value]="emp.employeeCode"
+            >
+              {{ emp.employeeCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Status</label>
+
+          <select
+            class="select-styled"
+            [(ngModel)]="selectedFilter"
+            (change)="onFilterChange($event)"
+          >
+            <option *ngFor="let item of deviceOptions" [value]="item.value">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-right">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search devices..."
+          [(ngModel)]="searchText"
+          (input)="onSearch($event)"
+        />
+
+        <select class="select-styled" (change)="onPageSizeChange($event)">
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body-area">
+      <div *ngIf="isLoading">Loading...</div>
+
+      <div
+        class="table-responsive"
+        *ngIf="!isLoading && filteredDeviceList.length"
+      >
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th *ngFor="let col of tableHeading">
+                {{ col.title }}
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="
+                let data of filteredDeviceList
+                  | paginate
+                    : {
+                        id: 'empId',
+                        itemsPerPage: pagesize.limit,
+                        currentPage: pagesize.offset,
+                        totalItems: pagesize.count,
+                      };
+                let i = index
+              "
+            >
+              <td>
+                {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
+              </td>
+
+              <td>{{ data.DeviceId }}</td>
+
+              <td>{{ data.DeviceName }}</td>
+
+              <td>{{ data.SerialNumber || "-" }}</td>
+
+              <!-- <td>
+                {{ data.status ? "Linked" : "Unlinked" }}
+              </td> -->
+              <td>
+                {{ data.Link === "1" ? "Linked" : "Unlinked" }}
+              </td>
+
+              <!-- <td>
+                <button
+                  (click)="handleAction(data)"
+                  [class]="data.status ? 'btn-action-dlink' : 'btn-action-link'"
+                >
+                  {{ data.status ? "DLink" : "Link" }}
+                </button>
+              </td> -->
+              <td>
+                <button
+                  (click)="handleAction(data)"
+                  [class]="
+                    data.Link === '1' ? 'btn-action-dlink' : 'btn-action-link'
+                  "
+                >
+                  {{ data.Link === "1" ? "DLink" : "Link" }}
+                </button>
+              </td>
+
+              <!-- <td>
+                {{ data.expiryDate || "-" }}
+              </td> -->
+              <td>
+                {{
+                  data.ValidToDate && data.ValidToDate !== "{}"
+                    ? (data.ValidToDate | date: "dd-MM-yyyy hh:mm a")
+                    : "-"
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="!isLoading && !filteredDeviceList.length">
+        No devices found
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="deviceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Assign Device</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedRowData">
+        <!-- FIXED Employee Code -->
+        <div class="mb-3">
+          <label>Employee Code</label>
+          <input class="form-control" [value]="selectedEmployeeCode" readonly />
+        </div>
+
+        <!-- FIXED Device Name -->
+        <div class="mb-3">
+          <label>Device Name</label>
+          <input
+            class="form-control"
+            [value]="selectedRowData?.DeviceName || '-'"
+            readonly
+          />
+        </div>
+
+        <!-- FIXED Serial -->
+        <div class="mb-3">
+          <label>Serial Number</label>
+          <input
+            class="form-control"
+            [(ngModel)]="assignForm.serialNumbers"
+            readonly
+          />
+        </div>
+
+        <div class="mb-3">
+          <label>Expiry</label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            [(ngModel)]="assignForm.ValidToDate"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-primary"
+          [disabled]="!assignForm.ValidToDate || !assignForm.serialNumbers"
+          (click)="submitAssignDevice()"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM POPUP -->
+<div class="custom-popup-backdrop" *ngIf="showConfirmPopup">
+  <div class="custom-popup-box">
+    <h4>Confirm Link</h4>
+
+    <p>Are you sure you want to link this device?</p>
+
+    <div class="popup-btn-group">
+      <button class="btn btn-secondary" (click)="closePopup()">Cancel</button>
+
+      <button class="btn btn-primary" (click)="confirmPopupAction()">
+        Yes
+      </button>
+    </div>
+  </div>
+</div>

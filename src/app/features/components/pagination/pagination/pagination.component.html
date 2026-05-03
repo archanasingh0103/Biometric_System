@@ -1,0 +1,253 @@
+<div class="page-container">
+  <div class="data-card">
+    <!-- CARD HEADER -->
+    <div class="card-header-bar">
+      <div class="header-row">
+        <div class="header-title-group">
+          <div class="header-icon-wrap">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <div>
+            <h5 class="header-title">Employee Wise Device</h5>
+          </div>
+        </div>
+
+        <div class="span">
+          <span class="count-badge">
+            {{ filteredDeviceList.length ? startValue : 0 }} -
+            {{ filteredDeviceList.length ? lastValue : 0 }} of
+            {{ filteredDeviceList.length }} devices
+          </span>
+        </div>
+        <div class="header-pagination">
+          <pagination-controls
+            id="empId"
+            (pageChange)="onTablePageChange($event)"
+          ></pagination-controls>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="filter-left">
+        <!-- Employee Dropdown -->
+        <div class="filter-group">
+          <label class="filter-label"><i class="fa-solid fa-user me-1"></i> Employee</label>
+          <select class="select-styled" [(ngModel)]="selectedEmployeeCode" (change)="onSelectEmployee($event)">
+            <option value="">Select Employee</option>
+            <option *ngFor="let emp of employeewithDevice" [value]="emp.employeeCode">
+              <!-- {{ emp.employeeName }} ({{ emp.employeeCode }}) -->
+                {{emp.employeeCode }}
+            </option>
+          </select>
+        </div>
+
+        <!-- <div class="filter-group">
+          <label class="filter-label">
+            <i class="fa-solid fa-user me-1"></i> Employee
+          </label>
+          <ngx-select-dropdown
+            [config]="employeeDropdownConfig"
+            [options]="employeewithDevice"
+            [(ngModel)]="selectedEmployee"
+            (change)="onSelectEmployee($event)"
+          >
+          </ngx-select-dropdown>
+        </div> -->
+
+        <!-- Link Filter -->
+        <div class="filter-group">
+          <label class="filter-label"
+            ><i class="fa-solid fa-filter me-1"></i> Status</label
+          >
+          <select
+            class="select-styled"
+            [(ngModel)]="selectedFilter"
+            (change)="onFilterChange($event)"
+          >
+            <option *ngFor="let item of deviceOptions" [value]="item.value">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-right">
+        <!-- Search -->
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search devices..."
+            [(ngModel)]="searchText"
+            (input)="onSearch($event)"
+          />
+        </div>
+
+        <!-- Page size -->
+        <div class="filter-group">
+          <label class="filter-label">Items:</label>
+          <select
+            class="select-styled select-sm"
+            (change)="onPageSizeChange($event)"
+          >
+            <option *ngFor="let size of [25, 50, 100]" [value]="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body-area">
+      <!-- LOADER -->
+      <div class="loader-wrap" *ngIf="isLoading">
+        <div class="loader-spinner"></div>
+        <span>Loading data...</span>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-responsive" *ngIf="!isLoading">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th *ngFor="let col of tableHeading">{{ col.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let data of filteredDeviceList
+                  | paginate
+                    : {
+                        id: 'empId',
+                        itemsPerPage: pagesize.limit,
+                        currentPage: pagesize.offset,
+                        totalItems: pagesize.count,
+                      };
+                let i = index
+              "
+            >
+              <td>
+                <span class="sno-badge">{{
+                  (pagesize.offset - 1) * pagesize.limit + i + 1
+                }}</span>
+              </td>
+              <td>
+                <span class="mono-text">{{ data.deviceId }}</span>
+              </td>
+              <td class="fw-medium">{{ data.deviceFName }}</td>
+              <td>
+                <span
+                  [class.badge-link]="data.status"
+                  [class.badge-dlink]="!data.status"
+                >
+                  <i
+                    class="fa-solid"
+                    [class.fa-check]="data.status"
+                    [class.fa-xmark]="!data.status"
+                  ></i>
+                  {{ data.status ? "Linked" : "Unlinked" }}
+                </span>
+              </td>
+              <td>
+                <button
+                  (click)="handleAction(data)"
+                  [class]="data.status ? 'btn-action-dlink' : 'btn-action-link'"
+                >
+                  <i
+                    class="fa-solid"
+                    [class.fa-link-slash]="data.status"
+                    [class.fa-link]="!data.status"
+                  ></i>
+                  {{ data.status ? "DLink" : "Link" }}
+                </button>
+              </td>
+              <td class="expiry-cell">
+                <span *ngIf="data.expiry" class="expiry-text">
+                  <i class="fa-regular fa-clock me-1"></i>{{ data.expiry }}
+                </span>
+                <span *ngIf="!data.expiry" class="text-muted-sm">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- NO DATA -->
+      <div class="no-data-msg" *ngIf="!isLoading && !filteredDeviceList.length">
+        <div class="no-data-icon"><i class="fa-solid fa-inbox"></i></div>
+        {{
+          selectedEmployeeCode
+            ? "No devices found for this employee"
+            : "Select an employee to view devices"
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGN DEVICE MODAL -->
+<div class="modal fade" id="deviceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header modern-modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon"><i class="fa-solid fa-link"></i></div>
+          <h5 class="modal-title-text">Assign Device</h5>
+        </div>
+        <button class="modal-close-btn" data-bs-dismiss="modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body modern-modal-body" *ngIf="selectedRowData">
+        <div class="modal-field">
+          <label class="modal-field-label">Employee Code</label>
+          <input
+            class="modal-field-input"
+            [value]="selectedEmployeeCode"
+            readonly
+          />
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-field-label">Device ID</label>
+          <input
+            class="modal-field-input"
+            [(ngModel)]="assignForm.deviceId"
+            readonly
+          />
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-field-label">Expiry Date & Time</label>
+          <input
+            type="datetime-local"
+            class="modal-field-input"
+            [(ngModel)]="assignForm.expiryDate"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer modern-modal-footer">
+        <button class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+        <button
+          class="btn-modal-submit"
+          (click)="submitAssignDevice()"
+          [disabled]="isLoading || !assignForm.expiryDate"
+        >
+          <span
+            *ngIf="isLoading"
+            class="spinner-border spinner-border-sm me-1"
+          ></span>
+          <i class="fa-solid fa-check me-1" *ngIf="!isLoading"></i>
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
