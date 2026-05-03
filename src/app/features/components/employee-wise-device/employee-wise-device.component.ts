@@ -119,17 +119,25 @@ export class EmployeeWiseDeviceComponent {
           );
         }
 
-        list = list.map((x: any) => {
-          return {
-            ...x,
-            ValidToDate:
-              x.ValidToDate &&
-              typeof x.ValidToDate === 'object' &&
-              Object.keys(x.ValidToDate).length > 0
-                ? x.ValidToDate
-                : null,
-          };
-        });
+list = list.map((x: any) => {
+  let value = x.ValidToDate;
+
+  if (!value || (typeof value === 'object' && Object.keys(value).length === 0)) {
+    return { ...x, ValidToDate: null };
+  }
+
+  let date = new Date(value + 'Z'); 
+  // 🔥 force UTC interpretation
+
+  if (isNaN(date.getTime())) {
+    return { ...x, ValidToDate: null };
+  }
+
+  return {
+    ...x,
+    ValidToDate: date
+  };
+});
 
         this.filteredDeviceList = list;
         this.pagesize.count = list[0]?.TotalCount || list.length;
@@ -194,12 +202,20 @@ export class EmployeeWiseDeviceComponent {
   confirmPopupAction() {
     this.showConfirmPopup = false;
 
+    const local = this.assignForm.ValidToDate;
+
+    let utcDate = null;
+
+    if (local) {
+      utcDate = new Date(local).toISOString(); // IST → UTC conversion happens here
+    }
+
     const payload = {
       employeeId: this.assignForm.employeeId,
       employeeCode: this.assignForm.employeeCode,
       deviceId: this.assignForm.deviceId,
       serialNumber: this.assignForm.serialNumbers,
-      validToDate: this.assignForm.ValidToDate,
+      validToDate: utcDate,
     };
 
     this.commonService.assignEmployeeDevice(payload).subscribe(() => {
@@ -211,7 +227,6 @@ export class EmployeeWiseDeviceComponent {
       modal?.hide();
     });
   }
-
   get startValue(): number {
     if (this.pagesize.count === 0) return 0;
     return (this.pagesize.offset - 1) * this.pagesize.limit + 1;

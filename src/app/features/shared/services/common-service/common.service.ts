@@ -31,7 +31,6 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-
   // Employee Wise Device GET
   getEmployeeWiseDevice(
     empCode: string,
@@ -51,7 +50,7 @@ export class CommmonService {
       .get(url)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
-// Get Device Wise Employee
+  // Get Device Wise Employee
   getDeviceWiseEmloyee(
     deviceId: string,
     page: number,
@@ -71,9 +70,6 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-
-
-
   //Post API
   updateEmployeeDeviceAccess(payload: any): Observable<any> {
     const url = API_CONSTANT.accessEmployeeDevice;
@@ -90,8 +86,6 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-
-
   // Employee Dropdown
   employeeDropdown(): Observable<any> {
     const url = API_CONSTANT.employeeDropdown;
@@ -107,8 +101,6 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-
-
   // assign employee with device
   assignEmployeeDevice(payload: any): Observable<any> {
     const url = API_CONSTANT.assignEmployeeDevice;
@@ -119,14 +111,21 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
   // Remove Device
-  removeEmployeeDevice(payload: {
-    employeeCode: string;
-    deviceId: number;
-    serialNumber: string;
-  }): Observable<any> {
+  // removeEmployeeDevice(payload: {
+  //   employeeCode: string;
+  //   deviceId: number;
+  //   serialNumber: string;
+  // }): Observable<any> {
+  //   const url = API_CONSTANT.removeEmployeeDevice;
+  //   return this.apiService
+  //     .post(payload, url)
+  //     .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  // }
+
+  removeEmployeeDevice(payload: any): Observable<any> {
     const url = API_CONSTANT.removeEmployeeDevice;
     return this.apiService
-      .post(payload, url)
+      .post(url, payload)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 }
