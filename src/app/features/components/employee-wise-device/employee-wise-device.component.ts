@@ -12,7 +12,7 @@ declare var bootstrap: any;
   styleUrl: './employee-wise-device.component.css',
 })
 export class EmployeeWiseDeviceComponent {
-   employeewithDevice: any[] = [];
+  employeewithDevice: any[] = [];
   filteredDeviceList: any[] = [];
 
   selectedEmployeeCode = '';
@@ -72,7 +72,7 @@ export class EmployeeWiseDeviceComponent {
   onSelectEmployee(event: any) {
     const code = event.target.value;
     const emp = this.employeewithDevice.find(
-      (x: any) => x.employeeCode === code
+      (x: any) => x.employeeCode === code,
     );
 
     this.selectedEmployeeCode = code;
@@ -94,7 +94,7 @@ export class EmployeeWiseDeviceComponent {
         this.selectedEmployeeCode,
         this.searchText,
         this.pagesize.offset,
-        this.pagesize.limit
+        this.pagesize.limit,
       )
       .subscribe((res: any) => {
         this.isLoading = false;
@@ -104,7 +104,7 @@ export class EmployeeWiseDeviceComponent {
         // status filter
         if (this.selectedFilter !== '') {
           list = list.filter(
-            (x: any) => String(x.Link) === this.selectedFilter
+            (x: any) => String(x.Link) === this.selectedFilter,
           );
         }
 
@@ -115,9 +115,21 @@ export class EmployeeWiseDeviceComponent {
           list = list.filter(
             (x: any) =>
               x.DeviceName?.toLowerCase().includes(txt) ||
-              x.SerialNumber?.toLowerCase().includes(txt)
+              x.SerialNumber?.toLowerCase().includes(txt),
           );
         }
+
+        list = list.map((x: any) => {
+          return {
+            ...x,
+            ValidToDate:
+              x.ValidToDate &&
+              typeof x.ValidToDate === 'object' &&
+              Object.keys(x.ValidToDate).length > 0
+                ? x.ValidToDate
+                : null,
+          };
+        });
 
         this.filteredDeviceList = list;
         this.pagesize.count = list[0]?.TotalCount || list.length;
@@ -155,9 +167,7 @@ export class EmployeeWiseDeviceComponent {
       this.assignForm.serialNumbers = data.SerialNumber || '';
       this.assignForm.ValidToDate = '';
 
-      new bootstrap.Modal(
-        document.getElementById('deviceModal')
-      ).show();
+      new bootstrap.Modal(document.getElementById('deviceModal')).show();
     } else {
       // DLINK
       const payload = {
@@ -196,7 +206,7 @@ export class EmployeeWiseDeviceComponent {
       this.loadDevices();
 
       const modal = bootstrap.Modal.getInstance(
-        document.getElementById('deviceModal')
+        document.getElementById('deviceModal'),
       );
       modal?.hide();
     });
@@ -210,7 +220,7 @@ export class EmployeeWiseDeviceComponent {
   get lastValue(): number {
     return Math.min(
       this.pagesize.offset * this.pagesize.limit,
-      this.pagesize.count
+      this.pagesize.count,
     );
   }
 }
