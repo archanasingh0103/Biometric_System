@@ -8,6 +8,7 @@ import {
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+     private toastr: ToastrService 
   ) {}
 
   ngOnInit() {
@@ -62,13 +64,17 @@ export class LoginComponent {
 
         localStorage.setItem('userData', JSON.stringify(userData));
 
-        alert('Login Successful ✅');
+        // alert('Login Successful ');
+        // TOAST SUCCESS (REPLACE ALERT)
+        this.toastr.success('Login Successful');
 
         this.router.navigate(['/dashboard']);
       },
       error: () => {
         this.loading = false;
         this.errorMessage = "Invalid credentials ❌";
+        //  TOAST ERROR
+        this.toastr.error('Invalid email or password', 'Login Failed');
       }
     });
   }

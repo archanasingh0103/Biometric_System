@@ -5,9 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-
-  private apiUrl =
-    'http://103.89.44.59:9094/api/Auth/login';
+  private apiUrl = 'http://103.89.44.59:9094/api/Auth/login';
 
   constructor(private http: HttpClient) {}
 
@@ -28,6 +26,6 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token'); 
+    localStorage.removeItem('token');
   }
 }

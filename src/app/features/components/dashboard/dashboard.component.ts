@@ -8,6 +8,7 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,9 +17,10 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
- constructor(
+  constructor(
     public router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+      private toastr: ToastrService
   ) {}
 
   //  Language
@@ -75,7 +77,7 @@ export class DashboardComponent {
 
   //  Font Size
   fontSize: number = 16;
-
+  
   applyFontSize() {
     document.documentElement.style.fontSize = this.fontSize + 'px';
     localStorage.setItem('fontSize', this.fontSize.toString());
@@ -86,7 +88,6 @@ export class DashboardComponent {
   userName: string = '';
 
   ngOnInit() {
-
     //  load theme
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -119,7 +120,7 @@ export class DashboardComponent {
     this.isLoggedIn = false;
     this.userName = '';
 
-    alert('Logout Successful ✅');
+    this.toastr.success('Logout Successful',);
 
     this.router.navigate(['/login']);
   }
