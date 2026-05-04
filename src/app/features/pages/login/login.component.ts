@@ -16,7 +16,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-
   loginForm!: FormGroup;
   loading = false;
   errorMessage = '';
@@ -29,62 +28,48 @@ export class LoginComponent {
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
 
   login() {
-
-    console.log("Button clicked");
-
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
-      console.log("Form Invalid");
       return;
     }
 
     this.loading = true;
+    this.errorMessage = '';
 
     const payload = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
     };
 
-    console.log(payload);
-
     this.authService.login(payload).subscribe({
       next: (res: any) => {
-        localStorage.setItem('token', res.token);
+        this.loading = false;
+
+        //  save token
+        this.authService.saveToken(res.token);
+
+        //  store user data
+        const userData = {
+          email: payload.email,
+          ...res
+        };
+
+        localStorage.setItem('userData', JSON.stringify(userData));
+
+        alert('Login Successful ✅');
+
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
+      error: () => {
         this.loading = false;
-        this.errorMessage = "Invalid credentials";
+        this.errorMessage = "Invalid credentials ❌";
       }
     });
   }
-
-
-//   login() {
-//   if (this.loginForm.invalid) return;
-
-//   const payload = {
-//     loginName: this.loginForm.value.loginName.trim(),
-//     password: this.loginForm.value.password.trim()
-//   };
-
-//   console.log(payload);
-
-//   this.authService.login(payload).subscribe({
-//     next: (res:any) => {
-//       localStorage.setItem('token', res.token);
-//       this.router.navigate(['/dashboard']);
-//     },
-//     error: (err) => {
-//       console.log(err);
-//       this.errorMessage = err?.error?.message || 'Invalid credentials ❌';
-//     }
-//   });
-// }
 }

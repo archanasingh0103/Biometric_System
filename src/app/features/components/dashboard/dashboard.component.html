@@ -1,14 +1,13 @@
 <div class="app-shell" [class.dark-theme-active]="isDarkMode">
 
-  <!-- TOP NAVBAR -->
+  <!-- NAVBAR -->
   <nav class="navbar header">
+
     <div class="navbar-left">
-      <!-- Mobile menu toggle -->
       <button class="mobile-menu-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
         <i class="fa-solid fa-bars"></i>
       </button>
 
-      <!-- Brand -->
       <div class="nav-brand">
         <div class="nav-brand-icon">
           <i class="fa-solid fa-building-shield"></i>
@@ -18,72 +17,72 @@
     </div>
 
     <div class="navbar-right">
-      <!-- Language -->
+
+      <!-- LANGUAGE -->
       <div class="dropdown">
-        <button class="nav-control-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        <button class="nav-control-btn dropdown-toggle" data-bs-toggle="dropdown">
           <i class="fa-solid fa-globe"></i>
           <span class="d-none d-sm-inline">{{ selectedLanguage }}</span>
         </button>
+
         <ul class="dropdown-menu dropdown-menu-end nav-dropdown">
-          <li><a class="dropdown-item" (click)="changeLanguage('en')">
-            <i class="fa-solid fa-circle-check me-2 text-primary" *ngIf="currentLang === 'en'"></i>
-            <i class="fa-regular fa-circle me-2 text-muted" *ngIf="currentLang !== 'en'"></i>
-            English
-          </a></li>
-          <li><a class="dropdown-item" (click)="changeLanguage('hi')">
-            <i class="fa-solid fa-circle-check me-2 text-primary" *ngIf="currentLang === 'hi'"></i>
-            <i class="fa-regular fa-circle me-2 text-muted" *ngIf="currentLang !== 'hi'"></i>
-            हिंदी
-          </a></li>
+          <li>
+            <a class="dropdown-item" (click)="changeLanguage('en')">English</a>
+          </li>
+          <li>
+            <a class="dropdown-item" (click)="changeLanguage('hi')">हिंदी</a>
+          </li>
         </ul>
       </div>
 
-      <!-- Theme toggle -->
-      <button class="nav-control-btn" (click)="toggleTheme()" [title]="isDarkMode ? 'Switch to light' : 'Switch to dark'">
+      <!-- THEME -->
+      <button class="nav-control-btn" (click)="toggleTheme()">
         <i class="fa-solid" [class.fa-sun]="isDarkMode" [class.fa-moon]="!isDarkMode"></i>
       </button>
 
-      <!-- Font size -->
-      <!-- <div class="font-size-controls d-none d-md-flex">
-        <button class="font-btn" (click)="decreaseFont()" title="Decrease font">A-</button>
-        <button class="font-btn font-btn-reset" (click)="resetFont()" title="Reset font">A</button>
-        <button class="font-btn" (click)="increaseFont()" title="Increase font">A+</button>
-      </div> -->
-
-      <!-- Profile -->
+      <!-- PROFILE -->
       <div class="dropdown">
         <button class="nav-profile-btn dropdown-toggle" data-bs-toggle="dropdown">
-          <span class="profile-avatar"><i class="fa-solid fa-user"></i></span>
-          <span class="profile-label d-none d-sm-inline">{{ isLoggedIn ? 'Admin' : '' }}</span>
+          <span class="profile-avatar">
+            <i class="fa-solid fa-user"></i>
+          </span>
+
+          <!--  USER EMAIL -->
+          <span class="profile-label d-none d-sm-inline">
+            {{ isLoggedIn ? userName : '' }}
+          </span>
         </button>
+
         <ul class="dropdown-menu dropdown-menu-end nav-dropdown">
+
+          <!-- LOGIN -->
           <li *ngIf="!isLoggedIn">
-            <a class="dropdown-item" (click)="login()">
-              <i class="fa-solid fa-right-to-bracket me-2 text-primary"></i> Login
+            <a class="dropdown-item" (click)="router.navigate(['/login'])">
+              <i class="fa-solid fa-right-to-bracket me-2 text-primary"></i>
+              Login
             </a>
           </li>
+
+          <!-- LOGOUT -->
           <li *ngIf="isLoggedIn">
             <a class="dropdown-item text-danger" (click)="logout()">
-              <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+              <i class="fa-solid fa-right-from-bracket me-2"></i>
+              Logout
             </a>
           </li>
+
         </ul>
       </div>
+
     </div>
   </nav>
 
-  <!-- PAGE BODY -->
+  <!-- BODY -->
   <div class="page-body">
 
-    <!-- DESKTOP SIDEBAR -->
+    <!-- SIDEBAR -->
     <aside class="sidebar d-none d-lg-flex">
       <div class="sidebar-inner">
-        <!-- <p class="sidebar-section-label">Navigation</p> -->
-
-        <!-- <a routerLink="/dashboard/home" routerLinkActive="active-link" class="nav-link">
-          <i class="fa-solid fa-house nav-icon"></i>
-          <span>{{ translations[currentLang].home }}</span>
-        </a> -->
 
         <a routerLink="/dashboard/device-list" routerLinkActive="active-link" class="nav-link">
           <i class="fa-solid fa-hard-drive nav-icon"></i>
@@ -104,38 +103,11 @@
           <i class="fa-solid fa-users nav-icon"></i>
           <span>{{ translations[currentLang].empList }}</span>
         </a>
+
       </div>
     </aside>
 
-    <!-- MOBILE SIDEBAR (Offcanvas) -->
-    <div class="offcanvas offcanvas-start mobile-sidebar" tabindex="-1" id="mobileSidebar">
-      <div class="offcanvas-header mobile-sidebar-header">
-        <div class="nav-brand">
-          <div class="nav-brand-icon small"><i class="fa-solid fa-building-shield"></i></div>
-          <span class="nav-brand-name">Smart Office</span>
-        </div>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-      </div>
-      <div class="offcanvas-body">
-        <!-- <a routerLink="/dashboard/home" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-          <i class="fa-solid fa-house nav-icon"></i> Home
-        </a> -->
-        <a routerLink="/dashboard/device-list" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-          <i class="fa-solid fa-hard-drive nav-icon"></i> Device List
-        </a>
-        <a routerLink="/dashboard/emp-with-device" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-          <i class="fa-solid fa-id-card nav-icon"></i> Employee Wise Device
-        </a>
-        <a routerLink="/dashboard/device-with-emp" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-          <i class="fa-solid fa-building-user nav-icon"></i> Device Wise Employee
-        </a>
-        <a routerLink="/dashboard/emp-list" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-          <i class="fa-solid fa-users nav-icon"></i> Employee List
-        </a>
-      </div>
-    </div>
-
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>

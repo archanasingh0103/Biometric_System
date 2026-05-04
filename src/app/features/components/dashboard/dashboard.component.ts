@@ -1,136 +1,126 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+  RouterModule,
+  RouterOutlet,
+} from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterOutlet,RouterLink, RouterModule,CommonModule  ],
+  imports: [RouterOutlet, RouterLink, RouterModule, CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
+ constructor(
+    public router: Router,
+    private authService: AuthService
+  ) {}
 
-selectedLanguage: string = 'English';
+  //  Language
+  selectedLanguage: string = 'English';
 
-translations: any = { 
-  en: {
-    home:'Home',
-    deviceList: 'Device List',
-    empWise: 'Employee Wise Device',
-    deviceWise: 'Device Wise Employee',
-    empList: 'Employee List'
-  },
-  hi: {
-    deviceList: 'डिवाइस सूची',
-    empWise: 'कर्मचारी अनुसार डिवाइस',
-    deviceWise: 'डिवाइस अनुसार कर्मचारी',
-    empList: 'कर्मचारी सूची'
+  translations: any = {
+    en: {
+      deviceList: 'Device List',
+      empWise: 'Employee Wise Device',
+      deviceWise: 'Device Wise Employee',
+      empList: 'Employee List',
+    },
+    hi: {
+      deviceList: 'डिवाइस सूची',
+      empWise: 'कर्मचारी अनुसार डिवाइस',
+      deviceWise: 'डिवाइस अनुसार कर्मचारी',
+      empList: 'कर्मचारी सूची',
+    },
+  };
+
+  currentLang: string = 'en';
+
+  changeLanguage(lang: string) {
+    this.currentLang = lang;
+    this.selectedLanguage = lang === 'en' ? 'English' : 'हिंदी';
   }
-};
 
-currentLang: string = 'en';
-
-changeLanguage(lang: string) {
-  this.currentLang = lang;
-  this.selectedLanguage = lang === 'en' ? 'English' : 'हिंदी';
-  }
-  
-
-
-
-
+  //  Dark Mode
   isDarkMode: boolean = false;
 
-ngOnInit() {
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    this.enableDarkMode();
-  }
-
-
-  const savedFont = localStorage.getItem('fontSize');
-  if (savedFont) {
-    this.fontSize = +savedFont;
-    this.applyFontSize();
-  }
-
-  // check login state from localStorage (page reload ke baad bhi same rahe)
-    const user = localStorage.getItem('user');
-    this.isLoggedIn = !!user;
-}
-
-//   toggleTheme() {
-//   // console.log('clicked');
-//   document.body.classList
-  
-//   this.isDarkMode = !this.isDarkMode;
-
-//   if (this.isDarkMode) {
-//     this.enableDarkMode();
-//   } else {
-//     this.enableLightMode();
-//   }
-// }
-
   toggleTheme() {
-  console.log('clicked');
+    this.isDarkMode = !this.isDarkMode;
 
-  this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
+  }
 
-  if (this.isDarkMode) {
-    document.body.classList.add('dark-theme');  
-  } else {
+  enableDarkMode() {
+    document.body.classList.add('dark-theme');
+    localStorage.setItem('theme', 'dark');
+    this.isDarkMode = true;
+  }
+
+  enableLightMode() {
     document.body.classList.remove('dark-theme');
+    localStorage.setItem('theme', 'light');
+    this.isDarkMode = false;
   }
-}
 
-enableDarkMode() {
-  document.body.classList.add('dark-theme');
-  localStorage.setItem('theme', 'dark');
-  this.isDarkMode = true;
-}
+  //  Font Size
+  fontSize: number = 16;
 
-enableLightMode() {
-  document.body.classList.remove('dark-theme');
-  localStorage.setItem('theme', 'light');
-  this.isDarkMode = false;
+  applyFontSize() {
+    document.documentElement.style.fontSize = this.fontSize + 'px';
+    localStorage.setItem('fontSize', this.fontSize.toString());
   }
-  
 
-  //  <!-- FONT SIZE CONTROLS -->
-  fontSize: number = 16; // default px
-
-
-applyFontSize() {
-  document.documentElement.style.fontSize = this.fontSize + 'px';
-  localStorage.setItem('fontSize', this.fontSize.toString());
-  }
-  
-
-
-
+  //  Auth
   isLoggedIn: boolean = false;
-   login() {
-    console.log('Login clicked');
+  userName: string = '';
 
-    // demo ke liye fake login
-    const fakeUser = {
-      name: 'Admin'
-    };
+  ngOnInit() {
 
-    localStorage.setItem('user', JSON.stringify(fakeUser));
-    this.isLoggedIn = true;
+    //  load theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      this.enableDarkMode();
+    }
 
-    alert('Logged In Successfully');
+    //  load font
+    const savedFont = localStorage.getItem('fontSize');
+    if (savedFont) {
+      this.fontSize = +savedFont;
+      this.applyFontSize();
+    }
+
+    //  check login
+    this.isLoggedIn = this.authService.isLoggedIn();
+
+    //  get user email
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.userName = user.email || 'User';
+    }
   }
 
+  //  Logout
   logout() {
-    console.log('Logout clicked');
+    this.authService.logout();
+    localStorage.removeItem('userData');
 
-    localStorage.removeItem('user');
     this.isLoggedIn = false;
+    this.userName = '';
 
-    alert('Logged Out Successfully');
+    alert('Logout Successful ✅');
+
+    this.router.navigate(['/login']);
   }
 }

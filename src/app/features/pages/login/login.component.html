@@ -1,54 +1,41 @@
 <div class="auth-shell">
-  <!-- LEFT BRANDING PANEL -->
+
+  <!-- LEFT PANEL -->
   <div class="auth-left">
-    <!-- <img src="/images/biometric_background.png" alt=""> -->
     <div class="auth-left-inner">
       <div class="brand-mark">
-        <span class="brand-icon"
-          ><i class="fa-solid fa-building-shield"></i
-        ></span>
+        <span class="brand-icon">
+          <i class="fa-solid fa-building-shield"></i>
+        </span>
         <h3>Smart Office</h3>
       </div>
 
       <div class="auth-headline">
         <h1>
-          Enterprise Access<br /><span class="accent-word">Management</span>
+          Enterprise Access<br />
+          <span class="accent-word">Management</span>
         </h1>
         <p class="auth-sub">
-          Centralized control for devices, employees and access permissions —
-          all in one place.
+          Centralized control for devices, employees and access permissions.
         </p>
       </div>
 
       <ul class="auth-features">
-        <li>
-          <i class="fa-solid fa-circle-check"></i> Real-time device monitoring
-        </li>
-        <li>
-          <i class="fa-solid fa-circle-check"></i> Role-based access control
-        </li>
-        <li>
-          <i class="fa-solid fa-circle-check"></i> Advanced analytics & reports
-        </li>
-        <li>
-          <i class="fa-solid fa-circle-check"></i> Secure cloud infrastructure
-        </li>
+        <li><i class="fa-solid fa-circle-check"></i> Real-time monitoring</li>
+        <li><i class="fa-solid fa-circle-check"></i> Role-based access</li>
+        <li><i class="fa-solid fa-circle-check"></i> Reports & analytics</li>
+        <li><i class="fa-solid fa-circle-check"></i> Secure system</li>
       </ul>
-
-      <div class="auth-decorative">
-        <div class="deco-circle deco-1"></div>
-        <div class="deco-circle deco-2"></div>
-        <div class="deco-circle deco-3"></div>
-      </div>
     </div>
   </div>
 
-  <!-- RIGHT FORM PANEL -->
+  <!-- RIGHT PANEL -->
   <div class="auth-right">
     <div class="auth-card">
+
       <div class="auth-card-header">
         <h2>Welcome back</h2>
-        <p>Sign in to your account to continue</p>
+        <p>Sign in to continue</p>
       </div>
 
       <!-- ERROR -->
@@ -59,30 +46,23 @@
 
       <!-- FORM -->
       <form [formGroup]="loginForm" (ngSubmit)="login()" class="auth-form">
-        <!-- Name -->
+
+        <!-- EMAIL -->
         <div class="field-group">
-          <!-- <label class="field-label">Email address</label> -->
           <label class="field-label">Email</label>
           <div class="field-input-wrap">
-            <!-- <i class="fa-solid fa-user"  ></i> -->
             <i class="fa-regular fa-envelope field-icon"></i>
-             <!-- <i class="fa-solid fa-user"></i> -->
             <input
               type="email"
               formControlName="email"
               placeholder="you@gmail.com"
               class="field-input"
-              [class.field-error]="
-                loginForm.get('email')?.touched && loginForm.get('email')?.invalid
-              "
+              [class.field-error]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
             />
           </div>
-          <span
-            class="field-error-msg"
-            *ngIf="
-              loginForm.get('email')?.touched && loginForm.get('email')?.invalid
-            "
-          >
+
+          <span class="field-error-msg"
+            *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
             Please enter a valid email
           </span>
         </div>
@@ -95,40 +75,31 @@
             <input
               type="password"
               formControlName="password"
-              placeholder="Enter your password"
+              placeholder="Enter password"
               class="field-input"
-              [class.field-error]="
-                loginForm.get('password')?.touched &&
-                loginForm.get('password')?.invalid
-              "
+              [class.field-error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
             />
           </div>
-          <span
-            class="field-error-msg"
-            *ngIf="
-              loginForm.get('password')?.touched &&
-              loginForm.get('password')?.invalid
-            "
-          >
+
+          <span class="field-error-msg"
+            *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
             Password is required
           </span>
         </div>
 
-        <div *ngIf="errorMessage">
-          {{ errorMessage }}
-        </div>
-
-        <!-- SUBMIT -->
+        <!-- BUTTON -->
         <button type="submit" class="btn-signin" [disabled]="loading">
           <span *ngIf="!loading">
-            {{ loading ? "Please wait..." : "Log In" }}
-            <i class="fa-solid fa-arrow-right ms-1"></i
-          ></span>
-          <span *ngIf="loading" class="btn-loading">
-            <i class="fa-solid fa-spinner fa-spin"></i> Authenticating...
+            Log In <i class="fa-solid fa-arrow-right ms-1"></i>
+          </span>
+
+          <span *ngIf="loading">
+            <i class="fa-solid fa-spinner fa-spin"></i> Logging in...
           </span>
         </button>
+
       </form>
     </div>
   </div>
+
 </div>

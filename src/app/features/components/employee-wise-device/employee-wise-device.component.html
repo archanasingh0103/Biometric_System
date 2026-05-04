@@ -159,8 +159,17 @@
         </table>
       </div>
 
-      <div *ngIf="!isLoading && !filteredDeviceList.length">
-        No devices found
+       <!-- NO DATA -->
+      <div class="no-data-msg" *ngIf="!filteredDeviceList.length">
+        <div class="no-data-icon">
+          <i class="fa-solid fa-inbox"></i>
+        </div>
+
+        {{
+          selectedEmployeeCode
+            ? "No employees found for this device"
+            : "Select a device to view employees"
+        }}
       </div>
     </div>
   </div>

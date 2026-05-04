@@ -119,25 +119,28 @@ export class EmployeeWiseDeviceComponent {
           );
         }
 
-list = list.map((x: any) => {
-  let value = x.ValidToDate;
+        list = list.map((x: any) => {
+          let value = x.ValidToDate;
 
-  if (!value || (typeof value === 'object' && Object.keys(value).length === 0)) {
-    return { ...x, ValidToDate: null };
-  }
+          if (
+            !value ||
+            (typeof value === 'object' && Object.keys(value).length === 0)
+          ) {
+            return { ...x, ValidToDate: null };
+          }
 
-  let date = new Date(value + 'Z'); 
-  // 🔥 force UTC interpretation
+          let date = new Date(value + 'Z');
+          // force UTC interpretation
 
-  if (isNaN(date.getTime())) {
-    return { ...x, ValidToDate: null };
-  }
+          if (isNaN(date.getTime())) {
+            return { ...x, ValidToDate: null };
+          }
 
-  return {
-    ...x,
-    ValidToDate: date
-  };
-});
+          return {
+            ...x,
+            ValidToDate: date,
+          };
+        });
 
         this.filteredDeviceList = list;
         this.pagesize.count = list[0]?.TotalCount || list.length;
@@ -185,6 +188,8 @@ list = list.map((x: any) => {
       };
 
       this.commonService.removeEmployeeDevice(payload).subscribe(() => {
+        // console.log();
+        
         this.loadDevices();
       });
     }
