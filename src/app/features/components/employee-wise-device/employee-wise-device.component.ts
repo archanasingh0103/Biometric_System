@@ -12,9 +12,15 @@ declare var bootstrap: any;
   styleUrl: './employee-wise-device.component.css',
 })
 export class EmployeeWiseDeviceComponent {
+<<<<<<< HEAD
    employeewithDevice: any[] = [];
   filteredDeviceList: any[] = [];
  private autoRefreshInterval: any;
+=======
+  employeewithDevice: any[] = [];
+  filteredDeviceList: any[] = [];
+
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
   selectedEmployeeCode = '';
   selectedFilter = '';
   searchText = '';
@@ -48,6 +54,10 @@ export class EmployeeWiseDeviceComponent {
     count: 0,
   };
 
+<<<<<<< HEAD
+=======
+  // dropdown filter
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
   deviceOptions = [
     { label: 'All', value: '' },
     { label: 'Linked', value: '1' },
@@ -58,6 +68,7 @@ export class EmployeeWiseDeviceComponent {
 
   ngOnInit(): void {
     this.getEmployeeDropdown();
+<<<<<<< HEAD
      this.startAutoRefreshAt1205AM();
   }
   ngOnDestroy(): void {
@@ -92,6 +103,18 @@ export class EmployeeWiseDeviceComponent {
     });
   }
 
+=======
+  }
+
+  // employee dropdown
+  getEmployeeDropdown() {
+    this.commonService.employeeDropdown().subscribe((res: any) => {
+      this.employeewithDevice = Array.isArray(res) ? res : res.body || [];
+    });
+  }
+
+  // employee select
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
   onSelectEmployee(event: any) {
     const code = event.target.value;
     const emp = this.employeewithDevice.find(
@@ -106,6 +129,7 @@ export class EmployeeWiseDeviceComponent {
     this.loadDevices();
   }
 
+<<<<<<< HEAD
   loadDevices() {
   if (!this.selectedEmployeeCode) return;
 
@@ -146,6 +170,71 @@ export class EmployeeWiseDeviceComponent {
       this.pagesize.count = res?.body?.totalRecords || list.length;
     });
 }
+=======
+  // table load
+  loadDevices() {
+    if (!this.selectedEmployeeCode) return;
+
+    this.isLoading = true;
+
+    this.commonService
+      .getEmployeeWiseDevice(
+        this.selectedEmployeeCode,
+        this.searchText,
+        this.pagesize.offset,
+        this.pagesize.limit,
+      )
+      .subscribe((res: any) => {
+        this.isLoading = false;
+
+        let list = Array.isArray(res) ? res : res.body || [];
+
+        // status filter
+        if (this.selectedFilter !== '') {
+          list = list.filter(
+            (x: any) => String(x.Link) === this.selectedFilter,
+          );
+        }
+
+        // search filter
+        if (this.searchText) {
+          const txt = this.searchText.toLowerCase();
+
+          list = list.filter(
+            (x: any) =>
+              x.DeviceName?.toLowerCase().includes(txt) ||
+              x.SerialNumber?.toLowerCase().includes(txt),
+          );
+        }
+
+        list = list.map((x: any) => {
+          let value = x.ValidToDate;
+
+          if (
+            !value ||
+            (typeof value === 'object' && Object.keys(value).length === 0)
+          ) {
+            return { ...x, ValidToDate: null };
+          }
+
+          let date = new Date(value + 'Z');
+          // force UTC interpretation
+
+          if (isNaN(date.getTime())) {
+            return { ...x, ValidToDate: null };
+          }
+
+          return {
+            ...x,
+            ValidToDate: date,
+          };
+        });
+
+        this.filteredDeviceList = list;
+        this.pagesize.count = list[0]?.TotalCount || list.length;
+      });
+  }
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
 
   onSearch(event: any) {
     this.searchText = event.target.value;
@@ -168,16 +257,28 @@ export class EmployeeWiseDeviceComponent {
     this.loadDevices();
   }
 
+<<<<<<< HEAD
+=======
+  // Link / DLink
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
   handleAction(data: any) {
     this.selectedRowData = data;
 
     if (data.Link === '0') {
+<<<<<<< HEAD
+=======
+      // LINK
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
       this.assignForm.deviceId = data.DeviceId;
       this.assignForm.serialNumbers = data.SerialNumber || '';
       this.assignForm.ValidToDate = '';
 
       new bootstrap.Modal(document.getElementById('deviceModal')).show();
     } else {
+<<<<<<< HEAD
+=======
+      // DLINK
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
       const payload = {
         employeeCode: this.selectedEmployeeCode,
         deviceId: data.DeviceId,
@@ -185,6 +286,11 @@ export class EmployeeWiseDeviceComponent {
       };
 
       this.commonService.removeEmployeeDevice(payload).subscribe(() => {
+<<<<<<< HEAD
+=======
+        // console.log();
+        
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
         this.loadDevices();
       });
     }
@@ -198,16 +304,35 @@ export class EmployeeWiseDeviceComponent {
     this.showConfirmPopup = false;
   }
 
+<<<<<<< HEAD
   //  FINAL FIX: NO UTC conversion
   confirmPopupAction() {
     this.showConfirmPopup = false;
 
+=======
+  // final link api
+  confirmPopupAction() {
+    this.showConfirmPopup = false;
+
+    const local = this.assignForm.ValidToDate;
+
+    let utcDate = null;
+
+    if (local) {
+      utcDate = new Date(local).toISOString(); // IST → UTC conversion happens here
+    }
+
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
     const payload = {
       employeeId: this.assignForm.employeeId,
       employeeCode: this.assignForm.employeeCode,
       deviceId: this.assignForm.deviceId,
       serialNumber: this.assignForm.serialNumbers,
+<<<<<<< HEAD
       validToDate: this.assignForm.ValidToDate || null, // direct IST string
+=======
+      validToDate: utcDate,
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
     };
 
     this.commonService.assignEmployeeDevice(payload).subscribe(() => {
@@ -219,7 +344,10 @@ export class EmployeeWiseDeviceComponent {
       modal?.hide();
     });
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
   get startValue(): number {
     if (this.pagesize.count === 0) return 0;
     return (this.pagesize.offset - 1) * this.pagesize.limit + 1;

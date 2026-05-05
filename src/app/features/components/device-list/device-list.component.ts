@@ -58,6 +58,7 @@ export class DeviceListComponent {
     this.commonService
       .deviceList(this.pagesize.offset, this.pagesize.limit)
       .subscribe((res: any) => {
+<<<<<<< HEAD
   console.log("device list :", res);
   
 
@@ -66,6 +67,16 @@ export class DeviceListComponent {
         this.deviceList = res?.body.data || [];
         this.filteredList = [...this.deviceList];
         this.pagesize.count = res?.body.totalRecords || 0;
+=======
+        console.log('API RESPONSE:', res);
+
+        this.isLoading = false;
+        const response = res?.body || res;
+
+        this.deviceList = response?.data?.data || [];
+        this.filteredList = [...this.deviceList];
+        this.pagesize.count = response?.data?.totalRecords || 0;
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
       });
   }
 

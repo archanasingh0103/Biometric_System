@@ -45,11 +45,18 @@ export class EmployeeListComponent {
   //API CALL
   getEmployeeList() {
     this.commonService.employeeList().subscribe((res: any) => {
+<<<<<<< HEAD
     console.log("Employee List:",res);
     
 
       this.isLoading = false;
       this.employeeList = res?.body?.data || [];
+=======
+      console.log('EMP API:', res);
+
+      this.isLoading = false;
+      this.employeeList = res?.body?.data?.data || [];
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
       this.pagesize.count = res?.body?.data?.totalRecords || 0;
 
       this.applyFilter();

@@ -150,7 +150,11 @@
               <td>
                 {{
                   data.ValidToDate
+<<<<<<< HEAD
                     ? (data.ValidToDate | date: "dd-MM-yyyy ")
+=======
+                    ? (data.ValidToDate | date: "dd-MM-yyyy HH:mm")
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
                     : "-"
                 }}
               </td>
@@ -213,7 +217,11 @@
         <div class="mb-3">
           <label>Expiry</label>
           <input
+<<<<<<< HEAD
             type="date"
+=======
+            type="datetime-local"
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
             class="form-control"
             [(ngModel)]="assignForm.ValidToDate"
           />

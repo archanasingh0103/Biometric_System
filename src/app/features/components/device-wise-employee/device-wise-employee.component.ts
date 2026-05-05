@@ -51,7 +51,11 @@ export class DeviceWiseEmployeeComponent {
   // DEVICE DROPDOWN API
   getDeviceDropdown() {
     this.commonService.deviceDropdown().subscribe((res: any) => {
+<<<<<<< HEAD
       console.log('Device Dropdown:', res);
+=======
+      console.log('dropdown response =>', res);
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
 
       // MAIN FIX
       this.deviceWithEmployee = res?.body || res || [];
@@ -59,6 +63,7 @@ export class DeviceWiseEmployeeComponent {
   }
 
   // TABLE DATA API
+<<<<<<< HEAD
   loadDevices() {
     if (!this.selectedDeviceId) return;
 
@@ -90,6 +95,44 @@ export class DeviceWiseEmployeeComponent {
           list.length > 0 ? list[0]?.TotalCount || list.length : 0;
       });
   }
+=======
+ loadDevices() {
+  if (!this.selectedDeviceId) return;
+
+  this.isLoading = true;
+
+  let linkValue: any = undefined;
+
+  // API returns Link = "1" / "0"
+  if (this.selectedFilter === 'true') linkValue = true;
+  if (this.selectedFilter === 'false') linkValue = false;
+
+  this.commonService
+    .getDeviceWiseEmloyee(
+      this.selectedDeviceId,
+      this.pagesize.offset,
+      this.pagesize.limit,
+      this.searchText,
+      linkValue
+    )
+    .subscribe((res: any) => {
+      this.isLoading = false;
+
+      // MAIN FIX
+      const list = Array.isArray(res) ? res : res?.body || [];
+
+      this.filteredList = list;
+
+      // some APIs don't send TotalCount
+      this.pagesize.count =
+        list.length > 0
+          ? list[0]?.TotalCount || list.length
+          : 0;
+    });
+}
+
+
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
 
   onSelectDevice(event: any) {
     this.selectedDeviceId = event.target.value;
@@ -119,6 +162,7 @@ export class DeviceWiseEmployeeComponent {
     this.loadDevices();
   }
 
+<<<<<<< HEAD
   // Replace toggleLink() method
 
   toggleLink(emp: any) {
@@ -148,6 +192,39 @@ export class DeviceWiseEmployeeComponent {
       });
     }
   }
+=======
+ 
+
+  // Replace toggleLink() method
+
+toggleLink(emp: any) {
+  const payload = {
+    employeeCode: emp.EmployeeCode,
+    deviceId: +this.selectedDeviceId,
+    serialNumber: emp.SerialNumber || '',
+  };
+
+  if (emp.Link == '1') {
+    // DLink API
+    this.commonService.removeEmployeeDevice(payload).subscribe(() => {
+      this.loadDevices();
+    });
+  } else {
+    // Link API
+    const body = {
+      employeeId: 0,
+      employeeCode: emp.EmployeeCode,
+      deviceId: +this.selectedDeviceId,
+      serialNumber: emp.SerialNumber || '',
+      validToDate: new Date().toISOString(),
+    };
+
+    this.commonService.assignEmployeeDevice(body).subscribe(() => {
+      this.loadDevices();
+    });
+  }
+}
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
 
   get startValue(): number {
     if (this.pagesize.count === 0) return 0;

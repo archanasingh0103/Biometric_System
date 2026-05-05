@@ -110,7 +110,21 @@ export class CommmonService {
       })
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
+<<<<<<< HEAD
 
+=======
+  // Remove Device
+  // removeEmployeeDevice(payload: {
+  //   employeeCode: string;
+  //   deviceId: number;
+  //   serialNumber: string;
+  // }): Observable<any> {
+  //   const url = API_CONSTANT.removeEmployeeDevice;
+  //   return this.apiService
+  //     .post(payload, url)
+  //     .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  // }
+>>>>>>> 21422b1d2a29037d8733e3a7cb63208807ceedb2
 
   removeEmployeeDevice(payload: any): Observable<any> {
     const url = API_CONSTANT.removeEmployeeDevice;
