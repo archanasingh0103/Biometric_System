@@ -28,6 +28,7 @@ export class DashboardComponent {
 
   translations: any = {
     en: {
+       home: 'Home',
       deviceList: 'Device List',
       empWise: 'Employee Wise Device',
       deviceWise: 'Device Wise Employee',

@@ -1,0 +1,62 @@
+<div class="home-container">
+  <!-- HERO BANNER -->
+  <div class="hero-banner">
+    <div class="hero-left">
+      <div class="hero-greeting">{{ greeting }},</div>
+      <div class="hero-username">{{ userName || 'Welcome Back' }}</div>
+      <div class="hero-sub">Biometric Attendance System — Delhi Central</div>
+    </div>
+    <div class="hero-right">
+      <div class="clock-box">
+        <div class="clock-time">{{ currentTime }}</div>
+        <div class="clock-date">{{ currentDate }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS GRID -->
+  <div class="stats-grid">
+    <a class="stat-card" *ngFor="let s of stats" [routerLink]="s.route" [class]="'stat-card stat-' + s.color">
+      <div class="stat-icon-wrap" [class]="'icon-' + s.color">
+        <i [class]="s.icon"></i>
+      </div>
+      <div class="stat-body">
+        <div class="stat-value">
+          <span *ngIf="!loading">{{ s.value | number }}</span>
+          <span class="stat-skeleton" *ngIf="loading"></span>
+        </div>
+        <div class="stat-label">{{ s.label }}</div>
+        <div class="stat-desc">{{ s.desc }}</div>
+      </div>
+      <div class="stat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </a>
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="section-title">
+    <i class="fa-solid fa-bolt"></i> Quick Access
+  </div>
+  <div class="quick-grid">
+    <a class="quick-card" *ngFor="let q of quickLinks" [routerLink]="q.route" [class]="'quick-card quick-' + q.color">
+      <div class="quick-icon" [class]="'qicon-' + q.color">
+        <i [class]="q.icon"></i>
+      </div>
+      <div class="quick-info">
+        <div class="quick-label">{{ q.label }}</div>
+        <div class="quick-desc">{{ q.desc }}</div>
+      </div>
+      <i class="fa-solid fa-chevron-right quick-arrow"></i>
+    </a>
+  </div>
+
+  <!-- INFO ROW -->
+  <div class="info-row">
+    <div class="info-card">
+      <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+      <div class="info-text">
+        <strong>System Notice:</strong> In case of ERROR 904, kindly update your AadhaarFACERD from PlayStore / AppStore.
+      </div>
+    </div>
+  </div>
+
+</div>

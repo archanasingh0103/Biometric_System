@@ -29,7 +29,7 @@
         <div class="filter-group">
           <label>Employee</label>
 
-          <select
+           <select
             class="select-styled"
             [(ngModel)]="selectedEmployeeCode"
             (change)="onSelectEmployee($event)"
@@ -42,7 +42,14 @@
             >
               {{ emp.employeeCode }}
             </option>
-          </select>
+          </select> 
+          <!-- <ngx-select-dropdown
+            [config]="dropdownConfig"
+            [options]="dropdownOptions"
+            [(ngModel)]="selectedEmployeeCode"
+            (change)="onSelectEmployee($event)"
+          >
+          </ngx-select-dropdown> -->
         </div>
 
         <div class="filter-group">
@@ -159,7 +166,7 @@
         </table>
       </div>
 
-       <!-- NO DATA -->
+      <!-- NO DATA -->
       <div class="no-data-msg" *ngIf="!filteredDeviceList.length">
         <div class="no-data-icon">
           <i class="fa-solid fa-inbox"></i>
