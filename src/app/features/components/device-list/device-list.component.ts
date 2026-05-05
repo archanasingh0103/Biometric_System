@@ -58,8 +58,9 @@ export class DeviceListComponent {
     this.commonService
       .deviceList(this.pagesize.offset, this.pagesize.limit)
       .subscribe((res: any) => {
-  console.log("device list :", res);
-  
+       console.log("Device List:",res);
+       
+
 
         this.isLoading = false;
 

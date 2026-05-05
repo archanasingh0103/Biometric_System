@@ -111,7 +111,6 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-
   removeEmployeeDevice(payload: any): Observable<any> {
     const url = API_CONSTANT.removeEmployeeDevice;
     return this.apiService

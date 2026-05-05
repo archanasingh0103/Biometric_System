@@ -219,7 +219,6 @@ export class EmployeeWiseDeviceComponent {
       modal?.hide();
     });
   }
-
   get startValue(): number {
     if (this.pagesize.count === 0) return 0;
     return (this.pagesize.offset - 1) * this.pagesize.limit + 1;
