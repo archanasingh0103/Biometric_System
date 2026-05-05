@@ -1,0 +1,218 @@
+<div class="page-container">
+  <div class="data-card">
+    <!-- ================= HEADER ================= -->
+    <div class="card-header-bar">
+      <div class="header-row">
+        <div class="header-title-group">
+          <div class="header-icon-wrap">
+            <i class="fa-solid fa-building-user"></i>
+          </div>
+          <div>
+            <h5 class="header-title">Device Wise Employee</h5>
+          </div>
+        </div>
+
+        <div class="span">
+          <span class="count-badge">
+            {{ filteredList.length ? startValue : 0 }} -
+            {{ filteredList.length ? lastValue : 0 }}
+            of {{ filteredList.length }} employees
+          </span>
+        </div>
+
+        <div class="header-pagination">
+          <pagination-controls
+            id="empId"
+            (pageChange)="onTablePageChange($event)"
+          >
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= FILTER BAR ================= -->
+    <div class="filter-bar">
+      <div class="filter-left">
+        <!-- Device Dropdown -->
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fa-solid fa-hard-drive me-1"></i> Device
+          </label>
+
+          <!-- <select
+            class="select-styled"
+            [(ngModel)]="selectedDeviceId"
+            (change)="onSelectDevice($event)"
+          >
+            <option value="">Select Device</option>
+            <option
+              *ngFor="let device of deviceWithEmployee"
+              [value]="device.deviceId"
+            >
+              {{ device.deviceFName }}
+            </option>
+          </select> -->
+          <select
+            class="select-styled"
+            [(ngModel)]="selectedDeviceId"
+            (change)="onSelectDevice($event)"
+          >
+            <option value="">Select Device</option>
+
+            <option
+              *ngFor="let device of deviceWithEmployee"
+              [value]="device.deviceId"
+            >
+              {{ device.deviceFName }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fa-solid fa-filter me-1"></i> Status
+          </label>
+
+          <select
+            class="select-styled"
+            [(ngModel)]="selectedFilter"
+            (change)="onFilterChange($event)"
+          >
+            <option *ngFor="let item of deviceOptions" [value]="item.value">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-right">
+        <!-- Search -->
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search employees..."
+            [(ngModel)]="searchText"
+            (input)="onSearchDevice()"
+          />
+        </div>
+
+        <!-- Page Size -->
+        <div class="filter-group">
+          <label class="filter-label">Items</label>
+          <select
+            class="select-styled select-sm"
+            (change)="onPageSizeChange($event)"
+          >
+            <option *ngFor="let size of [25, 50, 100]" [value]="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= BODY ================= -->
+    <div class="card-body-area">
+      <!-- TABLE -->
+      <div class="table-responsive" *ngIf="filteredList.length">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th *ngFor="let col of tableHeading">
+                {{ col.title }}
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="
+                let data of filteredList
+                  | paginate
+                    : {
+                        id: 'empId',
+                        itemsPerPage: pagesize.limit,
+                        currentPage: pagesize.offset,
+                        totalItems: pagesize.count,
+                      };
+                let i = index
+              "
+            >
+              <!-- S NO -->
+              <td>
+                <span class="sno-badge">
+                  {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
+                </span>
+              </td>
+
+              <!-- EMP ID -->
+              <td>
+                <span class="mono-text">{{ data.EmployeeCode }}</span>
+              </td>
+
+              <!-- NAME -->
+              <td>
+                <div class="emp-name-cell">
+                  <span class="emp-avatar">
+                    {{ data.EmployeeName?.charAt(0) | uppercase }}
+                  </span>
+                  <span class="fw-medium">
+                    {{ data.EmployeeName }}
+                  </span>
+                </div>
+              </td>
+
+              <!-- CODE -->
+              <td>
+                <span class="mono-text">{{ data.EmployeeCode }}</span>
+              </td>
+
+              <!-- status -->
+              <td>
+                <span
+                  [class.badge-link]="data.Link == '1'"
+                 [class.badge-dlink]="data.Link != '1'"
+                >
+                  <i
+                    class="fa-solid"
+                    [class.fa-check]="data.Link == '1'"
+                    [class.fa-xmark]="data.Link != '1'"
+                  ></i>
+                  <!-- {{ data.status ? "Linked" : "Unlinked" }} -->
+                      {{ data.Link == '1' ? 'Linked' : 'Unlinked' }}
+                </span>
+              </td>
+
+              <!-- action -->
+              <td>
+                <button
+                  [class]="data.Link == '1' ? 'btn-action-dlink' : 'btn-action-link'"
+                  (click)="toggleLink(data)"
+                >
+                  <!-- {{ data.status ? "DLink" : "Link" }} -->
+                       {{ data.Link == '1' ? 'DLink' : 'Link' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- NO DATA -->
+      <div class="no-data-msg" *ngIf="!filteredList.length">
+        <div class="no-data-icon">
+          <i class="fa-solid fa-inbox"></i>
+        </div>
+
+        {{
+          selectedDeviceId
+            ? "No employees found for this device"
+            : "Select a device to view employees"
+        }}
+      </div>
+    </div>
+  </div>
+</div>

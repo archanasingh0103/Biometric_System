@@ -1,0 +1,114 @@
+<div class="page-container">
+  <div class="data-card">
+    <!-- CARD HEADER -->
+    <div class="card-header-bar">
+      <div class="header-row">
+        <div class="header-title-group">
+          <div class="header-icon-wrap">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div>
+            <h5 class="header-title">Employee List</h5>
+          </div>
+        </div>
+        <div class="span">
+          <span class="count-badge">
+            {{ filteredEmployeeList.length > 0 ? startValue : 0 }} -
+            {{
+              filteredEmployeeList.length > 0
+                ? filteredEmployeeList.length < lastValue
+                  ? filteredEmployeeList.length
+                  : lastValue
+                : 0
+            }}
+            of {{ filteredEmployeeList.length }} employees
+          </span>
+        </div>
+        <div class="header-pagination">
+          <pagination-controls
+            id="empId"
+            (pageChange)="onTablePageChange($event)"
+          ></pagination-controls>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-left"></div>
+      <div class="toolbar-right">
+        <label class="toolbar-label">Items:</label>
+        <select (change)="onPageSizeChange($event)" class="select-sm">
+          <option *ngFor="let size of [25, 50, 100]" [value]="size">
+            {{ size }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th *ngFor="let col of tableHeading">{{ col.title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let data of filteredEmployeeList
+                | paginate
+                  : {
+                      id: 'empId',
+                      itemsPerPage: pagesize.limit,
+                      currentPage: pagesize.offset,
+                      totalItems: pagesize.count,
+                    };
+              let i = index
+            "
+          >
+            <td>
+              <span class="sno-badge">{{
+                (pagesize.offset - 1) * pagesize.limit + i + 1
+              }}</span>
+            </td>
+            <td>
+              <div class="emp-name-cell">
+                <span class="emp-avatar">{{
+                  data.employeeName?.charAt(0) | uppercase
+                }}</span>
+                <span class="fw-medium">{{ data.employeeName }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="mono-text">{{ data.employeeCode }}</span>
+            </td>
+            <td>
+              <span class="mono-text">{{ data.numericCode }}</span>
+            </td>
+            <td>
+              <span
+                class="gender-badge"
+                [class.male]="data.gender === 'M' || data.gender === 'Male'"
+                [class.female]="data.gender === 'F' || data.gender === 'Female'"
+              >
+                {{ data.gender }}
+              </span>
+            </td>
+            <td>{{ data.companyId }}</td>
+            <td>
+              <span class="designation-text">{{ data.designation }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- NO DATA -->
+    <div class="no-data-msg" *ngIf="!filteredEmployeeList.length">
+      <div class="no-data-icon"><i class="fa-solid fa-user-slash"></i></div>
+      No employees found
+    </div>
+  </div>
+</div>
