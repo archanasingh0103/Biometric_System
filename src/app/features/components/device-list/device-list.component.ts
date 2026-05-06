@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommmonService } from '../../shared/services/common-service/common.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
   templateUrl: './device-list.component.html',
   styleUrl: './device-list.component.css',
 })
-export class DeviceListComponent {
+export class DeviceListComponent implements OnInit {
   deviceList: any[] = [];
   tableHeading: any;
   filteredList: any[] = [];

@@ -30,7 +30,6 @@ export class EmployeeWiseDeviceComponent {
   selectedRowData: any = null;
 
   dropdownOptions: any[] = [];
-
   dropdownConfig = {
     displayKey: 'employeeCode',
     valueKey: 'employeeCode',
@@ -73,11 +72,37 @@ export class EmployeeWiseDeviceComponent {
 
   ngOnInit(): void {
     this.getEmployeeDropdown();
+     this.startAutoRefreshAt1205AM();
+  }
+    ngOnDestroy(): void {
+    //  NEW: prevent memory leak
+    if (this.autoRefreshInterval) {
+      clearInterval(this.autoRefreshInterval);
+    }
+  }
+     startAutoRefreshAt1205AM() {
+    this.autoRefreshInterval = setInterval(() => {
+
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      //  12:05 AM trigger
+      if (hours === 0 && minutes === 5) {
+
+        if (this.selectedEmployeeCode) {
+          this.loadDevices(); // refresh API call
+        }
+
+      }
+
+    }, 60000); // check every 1 minute
   }
 
   //  FIX: dropdown data
   getEmployeeDropdown() {
     this.commonService.employeeDropdown().subscribe((res: any) => {
+      console.log('Employee dropdown:', res);
       this.employeewithDevice = res?.body || [];
       this.dropdownOptions = this.employeewithDevice;
     });
