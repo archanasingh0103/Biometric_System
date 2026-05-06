@@ -38,20 +38,6 @@
           <label class="filter-label">
             <i class="fa-solid fa-hard-drive me-1"></i> Device
           </label>
-
-          <!-- <select
-            class="select-styled"
-            [(ngModel)]="selectedDeviceId"
-            (change)="onSelectDevice($event)"
-          >
-            <option value="">Select Device</option>
-            <option
-              *ngFor="let device of deviceWithEmployee"
-              [value]="device.deviceId"
-            >
-              {{ device.deviceFName }}
-            </option>
-          </select> -->
           <select
             class="select-styled"
             [(ngModel)]="selectedDeviceId"
@@ -88,7 +74,7 @@
 
       <div class="filter-right">
         <!-- Search -->
-        <div class="search-wrap">
+        <!-- <div class="search-wrap">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
           <input
             type="text"
@@ -97,11 +83,25 @@
             [(ngModel)]="searchText"
             (input)="onSearchDevice()"
           />
+        </div> -->
+        <div class="filter-group">
+          <label class="filter-label">Search</label>
+
+          <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search employees..."
+              [(ngModel)]="searchText"
+              (input)="onSearchDevice()"
+            />
+          </div>
         </div>
 
         <!-- Page Size -->
         <div class="filter-group">
-          <label class="filter-label">Items</label>
+          <label class="filter-label">ITEMS</label>
           <select
             class="select-styled select-sm"
             (change)="onPageSizeChange($event)"
@@ -150,7 +150,7 @@
 
               <!-- EMP ID -->
               <td>
-                <span class="mono-text">{{ data.EmployeeCode }}</span>
+                <span>{{ data.EmployeeCode }}</span>
               </td>
 
               <!-- NAME -->
@@ -167,14 +167,14 @@
 
               <!-- CODE -->
               <td>
-                <span class="mono-text">{{ data.EmployeeCode }}</span>
+                <span>{{ data.EmployeeCode }}</span>
               </td>
 
               <!-- status -->
               <td>
                 <span
                   [class.badge-link]="data.Link == '1'"
-                 [class.badge-dlink]="data.Link != '1'"
+                  [class.badge-dlink]="data.Link != '1'"
                 >
                   <i
                     class="fa-solid"
@@ -182,18 +182,20 @@
                     [class.fa-xmark]="data.Link != '1'"
                   ></i>
                   <!-- {{ data.status ? "Linked" : "Unlinked" }} -->
-                      {{ data.Link == '1' ? 'Linked' : 'Unlinked' }}
+                  {{ data.Link == "1" ? "Linked" : "Unlinked" }}
                 </span>
               </td>
 
               <!-- action -->
               <td>
                 <button
-                  [class]="data.Link == '1' ? 'btn-action-dlink' : 'btn-action-link'"
+                  [class]="
+                    data.Link == '1' ? 'btn-action-dlink' : 'btn-action-link'
+                  "
                   (click)="toggleLink(data)"
                 >
                   <!-- {{ data.status ? "DLink" : "Link" }} -->
-                       {{ data.Link == '1' ? 'DLink' : 'Link' }}
+                  {{ data.Link == "1" ? "DLink" : "Link" }}
                 </button>
               </td>
             </tr>

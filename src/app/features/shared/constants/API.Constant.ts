@@ -20,6 +20,7 @@ export const API_CONSTANT = {
   deviceDropdown: 'Devices/devices-dropdown',
 
   employeeWiseDevice:
+    // 'Devices/EmployeeWithDevices?employeecode=${empCode}&search=${search}&link=${link}&pageNumber=${page}&pageSize=${pageSize}',
     'Devices/EmployeeWithDevices?employeecode=${empCode}&search=${search}&link=${link}&pageNumber=${page}&pageSize=${pageSize}',
 
   assignEmployeeDevice:

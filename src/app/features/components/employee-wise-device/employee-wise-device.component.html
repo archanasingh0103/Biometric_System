@@ -27,33 +27,18 @@
     <div class="filter-bar">
       <div class="filter-left">
         <div class="filter-group">
-          <label>Employee</label>
-
-           <select
-            class="select-styled"
-            [(ngModel)]="selectedEmployeeCode"
-            (change)="onSelectEmployee($event)"
-          >
-            <option value="">Select Employee</option>
-
-            <option
-              *ngFor="let emp of employeewithDevice"
-              [value]="emp.employeeCode"
-            >
-              {{ emp.employeeCode }}
-            </option>
-          </select> 
-          <!-- <ngx-select-dropdown
+          <label><i class="fa-solid fa-user-tie"></i> Employee</label>
+          <ngx-select-dropdown
             [config]="dropdownConfig"
             [options]="dropdownOptions"
             [(ngModel)]="selectedEmployeeCode"
             (change)="onSelectEmployee($event)"
           >
-          </ngx-select-dropdown> -->
+          </ngx-select-dropdown>
         </div>
 
         <div class="filter-group">
-          <label>Status</label>
+          <label><i class="fa-solid fa-filter me-1"></i>Status</label>
 
           <select
             class="select-styled"
@@ -68,19 +53,24 @@
       </div>
 
       <div class="filter-right">
-        <input
-          type="text"
-          class="search-input"
-          placeholder="Search devices..."
-          [(ngModel)]="searchText"
-          (input)="onSearch($event)"
-        />
-
-        <select class="select-styled" (change)="onPageSizeChange($event)">
-          <option [value]="25">25</option>
-          <option [value]="50">50</option>
-          <option [value]="100">100</option>
-        </select>
+        <div class="filter-group">
+          <label >Search</label>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search devices..."
+            [(ngModel)]="searchText"
+            (input)="onSearch($event)"
+          />
+        </div>
+        <div class="filter-group">
+          <label>Items</label>
+          <select class="select-styled" (change)="onPageSizeChange($event)">
+            <option [value]="25">25</option>
+            <option [value]="50">50</option>
+            <option [value]="100">100</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -116,7 +106,10 @@
               "
             >
               <td>
-                {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
+                <!-- {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }} -->
+                  <span class="sno-badge">
+                  {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
+                </span>
               </td>
 
               <td>{{ data.DeviceId }}</td>
