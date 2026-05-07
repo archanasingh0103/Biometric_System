@@ -72,30 +72,26 @@ export class EmployeeWiseDeviceComponent {
 
   ngOnInit(): void {
     this.getEmployeeDropdown();
-     this.startAutoRefreshAt1205AM();
+    this.startAutoRefreshAt1205AM();
   }
-    ngOnDestroy(): void {
+  ngOnDestroy(): void {
     //  NEW: prevent memory leak
     if (this.autoRefreshInterval) {
       clearInterval(this.autoRefreshInterval);
     }
   }
-     startAutoRefreshAt1205AM() {
+  startAutoRefreshAt1205AM() {
     this.autoRefreshInterval = setInterval(() => {
-
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
 
       //  12:05 AM trigger
       if (hours === 0 && minutes === 5) {
-
         if (this.selectedEmployeeCode) {
           this.loadDevices(); // refresh API call
         }
-
       }
-
     }, 60000); // check every 1 minute
   }
 

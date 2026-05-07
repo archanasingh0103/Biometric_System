@@ -57,11 +57,11 @@ export class EmployeeListComponent {
   }
 
   // Search
-  onSearch(event: any) {
-    this.searchKeyword = event.target.value.toLowerCase();
-    this.pagesize.offset = 1;
-    this.applyFilter();
-  }
+  // onSearch(event: any) {
+  //   this.searchKeyword = event.target.value.toLowerCase();
+  //   this.pagesize.offset = 1;
+  //   this.applyFilter();
+  // }
 
   // Filter
   applyFilter() {

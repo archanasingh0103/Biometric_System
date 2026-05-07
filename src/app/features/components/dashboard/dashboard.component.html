@@ -1,9 +1,13 @@
 <div class="app-shell" [class.dark-theme-active]="isDarkMode">
-
   <!-- NAVBAR -->
   <nav class="navbar header">
     <div class="navbar-left">
-      <button class="mobile-menu-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+      <button
+        class="mobile-menu-btn d-lg-none"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#mobileSidebar"
+      >
         <i class="fa-solid fa-bars"></i>
       </button>
       <div class="nav-brand">
@@ -17,31 +21,48 @@
     <div class="navbar-right">
       <!-- LANGUAGE -->
       <div class="dropdown">
-        <button class="nav-control-btn dropdown-toggle" data-bs-toggle="dropdown">
+        <button
+          class="nav-control-btn dropdown-toggle"
+          data-bs-toggle="dropdown"
+        >
           <i class="fa-solid fa-globe"></i>
           <span class="d-none d-sm-inline">{{ selectedLanguage }}</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end nav-dropdown">
-          <li><a class="dropdown-item" (click)="changeLanguage('en')">English</a></li>
-          <li><a class="dropdown-item" (click)="changeLanguage('hi')">हिंदी</a></li>
+          <li>
+            <a class="dropdown-item" (click)="changeLanguage('en')">English</a>
+          </li>
+          <li>
+            <a class="dropdown-item" (click)="changeLanguage('hi')">हिंदी</a>
+          </li>
         </ul>
       </div>
 
       <!-- THEME -->
       <button class="nav-control-btn" (click)="toggleTheme()">
-        <i class="fa-solid" [class.fa-sun]="isDarkMode" [class.fa-moon]="!isDarkMode"></i>
+        <i
+          class="fa-solid"
+          [class.fa-sun]="isDarkMode"
+          [class.fa-moon]="!isDarkMode"
+        ></i>
       </button>
 
       <!-- PROFILE -->
       <div class="dropdown">
-        <button class="nav-profile-btn dropdown-toggle" data-bs-toggle="dropdown">
+        <button
+          class="nav-profile-btn dropdown-toggle"
+          data-bs-toggle="dropdown"
+        >
           <span class="profile-avatar"><i class="fa-solid fa-user"></i></span>
-          <span class="profile-label d-none d-sm-inline">{{ isLoggedIn ? userName : '' }}</span>
+          <span class="profile-label d-none d-sm-inline">{{
+            isLoggedIn ? userName : ""
+          }}</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end nav-dropdown">
           <li *ngIf="!isLoggedIn">
             <a class="dropdown-item" (click)="router.navigate(['/login'])">
-              <i class="fa-solid fa-right-to-bracket me-2 text-primary"></i>Login
+              <i class="fa-solid fa-right-to-bracket me-2 text-primary"></i
+              >Login
             </a>
           </li>
           <li *ngIf="isLoggedIn">
@@ -59,23 +80,43 @@
     <!-- SIDEBAR (Desktop) -->
     <aside class="sidebar d-none d-lg-flex">
       <div class="sidebar-inner">
-        <!-- <a routerLink="/dashboard/home" routerLinkActive="active-link" class="nav-link">
+        <a
+          routerLink="/dashboard/home"
+          routerLinkActive="active-link"
+          class="nav-link"
+        >
           <i class="fa-solid fa-house nav-icon"></i>
           <span>{{ translations[currentLang].home }}</span>
-        </a> -->
-        <a routerLink="/dashboard/device-list" routerLinkActive="active-link" class="nav-link">
+        </a>
+        <a
+          routerLink="/dashboard/device-list"
+          routerLinkActive="active-link"
+          class="nav-link"
+        >
           <i class="fa-solid fa-hard-drive nav-icon"></i>
           <span>{{ translations[currentLang].deviceList }}</span>
         </a>
-        <a routerLink="/dashboard/emp-with-device" routerLinkActive="active-link" class="nav-link">
+        <a
+          routerLink="/dashboard/emp-with-device"
+          routerLinkActive="active-link"
+          class="nav-link"
+        >
           <i class="fa-solid fa-id-card nav-icon"></i>
           <span>{{ translations[currentLang].empWise }}</span>
         </a>
-        <a routerLink="/dashboard/device-with-emp" routerLinkActive="active-link" class="nav-link">
+        <a
+          routerLink="/dashboard/device-with-emp"
+          routerLinkActive="active-link"
+          class="nav-link"
+        >
           <i class="fa-solid fa-building-user nav-icon"></i>
           <span>{{ translations[currentLang].deviceWise }}</span>
         </a>
-        <a routerLink="/dashboard/emp-list" routerLinkActive="active-link" class="nav-link">
+        <a
+          routerLink="/dashboard/emp-list"
+          routerLinkActive="active-link"
+          class="nav-link"
+        >
           <i class="fa-solid fa-users nav-icon"></i>
           <span>{{ translations[currentLang].empList }}</span>
         </a>
@@ -83,30 +124,72 @@
     </aside>
 
     <!-- MOBILE SIDEBAR (Offcanvas) -->
-    <div class="offcanvas offcanvas-start mobile-sidebar" tabindex="-1" id="mobileSidebar">
+    <div
+      class="offcanvas offcanvas-start mobile-sidebar"
+      tabindex="-1"
+      id="mobileSidebar"
+    >
       <div class="offcanvas-header mobile-sidebar-header">
         <div class="nav-brand">
-          <div class="nav-brand-icon small"><i class="fa-solid fa-building-shield"></i></div>
-          <span class="nav-brand-name" style="color:white;font-size:15px;">Smart Office</span>
+          <div class="nav-brand-icon small">
+            <i class="fa-solid fa-building-shield"></i>
+          </div>
+          <span class="nav-brand-name" style="color: white; font-size: 15px"
+            >Smart Office</span
+          >
         </div>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+        ></button>
       </div>
       <div class="offcanvas-body p-3">
         <div class="sidebar-inner">
-          <a routerLink="/dashboard/home" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-            <i class="fa-solid fa-house nav-icon"></i><span>{{ translations[currentLang].home }}</span>
+          <a
+            routerLink="/dashboard/home"
+            routerLinkActive="active-link"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-house nav-icon"></i
+            ><span>{{ translations[currentLang].home }}</span>
           </a>
-          <a routerLink="/dashboard/device-list" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-            <i class="fa-solid fa-hard-drive nav-icon"></i><span>{{ translations[currentLang].deviceList }}</span>
+          <a
+            routerLink="/dashboard/device-list"
+            routerLinkActive="active-link"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-hard-drive nav-icon"></i
+            ><span>{{ translations[currentLang].deviceList }}</span>
           </a>
-          <a routerLink="/dashboard/emp-with-device" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-            <i class="fa-solid fa-id-card nav-icon"></i><span>{{ translations[currentLang].empWise }}</span>
+          <a
+            routerLink="/dashboard/emp-with-device"
+            routerLinkActive="active-link"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-id-card nav-icon"></i
+            ><span>{{ translations[currentLang].empWise }}</span>
           </a>
-          <a routerLink="/dashboard/device-with-emp" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-            <i class="fa-solid fa-building-user nav-icon"></i><span>{{ translations[currentLang].deviceWise }}</span>
+          <a
+            routerLink="/dashboard/device-with-emp"
+            routerLinkActive="active-link"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-building-user nav-icon"></i
+            ><span>{{ translations[currentLang].deviceWise }}</span>
           </a>
-          <a routerLink="/dashboard/emp-list" routerLinkActive="active-link" class="nav-link" data-bs-dismiss="offcanvas">
-            <i class="fa-solid fa-users nav-icon"></i><span>{{ translations[currentLang].empList }}</span>
+          <a
+            routerLink="/dashboard/emp-list"
+            routerLinkActive="active-link"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-users nav-icon"></i
+            ><span>{{ translations[currentLang].empList }}</span>
           </a>
         </div>
       </div>
