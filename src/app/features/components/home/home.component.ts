@@ -54,6 +54,15 @@ export class HomeComponent {
       desc: 'Pending device assignments',
       loaded: true,
     },
+      {
+      label: 'Expired Soon',
+      value: 0,
+      icon: 'fa-solid fa-triangle-exclamation',
+      color: 'orange',
+      route: '/dashboard/emp-with-device',
+      desc: 'Upcoming device expirations',
+      loaded: true,
+    },
   ];
 
   quickLinks = [

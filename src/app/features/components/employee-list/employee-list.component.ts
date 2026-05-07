@@ -14,8 +14,16 @@ export class EmployeeListComponent {
   employeeList: any[] = [];
   filteredEmployeeList: any[] = [];
   isLoading: boolean = false;
-  tableHeading: any;
-  searchKeyword: string = '';
+
+  tableHeading = [
+    { key: 'Sno', title: 'S.No.' },
+    { key: 'employeeName', title: 'Employee Name' },
+    { key: 'employeeCode', title: 'Employee Code' },
+    { key: 'numericCode', title: 'Numeric Code' },
+    { key: 'gender', title: 'Gender' },
+    { key: 'companyId', title: 'Company Id' },
+    { key: 'designation', title: 'Designation' },
+  ];
 
   pagesize = {
     limit: 25,
@@ -25,79 +33,60 @@ export class EmployeeListComponent {
 
   constructor(private commonService: CommmonService) {}
 
-  ngOnInit() {
-    this.setInitialEmplyeeTable();
+  ngOnInit(): void {
     this.getEmployeeList();
   }
 
-  setInitialEmplyeeTable() {
-    this.tableHeading = [
-      { key: 'Sno', title: 'S.No.' },
-      { key: 'employeeName', title: 'Employee Name' },
-      { key: 'employeeCode', title: 'Employee Code' },
-      { key: 'numericCode', title: 'Numeric Code' },
-      { key: 'gender', title: 'Gender' },
-      { key: 'companyId', title: 'CompanyId' },
-      { key: 'designation', title: 'Designation' },
-    ];
-  }
-
-  //API CALL
+  // GET EMPLOYEE LIST
   getEmployeeList() {
-    this.commonService.employeeList().subscribe((res: any) => {
-    console.log("Employee List:",res);
-    
+    this.isLoading = true;
 
-      this.isLoading = false;
-      this.employeeList = res?.body?.data || [];
-      this.pagesize.count = res?.body?.data?.totalRecords || 0;
+    this.commonService
+      .employeeList(this.pagesize.offset, this.pagesize.limit)
+      .subscribe({
+        next: (res: any) => {
+          console.log('Employee List:', res);
 
-      this.applyFilter();
-    });
+          this.employeeList = res?.body?.data || [];
+
+         this.filteredEmployeeList=[...this.employeeList]
+          this.pagesize.count = res?.body?.totalRecords || 0;
+
+          this.isLoading = false;
+        },
+
+        error: (err) => {
+          console.log(err);
+          this.isLoading = false;
+        },
+      });
   }
 
-  // Search
-  // onSearch(event: any) {
-  //   this.searchKeyword = event.target.value.toLowerCase();
-  //   this.pagesize.offset = 1;
-  //   this.applyFilter();
-  // }
-
-  // Filter
-  applyFilter() {
-    if (!this.searchKeyword) {
-      this.filteredEmployeeList = [...this.employeeList];
-    } else {
-      this.filteredEmployeeList = this.employeeList.filter((item: any) =>
-        Object.values(item).some((val) =>
-          val?.toString().toLowerCase().includes(this.searchKeyword),
-        ),
-      );
-    }
-
-    this.pagesize.count = this.filteredEmployeeList.length;
+  // PAGE CHANGE
+  onTablePageChange(page: number) {
+    this.pagesize.offset = page;
+    this.getEmployeeList();
   }
 
-  // Page Change
-  onTablePageChange(event: number) {
-    this.pagesize.offset = event;
-  }
-
-  // Page Size Change
+  // PAGE SIZE CHANGE
   onPageSizeChange(event: any) {
     this.pagesize.limit = +event.target.value;
     this.pagesize.offset = 1;
+    this.getEmployeeList();
   }
 
-  // Counting
+  // START VALUE
   get startValue(): number {
     return (
-      this.pagesize.offset * this.pagesize.limit - (this.pagesize.limit - 1)
+      (this.pagesize.offset - 1) * this.pagesize.limit + 1
     );
   }
 
+  // LAST VALUE
   get lastValue(): number {
-    const last = this.startValue + this.pagesize.limit - 1;
+    const last =
+      this.startValue + this.employeeList.length - 1;
+
     return Math.min(last, this.pagesize.count);
   }
 }
