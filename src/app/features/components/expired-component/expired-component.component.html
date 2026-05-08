@@ -1,1 +1,97 @@
 
+<div class="page-container">
+  <div class="data-card">
+    <!-- CARD HEADER -->
+    <div class="card-header-bar">
+      <div class="header-row">
+        <div class="header-title-group">
+          <div class="header-icon-wrap">
+            <i class="fa-solid fa-hard-drive"></i>
+          </div>
+          <div>
+            <h5 class="header-title">Expired Soon</h5>
+          </div>
+        </div>
+
+        <div class="span">
+          <span class="count-badge">
+            {{ filteredList.length > 0 ? startValue : 0 }} -
+            {{
+              filteredList.length > 0
+                ? filteredList.length < lastValue
+                  ? filteredList.length
+                  : lastValue
+                : 0
+            }}
+            of {{ filteredList.length }} Expired
+          </span>
+        </div>
+        <div class="header-pagination">
+          <pagination-controls
+            id="empId"
+            (pageChange)="onTablePageChange($event)"
+          ></pagination-controls>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-left"></div>
+      <div class="toolbar-right">
+        <label class="toolbar-label">Items:</label>
+        <select (change)="onPageSizeChange($event)" class="select-sm">
+          <option *ngFor="let size of [25, 50, 100]" [value]="size">
+            {{ size }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th *ngFor="let col of tableHeading">{{ col.title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let data of filteredList
+                | paginate
+                  : {
+                      id: 'empId',
+                      itemsPerPage: pagesize.limit,
+                      currentPage: pagesize.offset,
+                      totalItems: pagesize.count,
+                    };
+              let i = index
+            "
+          >
+            <td>
+              <span class="sno-badge">{{
+                (pagesize.offset - 1) * pagesize.limit + i + 1
+              }}</span>
+            </td>
+            <td>
+              <span >{{ data.idd }}</span>
+            </td>
+            <td >{{ data.name }}</td>
+            <td>{{ data.deviceId }}</td>
+            <td>{{ data.validToDate }}</td>
+            
+            
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- NO DATA -->
+    <div class="no-data-msg" *ngIf="!filteredList.length">
+      <div class="no-data-icon"><i class="fa-solid fa-inbox"></i></div>
+      No devices found
+    </div>
+  </div>
+</div>

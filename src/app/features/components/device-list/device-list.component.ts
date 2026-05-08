@@ -82,9 +82,5 @@ export class DeviceListComponent implements OnInit {
     this.getDeviceList();
   }
 
-  // SEARCH
-  // onSearch(event: any) {
-  //   // this.searchText = event.target.value.toLowerCase();
-  //   this.pagesize.offset = 1;
-  // }
+ 
 }

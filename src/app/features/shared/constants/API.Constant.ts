@@ -26,6 +26,10 @@ export const API_CONSTANT = {
   assignEmployeeDevice:
     'Devices/AssignEmployeeWithDevice',
   
-  removeEmployeeDevice:'Devices/RemoveEmployeeFromDevice'
+  removeEmployeeDevice: 'Devices/RemoveEmployeeFromDevice',
+  
+ allActivity:'Dashboard/GetAllActivity?days={days}&id={id}',
+ expiringSoonList:
+'Dashboard/expiring-soon-list?days={days}&pageNumber={pageNumber}&pageSize={pageSize}',
 
 };

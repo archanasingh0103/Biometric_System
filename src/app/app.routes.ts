@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/pages/login/login.component';
-import { authGuard } from './core/guards/auth.guard';
-// import { LoginComponent } from '../pages/login/login.component';
+import { authGuard,  } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -20,7 +19,7 @@ export const routes: Routes = [
         (m) => m.DASHBOARD_ROUTES,
       ),
     canActivate: [authGuard],
-      canActivateChild: [authGuard]
+    // canActivateChild: [authGuardChild],
   },
   {
     path: '**',

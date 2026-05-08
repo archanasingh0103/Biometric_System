@@ -5,6 +5,7 @@ import { DeviceWiseEmployeeComponent } from '../device-wise-employee/device-wise
 import { EmployeeListComponent } from '../employee-list/employee-list.component';
 import { EmployeeWiseDeviceComponent } from '../employee-wise-device/employee-wise-device.component';
 import { HomeComponent } from '../home/home.component';
+import { ExpiredComponentComponent } from '../expired-component/expired-component.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
@@ -18,6 +19,7 @@ export const DASHBOARD_ROUTES: Routes = [
       { path: 'device-with-emp', component: DeviceWiseEmployeeComponent },
       { path: 'emp-list', component: EmployeeListComponent },
       { path: 'emp-with-device', component: EmployeeWiseDeviceComponent },
+      {path:'empiry-soon',component:ExpiredComponentComponent}
     ],
   },
 ];

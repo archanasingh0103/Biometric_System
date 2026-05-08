@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommmonService } from '../../shared/services/common-service/common.service';
 // import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,160 +11,196 @@ import { RouterLink, RouterModule } from '@angular/router';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  loading: boolean = true;
-  currentTime: string = '';
-  currentDate: string = '';
-  userName: string = '';
-  greeting: string = '';
+  @ViewChild('donutCanvas')
+  donutCanvas!: ElementRef<HTMLCanvasElement>;
 
-  stats = [
-    {
-      label: 'Total Devices',
-      value: 0,
-      icon: 'fa-solid fa-hard-drive',
-      color: 'blue',
-      route: '/dashboard/device-list',
-      desc: 'Registered biometric devices',
-      loaded: false,
-    },
-    {
-      label: 'Total Employees',
-      value: 0,
-      icon: 'fa-solid fa-users',
-      color: 'purple',
-      route: '/dashboard/emp-list',
-      desc: 'Registered employees in system',
-      loaded: false,
-    },
-    {
-      label: 'Active Users',
-      value: 0,
-      icon: 'fa-solid fa-link',
-      color: 'green',
-      route: '/dashboard/device-with-emp',
-      desc: 'Employee-device links active',
-      loaded: true,
-    },
-    {
-      label: 'Unlinked Users',
-      value: 0,
-      icon: 'fa-solid fa-link-slash',
-      color: 'red',
-      route: '/dashboard/emp-with-device',
-      desc: 'Pending device assignments',
-      loaded: true,
-    },
-      {
-      label: 'Expired Soon',
-      value: 0,
-      icon: 'fa-solid fa-triangle-exclamation',
-      color: 'orange',
-      route: '/dashboard/emp-with-device',
-      desc: 'Upcoming device expirations',
-      loaded: true,
-    },
-  ];
+  // CLOCK
+  currentTime = '';
+  currentDate = '';
+  greeting = '';
+  userName = '';
+  private clockTimer: any;
 
-  quickLinks = [
-    {
-      label: 'Device List',
-      icon: 'fa-solid fa-hard-drive',
-      route: '/dashboard/device-list',
-      desc: 'View & manage all biometric devices',
-      color: 'blue',
-    },
-    {
-      label: 'Employee Wise Device',
-      icon: 'fa-solid fa-id-card',
-      route: '/dashboard/emp-with-device',
-      desc: 'See devices assigned to each employee',
-      color: 'amber',
-    },
-    {
-      label: 'Device Wise Employee',
-      icon: 'fa-solid fa-building-user',
-      route: '/dashboard/device-with-emp',
-      desc: 'See employees linked to each device',
-      color: 'purple',
-    },
-    {
-      label: 'Employee List',
-      icon: 'fa-solid fa-users',
-      route: '/dashboard/emp-list',
-      desc: 'Browse all registered employees',
-      color: 'green',
-    },
-  ];
+
+  // DASHBOARD STATS
+  loading = true;
+
+  totalDevices = 0;
+  totalEmployees = 0;
+  linkedDevices = 0;
+  unlinkedDevices = 0;
+  expiringSoon = 0;
 
   constructor(private commonService: CommmonService) {}
 
-  ngOnInit() {
-    this.updateClock();
-    setInterval(() => this.updateClock(), 1000);
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      const user = JSON.parse(userData);
-      this.userName = user.email || 'User';
-    }
-    this.loadDeviceCount();
-    this.loadEmployeeCount();
+  // ─────────────────────────────────────
+  // ROW 1 CARDS
+  // ─────────────────────────────────────
+  get row1() {
+    return [
+      {
+        key: 'totalEmployees',
+        label: 'Total Employees',
+        value: this.totalEmployees,
+        icon: 'fa-solid fa-users',
+        color: 'blue',
+        route: '/dashboard/emp-list',
+        desc: 'Registered employees',
+      },
+      {
+        key: 'totalDevices',
+        label: 'Total Devices',
+        value: this.totalDevices,
+        icon: 'fa-solid fa-hard-drive',
+        color: 'purple',
+        route: '/dashboard/device-list',
+        desc: 'Registered biometric devices',
+      },
+      {
+        key: 'linkedDevices',
+        label: 'Active Employees',
+        value: this.linkedDevices,
+        icon: 'fa-solid fa-link',
+        color: 'green',
+        route: '/dashboard/device-with-emp',
+        desc: 'Employee–device links active',
+      },
+    ];
   }
 
-  updateClock() {
+
+  // ROW 2 CARDS
+  get row2Cards() {
+    return [
+      {
+        key: 'unlinkedDevices',
+        label: 'Unlinked Users',
+        value: this.unlinkedDevices,
+        icon: 'fa-solid fa-link-slash',
+        color: 'red',
+        route: '/dashboard/emp-with-device',
+        desc: 'Pending device assignments',
+      },
+      {
+        key: 'expiringSoon',
+        label: 'Expiring Soon',
+        value: this.expiringSoon,
+        icon: 'fa-solid fa-triangle-exclamation',
+        color: 'orange',
+        route: '/dashboard/empiry-soon',
+        desc: 'Devices expiring in 30 days',
+      },
+    ];
+  }
+
+  // ─────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────
+  ngOnInit(): void {
+    this.startClock();
+
+    const raw = localStorage.getItem('userData');
+
+    if (raw) {
+      try {
+        this.userName = JSON.parse(raw)?.email || 'User';
+      } catch {
+        this.userName = 'User';
+      }
+    }
+
+    this.loadSummary();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.clockTimer);
+  }
+
+  // CLOCK METHODS
+  
+  startClock(): void {
+    this.tick();
+    this.clockTimer = setInterval(() => this.tick(), 1000);
+  }
+
+  tick(): void {
     const now = new Date();
+    const h = now.getHours();
+
+    this.greeting =
+      h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+
     this.currentTime = now.toLocaleTimeString('en-IN', {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
     });
+
     this.currentDate = now.toLocaleDateString('en-IN', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
-    const hour = now.getHours();
-    this.greeting =
-      hour < 12
-        ? 'Good Morning'
-        : hour < 17
-          ? 'Good Afternoon'
-          : 'Good Evening';
   }
 
-  loadDeviceCount() {
-    this.commonService.deviceList(1, 1000).subscribe({
+  // ─────────────────────────────────────
+  // LOAD DASHBOARD DATA
+  // ─────────────────────────────────────
+  loadSummary(): void {
+    this.loading = true;
+
+    this.commonService.getDashboardSummary(30, 1).subscribe({
       next: (res: any) => {
-        const total = res?.totalCount || res?.data?.length || 0;
-        this.stats[0].value = total;
-        this.stats[0].loaded = true;
-        this.checkLoading();
+        console.log('Card Data:', res);
+
+        // actual response data
+        const data = res?.body?.data;
+
+        // assign values
+        this.totalDevices = data?.totalDevices || 0;
+
+        this.totalEmployees = data?.totalEmployees || 0;
+
+        this.linkedDevices = data?.activeEmployees || 0;
+
+        this.unlinkedDevices = data?.totalUnlinkedUser || 0;
+
+        this.expiringSoon = data?.deviceExpiringSoon || 0;
+
+        this.loading = false;
       },
-      error: () => {
-        this.stats[0].loaded = true;
-        this.checkLoading();
+
+      error: (err) => {
+        console.error('Dashboard Error:', err);
+
+        this.loading = false;
       },
     });
   }
 
-  loadEmployeeCount() {
-    this.commonService.employeeList(1, 1000).subscribe({
-      next: (res: any) => {
-        const total = res?.totalCount || res?.data?.length || 0;
-        this.stats[1].value = total;
-        this.stats[1].loaded = true;
-        this.checkLoading();
-      },
-      error: () => {
-        this.stats[1].loaded = true;
-        this.checkLoading();
-      },
-    });
-  }
+  // ── Pure-CSS SVG donut (no external lib needed) ───────────
+  // drawDonut() {
+  //   // handled in template via SVG stroke-dasharray — no canvas needed
+  // }
 
-  checkLoading() {
-    if (this.stats[0].loaded && this.stats[1].loaded) {
-      this.loading = false;
-    }
-  }
+  // SVG donut helpers
+  // readonly R = 54; // circle radius
+  // readonly C = 2 * Math.PI * 54; // circumference ≈ 339.3
+
+  // get linkedDash(): string {
+  //   const v = (this.linkedPct / 100) * this.C;
+  //   return `${v} ${this.C - v}`;
+  // }
+  // get unlinkedDash(): string {
+  //   const v = (this.unlinkedPct / 100) * this.C;
+  //   return `${v} ${this.C - v}`;
+  // }
+  // get linkedOffset(): string {
+  //   return `${this.C * 0.25}`; // start at top (−90°)
+  // }
+  // get unlinkedOffset(): string {
+  //   const linked = (this.linkedPct / 100) * this.C;
+  //   return `${this.C * 0.25 - linked}`;
+  // }
 }
