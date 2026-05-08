@@ -173,7 +173,7 @@ export class HomeComponent {
     next: (res: any) => {
       console.log("Donut Response:", res);
 
-      const data = res?.body; // ✅ FIXED HERE
+      const data = res?.body; //  FIXED HERE
 
       const linked = data?.distribution?.find(
         (x: any) => x.label === 'Linked Devices'

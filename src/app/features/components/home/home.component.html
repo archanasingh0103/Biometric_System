@@ -1,8 +1,7 @@
 <div class="home-container">
 
-  <!-- ══════════════════════════════════
-       HERO BANNER
-  ══════════════════════════════════ -->
+
+ <!-- HERO BANNER -->
   <div class="hero-banner">
     <div class="hero-left">
       <div class="hero-greeting">{{ greeting }},</div>
@@ -20,9 +19,7 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════════
-       ROW 1 — 3 STAT CARDS
-  ══════════════════════════════════ -->
+<!-- ROW 1 — 3 STAT CARDS -->
   <div class="stat-row-3">
     <a class="stat-card"
        *ngFor="let s of row1"
@@ -36,6 +33,7 @@
         <div class="sc-info">
           <div class="sc-value">
             <ng-container *ngIf="!loading; else skelTpl">{{ s.value | number }}</ng-container>
+            
             <ng-template #skelTpl><span class="skel"></span></ng-template>
           </div>
           <div class="sc-label">{{ s.label }}</div>
@@ -46,9 +44,7 @@
     </a>
   </div>
 
-  <!-- ══════════════════════════════════
-       ROW 2 — 2 STAT CARDS + DONUT CHART
-  ══════════════════════════════════ -->
+ <!--  ROW 2 — 2 STAT CARDS + DONUT CHART -->
   <div class="stat-row-2-chart">
 
     <!-- 2 cards left side -->
@@ -156,9 +152,7 @@
   </div>
 </div>
 
-  <!-- ══════════════════════════════════
-       NOTICE BAR
-  ══════════════════════════════════ -->
+<!--  NOTICE BAR -->
   <!-- <div class="notice-bar">
     <i class="fa-solid fa-circle-exclamation notice-icon"></i>
     <span>
