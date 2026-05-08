@@ -1,11 +1,8 @@
 export const API_CONSTANT = {
   //Device api
-  deviceList:
-    // 'Devices/GetDeviceList?pageNumber=${page}&pageSize=${pageSize}',
-    'Devices/GetDeviceList?pageNumber=${page}&pageSize=${pageSize}',
+  deviceList: 'Devices/GetDeviceList?pageNumber=${page}&pageSize=${pageSize}',
   deviceWiseEmployee:
-    // 'Devices/DeviceWithEmployee?deviceId=${deviceId}&search=${search}&link=${link}&pageNumber=${page}&pageSize=${pageSize}',
-   'Devices/DeviceWithEmployee?deviceId=${deviceId}&search=${search}&link=${link}&pageNumber=${pageNumber}&pageSize=${pageSize}',
+    'Devices/DeviceWithEmployee?deviceId=${deviceId}&search=${search}&link=${link}&pageNumber=${pageNumber}&pageSize=${pageSize}',
 
   //Employee api
   employeeList:
@@ -20,16 +17,14 @@ export const API_CONSTANT = {
   deviceDropdown: 'Devices/devices-dropdown',
 
   employeeWiseDevice:
-    // 'Devices/EmployeeWithDevices?employeecode=${empCode}&search=${search}&link=${link}&pageNumber=${page}&pageSize=${pageSize}',
     'Devices/EmployeeWithDevices?employeecode=${empCode}&search=${search}&link=${link}&pageNumber=${page}&pageSize=${pageSize}',
 
-  assignEmployeeDevice:
-    'Devices/AssignEmployeeWithDevice',
-  
-  removeEmployeeDevice: 'Devices/RemoveEmployeeFromDevice',
-  
- allActivity:'Dashboard/GetAllActivity?days={days}&id={id}',
- expiringSoonList:
-'Dashboard/expiring-soon-list?days={days}&pageNumber={pageNumber}&pageSize={pageSize}',
+  assignEmployeeDevice: 'Devices/AssignEmployeeWithDevice',
 
+  removeEmployeeDevice: 'Devices/RemoveEmployeeFromDevice',
+
+  allActivity: 'Dashboard/GetAllActivity?days={days}&id={id}',
+  expiringSoonList:
+    'Dashboard/expiring-soon-list?days={days}&pageNumber={pageNumber}&pageSize={pageSize}',
+    donutList:'Dashboard/device-distribution'
 };

@@ -173,13 +173,29 @@ expiringSoonList(
   //     ),
   //   );
   // }
-  getDashboardSummary(days:number,id:number): Observable<any>
-  {
-    const url = API_CONSTANT.allActivity
-      .replace('{days}', days.toString())
-      .replace('{id}', id.toString())
-    return this.apiService.get(url).pipe(catchError((error:HttpErrorResponse)=> of(error)))
-  }
+ getDashboardSummary(days: number, id: number): Observable<any> {
+  const url = API_CONSTANT.allActivity
+    .replace('{days}', days.toString())
+    .replace('{id}', id.toString());
+
+  return this.apiService.get(url).pipe(
+    catchError((error: HttpErrorResponse) => {
+      console.error('Dashboard API Error:', error);
+      return of(null); // 👈 safe fallback
+    })
+  );
+}
+
+donutSummary(): Observable<any> {
+  const url = API_CONSTANT.donutList;
+
+  return this.apiService.get(url).pipe(
+    catchError((error: HttpErrorResponse) => {
+      console.error('Donut API Error:', error);
+      return of(null);
+    })
+  );
+}
 
   // ─── Helper ───────────────────────────────────────────────
   // private _toArray(res: any): any[] {

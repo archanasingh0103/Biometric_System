@@ -75,89 +75,86 @@
       </a>
     </div>
 
-    <!-- Donut chart right side -->
-    <!-- <div class="chart-card">
-      <div class="chart-card-header">
-        <span class="chart-title">Device Status Distribution</span>
-      </div>
-      <div class="chart-card-body"> -->
-
-        <!-- SVG Donut -->
-        <!-- <div class="donut-wrap"> -->
-          <!-- <svg viewBox="0 0 120 120" class="donut-svg">
-            <!- Background ring -->
-            <!-- <circle cx="60" cy="60" [attr.r]="R"
-              fill="none" stroke="#f1f5f9" stroke-width="14"/> -->
-
-            <!-- Unlinked (red) — drawn first, below -->
-            <!-- <circle cx="60" cy="60" [attr.r]="R"
-              fill="none"
-              stroke="#ef4444"
-              stroke-width="14"
-              stroke-linecap="round"
-              [attr.stroke-dasharray]="unlinkedDash"
-              [attr.stroke-dashoffset]="unlinkedOffset"
-              style="transition: stroke-dasharray 0.6s ease;"/> -->
-
-            <!-- Linked (green) — drawn on top -->
-            <!-- <circle cx="60" cy="60" [attr.r]="R"
-              fill="none"
-              stroke="#22c55e"
-              stroke-width="14"
-              stroke-linecap="round"
-              [attr.stroke-dasharray]="linkedDash"
-              [attr.stroke-dashoffset]="linkedOffset"
-              style="transition: stroke-dasharray 0.6s ease;"/> -->
-
-            <!-- Center text -->
-            <!-- <text x="60" y="55" text-anchor="middle"
-              font-size="16" font-weight="800" fill="currentColor"
-              class="donut-center-val">
-              {{ loading ? '—' : (totalDevices | number) }}
-            </text>
-            <text x="60" y="70" text-anchor="middle"
-              font-size="7" fill="#94a3b8">
-              Total
-            </text> -->
-          <!-- </svg> --> 
-        <!-- </div> -->
-
-        <!-- Legend -->
-        <!-- <div class="donut-legend">
-          <div class="legend-item">
-            <span class="legend-dot dot-green"></span>
-            <div class="legend-info">
-              <span class="legend-label">Linked Devices</span>
-              <span class="legend-val green-text">
-                {{ loading ? '—' : (linkedDevices | number) }}
-                <small>({{ linkedPct }}%)</small>
-              </span>
-            </div>
-          </div>
-          <div class="legend-divider"></div>
-          <div class="legend-item">
-            <span class="legend-dot dot-red"></span>
-            <div class="legend-info">
-              <span class="legend-label">Unlinked Devices</span>
-              <span class="legend-val red-text">
-                {{ loading ? '—' : (unlinkedDevices | number) }}
-                <small>({{ unlinkedPct }}%)</small>
-              </span>
-            </div>
-          </div>
-          <div class="legend-divider"></div>
-          <div class="legend-item">
-            <span class="legend-dot dot-gray"></span>
-            <div class="legend-info">
-              <span class="legend-label">Total</span>
-              <span class="legend-val">{{ loading ? '—' : (totalDevices | number) }}</span>
-            </div>
-          </div>
-        </div> -->
-
-      <!-- </div> -->
-    <!-- </div> -->
+    <div class="chart-card">
+  <div class="chart-card-header">
+    <span class="chart-title">Device Status Distribution</span>
   </div>
+
+  <div class="chart-card-body">
+
+   <div class="donut-wrap">
+  <svg viewBox="0 0 120 120" class="donut-svg">
+
+    <!-- RED BASE -->
+    <circle
+      cx="60"
+      cy="60"
+      r="54"
+      fill="none"
+      stroke="#ef4444"
+      stroke-width="14"
+    />
+
+    <!-- GREEN PROGRESS -->
+    <circle
+      cx="60"
+      cy="60"
+      r="54"
+      fill="none"
+      stroke="#22c55e"
+      stroke-width="14"
+      stroke-linecap="round"
+      class="progress-ring"
+      [attr.stroke-dasharray]="circumference"
+      [attr.stroke-dashoffset]="linkedOffset"
+    />
+
+    <!-- CENTER TEXT -->
+    <text
+      x="60"
+      y="55"
+      text-anchor="middle"
+      font-size="16"
+      font-weight="800"
+    >
+      {{ donutData.total }}
+    </text>
+
+    <text
+      x="60"
+      y="70"
+      text-anchor="middle"
+      font-size="7"
+    >
+      Total
+    </text>
+
+  </svg>
+</div>
+
+    <!-- Legend -->
+    <div class="donut-legend">
+
+      <div class="legend-item">
+        <span class="legend-dot dot-green"></span>
+        <div class="legend-info">
+          <span>Linked Devices</span>
+          <span>{{ donutData.linked }} ({{ linkedPct }}%)</span>
+        </div>
+      </div>
+
+      <div class="legend-item">
+        <span class="legend-dot dot-red"></span>
+        <div class="legend-info">
+          <span>Unlinked Devices</span>
+          <span>{{ donutData.unlinked }} ({{ unlinkedPct }}%)</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
 
   <!-- ══════════════════════════════════
        NOTICE BAR

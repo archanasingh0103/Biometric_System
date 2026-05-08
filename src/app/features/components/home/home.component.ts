@@ -11,8 +11,7 @@ import { RouterLink, RouterModule } from '@angular/router';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  @ViewChild('donutCanvas')
-  donutCanvas!: ElementRef<HTMLCanvasElement>;
+ @ViewChild('donutCanvas') donutCanvas!: ElementRef<HTMLCanvasElement>;
 
   // CLOCK
   currentTime = '';
@@ -21,21 +20,26 @@ export class HomeComponent {
   userName = '';
   private clockTimer: any;
 
-
-  // DASHBOARD STATS
+  // LOADING
   loading = true;
 
+  // DASHBOARD DATA
   totalDevices = 0;
   totalEmployees = 0;
   linkedDevices = 0;
   unlinkedDevices = 0;
   expiringSoon = 0;
 
+  // DONUT DATA
+  donutData = {
+    total: 0,
+    linked: 0,
+    unlinked: 0,
+  };
+
   constructor(private commonService: CommmonService) {}
 
-  // ─────────────────────────────────────
-  // ROW 1 CARDS
-  // ─────────────────────────────────────
+  // ROW 1
   get row1() {
     return [
       {
@@ -68,8 +72,7 @@ export class HomeComponent {
     ];
   }
 
-
-  // ROW 2 CARDS
+  // ROW 2
   get row2Cards() {
     return [
       {
@@ -93,14 +96,11 @@ export class HomeComponent {
     ];
   }
 
-  // ─────────────────────────────────────
   // INIT
-  // ─────────────────────────────────────
   ngOnInit(): void {
     this.startClock();
 
     const raw = localStorage.getItem('userData');
-
     if (raw) {
       try {
         this.userName = JSON.parse(raw)?.email || 'User';
@@ -110,14 +110,14 @@ export class HomeComponent {
     }
 
     this.loadSummary();
+    this.loadDonut();
   }
 
   ngOnDestroy(): void {
     clearInterval(this.clockTimer);
   }
 
-  // CLOCK METHODS
-  
+  // CLOCK
   startClock(): void {
     this.tick();
     this.clockTimer = setInterval(() => this.tick(), 1000);
@@ -144,63 +144,69 @@ export class HomeComponent {
     });
   }
 
-  // ─────────────────────────────────────
-  // LOAD DASHBOARD DATA
-  // ─────────────────────────────────────
+  // DASHBOARD API
   loadSummary(): void {
     this.loading = true;
 
     this.commonService.getDashboardSummary(30, 1).subscribe({
       next: (res: any) => {
-        console.log('Card Data:', res);
+        const data = res?.body.data || {};
 
-        // actual response data
-        const data = res?.body?.data;
-
-        // assign values
-        this.totalDevices = data?.totalDevices || 0;
-
-        this.totalEmployees = data?.totalEmployees || 0;
-
-        this.linkedDevices = data?.activeEmployees || 0;
-
-        this.unlinkedDevices = data?.totalUnlinkedUser || 0;
-
-        this.expiringSoon = data?.deviceExpiringSoon || 0;
+        this.totalDevices = data.totalDevices || 0;
+        this.totalEmployees = data.totalEmployees || 0;
+        this.linkedDevices = data.activeEmployees || 0;
+        this.unlinkedDevices = data.totalUnlinkedUser || 0;
+        this.expiringSoon = data.deviceExpiringSoon || 0;
 
         this.loading = false;
       },
-
       error: (err) => {
-        console.error('Dashboard Error:', err);
-
+        console.error(err);
         this.loading = false;
       },
     });
   }
 
-  // ── Pure-CSS SVG donut (no external lib needed) ───────────
-  // drawDonut() {
-  //   // handled in template via SVG stroke-dasharray — no canvas needed
-  // }
+  // DONUT API
+ loadDonut(): void {
+  this.commonService.donutSummary().subscribe({
+    next: (res: any) => {
+      console.log("Donut Response:", res);
 
-  // SVG donut helpers
-  // readonly R = 54; // circle radius
-  // readonly C = 2 * Math.PI * 54; // circumference ≈ 339.3
+      const data = res?.body; // ✅ FIXED HERE
 
-  // get linkedDash(): string {
-  //   const v = (this.linkedPct / 100) * this.C;
-  //   return `${v} ${this.C - v}`;
-  // }
-  // get unlinkedDash(): string {
-  //   const v = (this.unlinkedPct / 100) * this.C;
-  //   return `${v} ${this.C - v}`;
-  // }
-  // get linkedOffset(): string {
-  //   return `${this.C * 0.25}`; // start at top (−90°)
-  // }
-  // get unlinkedOffset(): string {
-  //   const linked = (this.linkedPct / 100) * this.C;
-  //   return `${this.C * 0.25 - linked}`;
-  // }
+      const linked = data?.distribution?.find(
+        (x: any) => x.label === 'Linked Devices'
+      );
+
+      const unlinked = data?.distribution?.find(
+        (x: any) => x.label === 'Unlinked Devices'
+      );
+
+      this.donutData = {
+        total: data?.totalDevices || 0,
+        linked: linked?.count || 0,
+        unlinked: unlinked?.count || 0,
+      };
+    },
+    error: (err) => console.error(err),
+  });
+}
+circumference = 2 * Math.PI * 54;
+
+get linkedOffset(): number {
+  return (
+    this.circumference -
+    (this.linkedPct / 100) * this.circumference
+  );
+}
+  // DONUT PERCENT
+  get linkedPct(): number {
+    if (!this.donutData.total) return 0;
+    return Math.round((this.donutData.linked / this.donutData.total) * 100);
+  }
+
+  get unlinkedPct(): number {
+    return 100 - this.linkedPct;
+  }
 }
