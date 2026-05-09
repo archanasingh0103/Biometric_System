@@ -1,7 +1,6 @@
 <div class="home-container">
 
-
- <!-- HERO BANNER -->
+  <!-- ══════════════ HERO BANNER ══════════════ -->
   <div class="hero-banner">
     <div class="hero-left">
       <div class="hero-greeting">{{ greeting }},</div>
@@ -19,10 +18,10 @@
     </div>
   </div>
 
-<!-- ROW 1 — 3 STAT CARDS -->
-  <div class="stat-row-3">
+  <!-- ══════════════ ROW 1 — 5 STAT CARDS ══════════════ -->
+  <div class="stat-row-5">
     <a class="stat-card"
-       *ngFor="let s of row1"
+       *ngFor="let s of allStats"
        [routerLink]="s.route"
        [class]="'stat-card card-' + s.color">
       <div class="sc-top-bar" [class]="'bar-' + s.color"></div>
@@ -32,8 +31,9 @@
         </div>
         <div class="sc-info">
           <div class="sc-value">
-            <ng-container *ngIf="!loading; else skelTpl">{{ s.value | number }}</ng-container>
-            
+            <ng-container *ngIf="!loading; else skelTpl">
+              {{ s.value | number }}
+            </ng-container>
             <ng-template #skelTpl><span class="skel"></span></ng-template>
           </div>
           <div class="sc-label">{{ s.label }}</div>
@@ -44,121 +44,145 @@
     </a>
   </div>
 
- <!--  ROW 2 — 2 STAT CARDS + DONUT CHART -->
-  <div class="stat-row-2-chart">
+  <!-- ══════════════ ROW 2 — BARS + DONUT ══════════════ -->
+  <div class="row2-wrap">
 
-    <!-- 2 cards left side -->
-    <div class="row2-cards">
-      <a class="stat-card"
-         *ngFor="let s of row2Cards"
-         [routerLink]="s.route"
-         [class]="'stat-card card-' + s.color">
-        <div class="sc-top-bar" [class]="'bar-' + s.color"></div>
-        <div class="sc-body">
-          <div class="sc-icon" [class]="'icon-' + s.color">
-            <i [class]="s.icon"></i>
+    <!-- LEFT: Distribution Progress Bars -->
+    <div class="bars-card">
+      <div class="bars-header">
+        <span class="bars-title">Device Distribution</span>
+      </div>
+      <div class="bars-body">
+
+        <div class="bar-item">
+          <div class="bar-meta">
+            <span class="bar-label">
+              <span class="bar-dot dot-blue"></span>Total Devices
+            </span>
+            <span class="bar-count">{{ loading ? '—' : (totalDevices | number) }}</span>
           </div>
-          <div class="sc-info">
-            <div class="sc-value">
-              <ng-container *ngIf="!loading; else skelTpl2">{{ s.value | number }}</ng-container>
-              <ng-template #skelTpl2><span class="skel"></span></ng-template>
-            </div>
-            <div class="sc-label">{{ s.label }}</div>
-            <div class="sc-desc">{{ s.desc }}</div>
+          <div class="bar-track">
+            <div class="bar-fill fill-blue"
+                 [style.width]="loading ? '0%' : '100%'"></div>
           </div>
-          <div class="sc-arrow"><i class="fa-solid fa-arrow-right"></i></div>
         </div>
-      </a>
+
+        <div class="bar-item">
+          <div class="bar-meta">
+            <span class="bar-label">
+              <span class="bar-dot dot-green"></span>Linked Devices
+            </span>
+            <span class="bar-count">{{ loading ? '—' : (linkedDevices | number) }}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill fill-green"
+                 [style.width]="loading ? '0%' : linkedPct + '%'"></div>
+          </div>
+          <span class="bar-pct">{{ loading ? '' : linkedPct + '%' }}</span>
+        </div>
+
+        <div class="bar-item">
+          <div class="bar-meta">
+            <span class="bar-label">
+              <span class="bar-dot dot-red"></span>Unlinked Devices
+            </span>
+            <span class="bar-count">{{ loading ? '—' : (unlinkedDevices | number) }}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill fill-red"
+                 [style.width]="loading ? '0%' : unlinkedPct + '%'"></div>
+          </div>
+          <span class="bar-pct">{{ loading ? '' : unlinkedPct + '%' }}</span>
+        </div>
+
+        <div class="bar-item">
+          <div class="bar-meta">
+            <span class="bar-label">
+              <span class="bar-dot dot-orange"></span>Expiring Soon
+            </span>
+            <span class="bar-count">{{ loading ? '—' : (expiringSoon | number) }}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill fill-orange"
+                 [style.width]="loading ? '0%' : expiringPct + '%'"></div>
+          </div>
+          <span class="bar-pct">{{ loading ? '' : expiringPct + '%' }}</span>
+        </div>
+
+      </div>
     </div>
 
+    <!-- RIGHT: Donut Chart -->
     <div class="chart-card">
-  <div class="chart-card-header">
-    <span class="chart-title">Device Status Distribution</span>
-  </div>
-
-  <div class="chart-card-body">
-
-   <div class="donut-wrap">
-  <svg viewBox="0 0 120 120" class="donut-svg">
-
-    <!-- RED BASE -->
-    <circle
-      cx="60"
-      cy="60"
-      r="54"
-      fill="none"
-      stroke="#ef4444"
-      stroke-width="14"
-    />
-
-    <!-- GREEN PROGRESS -->
-    <circle
-      cx="60"
-      cy="60"
-      r="54"
-      fill="none"
-      stroke="#22c55e"
-      stroke-width="14"
-      stroke-linecap="round"
-      class="progress-ring"
-      [attr.stroke-dasharray]="circumference"
-      [attr.stroke-dashoffset]="linkedOffset"
-    />
-
-    <!-- CENTER TEXT -->
-    <text
-      x="60"
-      y="55"
-      text-anchor="middle"
-      font-size="16"
-      font-weight="800"
-    >
-      {{ donutData.total }}
-    </text>
-
-    <text
-      x="60"
-      y="70"
-      text-anchor="middle"
-      font-size="7"
-    >
-      Total
-    </text>
-
-  </svg>
-</div>
-
-    <!-- Legend -->
-    <div class="donut-legend">
-
-      <div class="legend-item">
-        <span class="legend-dot dot-green"></span>
-        <div class="legend-info">
-          <span>Linked Devices</span>
-          <span>{{ donutData.linked }} ({{ linkedPct }}%)</span>
-        </div>
+      <div class="chart-card-header">
+        <span class="chart-title">Device Status Distribution</span>
       </div>
+      <div class="chart-card-body">
 
-      <div class="legend-item">
-        <span class="legend-dot dot-red"></span>
-        <div class="legend-info">
-          <span>Unlinked Devices</span>
-          <span>{{ donutData.unlinked }} ({{ unlinkedPct }}%)</span>
+        <!-- SVG Donut -->
+        <div class="donut-wrap">
+          <svg viewBox="0 0 120 120" class="donut-svg">
+            <!-- Red base (unlinked) -->
+            <circle cx="60" cy="60" r="44"
+              fill="none" stroke="#ef4444" stroke-width="16"/>
+            <!-- Green overlay (linked) -->
+            <circle cx="60" cy="60" r="44"
+              fill="none" stroke="#22c55e" stroke-width="16"
+              stroke-linecap="butt"
+              [attr.stroke-dasharray]="linkedDash"
+              [attr.stroke-dashoffset]="linkedOffset"
+              style="transition: stroke-dasharray 0.8s ease;"/>
+            <!-- Center value -->
+            <text x="60" y="56" text-anchor="middle"
+              font-size="17" font-weight="800"
+              class="donut-center-num">
+              {{ loading ? '—' : totalDevices }}
+            </text>
+            <text x="60" y="70" text-anchor="middle"
+              font-size="7.5" class="donut-center-lbl">
+              Total
+            </text>
+          </svg>
         </div>
-      </div>
 
+        <!-- Legend -->
+        <div class="donut-legend">
+          <div class="legend-item">
+            <span class="legend-dot dot-green"></span>
+            <div class="legend-info">
+              <span class="legend-name">Linked Devices</span>
+              <span class="legend-val green-text">
+                {{ loading ? '—' : (linkedDevices | number) }}
+                <small>({{ linkedPct }}%)</small>
+              </span>
+            </div>
+          </div>
+          <div class="legend-divider"></div>
+          <div class="legend-item">
+            <span class="legend-dot dot-red"></span>
+            <div class="legend-info">
+              <span class="legend-name">Unlinked Devices</span>
+              <span class="legend-val red-text">
+                {{ loading ? '—' : (unlinkedDevices | number) }}
+                <small>({{ unlinkedPct }}%)</small>
+              </span>
+            </div>
+          </div>
+          <div class="legend-divider"></div>
+          <div class="legend-item">
+            <span class="legend-dot dot-gray"></span>
+            <div class="legend-info">
+              <span class="legend-name">Total</span>
+              <span class="legend-val">
+                {{ loading ? '—' : (totalDevices | number) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-  </div>
-</div>
-
-<!--  NOTICE BAR -->
-  <!-- <div class="notice-bar">
-    <i class="fa-solid fa-circle-exclamation notice-icon"></i>
-    <span>
-      <strong>System Notice:</strong>
-      In case of ERROR 904, kindly update your AadhaarFACERD from PlayStore / AppStore.
-    </span>
-  </div> -->
+  </div><!-- /row2-wrap -->
 
 </div>

@@ -25,6 +25,6 @@ export const API_CONSTANT = {
 
   allActivity: 'Dashboard/GetAllActivity?days={days}&id={id}',
   expiringSoonList:
-    'Dashboard/expiring-soon-list?days={days}&pageNumber={pageNumber}&pageSize={pageSize}',
+    'Dashboard/expiring-soon-list?fromDate={fromDate}&toDate={toDate}&pageNumber={pageNumber}&pageSize={pageSize}',
     donutList:'Dashboard/device-distribution'
 };

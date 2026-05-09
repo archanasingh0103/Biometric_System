@@ -19,7 +19,7 @@ export class EmployeeListComponent {
     { key: 'Sno', title: 'S.No.' },
     { key: 'employeeName', title: 'Employee Name' },
     { key: 'employeeCode', title: 'Employee Code' },
-    { key: 'numericCode', title: 'Numeric Code' },
+    { key: 'employeeId', title: 'Employee Id' },
     { key: 'gender', title: 'Gender' },
     { key: 'companyId', title: 'Company Id' },
     { key: 'designation', title: 'Designation' },

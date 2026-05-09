@@ -15,7 +15,22 @@ export class ExpiredComponentComponent {
   tableHeading: any;
   filteredList: any[] = [];
   isLoading: boolean = false;
-  days: number = 30;
+  fromDate: string = '';
+  toDate: string = '';
+  ngOnInit(): void {
+  this.setInitialDeviceTable();
+
+  // load complete list initially
+  this.getExpiringSoonList();
+}
+
+  formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+
+  return `${year}-${month}-${day}`;
+}
 
   pagesize = {
     limit: 25,
@@ -35,10 +50,6 @@ export class ExpiredComponentComponent {
   }
 
   constructor(private commonService: CommmonService) {}
-  ngOnInit() {
-    this.setInitialDeviceTable();
-    this.getDeviceList();
-  }
 
   // Table headings
   setInitialDeviceTable() {
@@ -51,43 +62,54 @@ export class ExpiredComponentComponent {
     ];
   }
 
-  getDeviceList() {
-    this.isLoading = true;
+getExpiringSoonList() {
+  this.isLoading = true;
 
-    this.commonService
-      .expiringSoonList(this.days, this.pagesize.offset, this.pagesize.limit)
-      .subscribe({
-        next: (res: any) => {
-          console.log('Expired Device List:', res);
+  this.commonService
+    .expiringSoonList(
+      this.fromDate || '',
+      this.toDate || '',
+      this.pagesize.offset,
+      this.pagesize.limit
+    )
+    .subscribe({
+      next: (res: any) => {
+        const response = res?.body;
 
-          const response = res?.body;
+        this.expiredList = response?.data || [];
+        this.filteredList = [...this.expiredList];
 
-          this.expiredList = response?.data || [];
+        this.pagesize.count = response?.totalRecords || 0;
 
-          this.filteredList = [...this.expiredList];
+        this.isLoading = false;
+      },
 
-          this.pagesize.count = response?.totalRecords || 0;
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      },
+    });
+}
 
-          this.isLoading = false;
-        },
-
-        error: (err) => {
-          console.error(err);
-
-          this.isLoading = false;
-        },
-      });
+onShowClick() {
+  if (!this.fromDate || !this.toDate) {
+    alert("Please select From and To date");
+    return;
   }
+
+  this.pagesize.offset = 1; // reset pagination
+  this.getExpiringSoonList();
+}
 
   // Pagination Change
   onTablePageChange(event: number) {
     this.pagesize.offset = event;
-    this.getDeviceList();
+    this.getExpiringSoonList();
   }
 
   onPageSizeChange(event: any) {
     this.pagesize.limit = +event.target.value;
     this.pagesize.offset = 1;
-    this.getDeviceList();
+    this.getExpiringSoonList();
   }
 }

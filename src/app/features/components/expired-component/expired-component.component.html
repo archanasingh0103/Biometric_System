@@ -1,4 +1,3 @@
-
 <div class="page-container">
   <div class="data-card">
     <!-- CARD HEADER -->
@@ -37,7 +36,23 @@
 
     <!-- TOOLBAR -->
     <div class="toolbar">
-      <div class="toolbar-left"></div>
+      <div class="toolbar-left">
+        <!-- FROM DATE -->
+        <div class="date-filter">
+          <label class="toolbar-label">From:</label>
+         <input type="date" [(ngModel)]="fromDate"  />
+        </div>
+
+        <!-- TO DATE -->
+        <div class="date-filter">
+          <label class="toolbar-label">To:</label>
+         <input type="date" [(ngModel)]="toDate" />
+        </div>
+      </div>
+
+      <div class="btn">
+        <button (click)="onShowClick()">Show</button>
+      </div>
       <div class="toolbar-right">
         <label class="toolbar-label">Items:</label>
         <select (change)="onPageSizeChange($event)" class="select-sm">
@@ -76,13 +91,11 @@
               }}</span>
             </td>
             <td>
-              <span >{{ data.idd }}</span>
+              <span>{{ data.idd }}</span>
             </td>
-            <td >{{ data.name }}</td>
+            <td>{{ data.name }}</td>
             <td>{{ data.deviceId }}</td>
             <td>{{ data.validToDate }}</td>
-            
-            
           </tr>
         </tbody>
       </table>
