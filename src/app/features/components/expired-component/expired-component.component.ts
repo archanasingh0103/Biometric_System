@@ -3,6 +3,7 @@ import { CommmonService } from '../../shared/services/common-service/common.serv
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-expired-component',
@@ -18,19 +19,19 @@ export class ExpiredComponentComponent {
   fromDate: string = '';
   toDate: string = '';
   ngOnInit(): void {
-  this.setInitialDeviceTable();
+    this.setInitialDeviceTable();
 
-  // load complete list initially
-  this.getExpiringSoonList();
-}
+    // load complete list initially
+    this.getExpiringSoonList();
+  }
 
   formatDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = ('0' + (date.getMonth() + 1)).slice(-2);
-  const day = ('0' + date.getDate()).slice(-2);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
 
-  return `${year}-${month}-${day}`;
-}
+    return `${year}-${month}-${day}`;
+  }
 
   pagesize = {
     limit: 25,
@@ -62,44 +63,60 @@ export class ExpiredComponentComponent {
     ];
   }
 
-getExpiringSoonList() {
-  this.isLoading = true;
+  getExpiringSoonList() {
+    this.isLoading = true;
 
-  this.commonService
-    .expiringSoonList(
-      this.fromDate || '',
-      this.toDate || '',
-      this.pagesize.offset,
-      this.pagesize.limit
-    )
-    .subscribe({
-      next: (res: any) => {
-        const response = res?.body;
+    this.commonService
+      .expiringSoonList(
+        this.fromDate || '',
+        this.toDate || '',
+        this.pagesize.offset,
+        this.pagesize.limit,
+      )
+      .subscribe({
+        next: (res: any) => {
+          const response = res?.body;
 
-        this.expiredList = response?.data || [];
-        this.filteredList = [...this.expiredList];
+          this.expiredList = response?.data || [];
+          this.filteredList = [...this.expiredList];
 
-        this.pagesize.count = response?.totalRecords || 0;
+          this.pagesize.count = response?.totalRecords || 0;
 
-        this.isLoading = false;
-      },
+          this.isLoading = false;
+        },
 
-      error: (err) => {
-        console.error(err);
-        this.isLoading = false;
-      },
-    });
-}
-
-onShowClick() {
-  if (!this.fromDate || !this.toDate) {
-    alert("Please select From and To date");
-    return;
+        error: (err) => {
+          console.error(err);
+          this.isLoading = false;
+        },
+      });
   }
 
-  this.pagesize.offset = 1; // reset pagination
-  this.getExpiringSoonList();
-}
+  // onShowClick() {
+  //   if (!this.fromDate || !this.toDate) {
+  //     alert("Please select From and To date");
+  //     return;
+  //   }
+
+  //   this.pagesize.offset = 1; // reset pagination
+  //   this.getExpiringSoonList();
+  // }
+  onShowClick() {
+    if (!this.fromDate || !this.toDate) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Date',
+        text: 'Please select From and To date',
+        confirmButtonText: 'OK',
+      });
+
+      return;
+    }
+
+    console.log('API CALL');
+    this.pagesize.offset = 1; // reset pagination
+    this.getExpiringSoonList();
+  }
 
   // Pagination Change
   onTablePageChange(event: number) {

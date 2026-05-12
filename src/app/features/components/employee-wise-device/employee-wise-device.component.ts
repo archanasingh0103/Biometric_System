@@ -95,7 +95,7 @@ export class EmployeeWiseDeviceComponent {
     }, 60000); // check every 1 minute
   }
 
-  //  FIX: dropdown data
+  // dropdown data
   getEmployeeDropdown() {
     this.commonService.employeeDropdown().subscribe((res: any) => {
       console.log('Employee dropdown:', res);
@@ -104,7 +104,7 @@ export class EmployeeWiseDeviceComponent {
     });
   }
 
-  // FIX: ngx dropdown gives object OR value
+  //  ngx dropdown gives object OR value
   onSelectEmployee(event: any) {
     const emp = event?.value || event; //  IMPORTANT FIX
 

@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   readonly R = 44;
   readonly C = 2 * Math.PI * this.R;
 
-  constructor(private svc: CommmonService) {}
+  constructor(private commonService: CommmonService) {}
 
   // ───────────────── INIT ─────────────────
   ngOnInit(): void {
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadDashboard(): void {
     this.loading = true;
 
-    this.svc.getDashboardSummary(1, 0).subscribe({
+    this.commonService.getDashboardSummary(1, 0).subscribe({
       next: (res: any) => {
 
         console.log('Dashboard Response:', res);
@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadDonut(): void {
     this.donutLoading = true;
 
-    this.svc.donutSummary().subscribe({
+    this.commonService.donutSummary().subscribe({
       next: (res: any) => {
 
         console.log('Donut Response:', res);

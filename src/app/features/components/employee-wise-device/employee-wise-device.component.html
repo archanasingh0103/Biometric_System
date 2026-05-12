@@ -10,10 +10,11 @@
 
           <h5 class="header-title">Employee Wise Device</h5>
         </div>
-
-        <span class="count-badge">
-          {{ startValue }} - {{ lastValue }} of {{ pagesize.count }} devices
-        </span>
+        <div>
+          <span class="count-badge">
+            {{ startValue }} - {{ lastValue }} of {{ pagesize.count }} devices
+          </span>
+        </div>
 
         <pagination-controls
           id="empId"
@@ -54,7 +55,7 @@
 
       <div class="filter-right">
         <div class="filter-group">
-          <label >Search</label>
+          <label>Search</label>
           <input
             type="text"
             class="search-input"
@@ -107,7 +108,7 @@
             >
               <td>
                 <!-- {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }} -->
-                  <span class="sno-badge">
+                <span class="sno-badge">
                   {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
                 </span>
               </td>

@@ -295,3 +295,25 @@
     padding: 0;
   }
 }
+
+/* ── FIX: Button text not clipping, g not cut ── */
+.btn-signin {
+  overflow: visible !important;
+  line-height: 1.5 !important;
+  padding: 12px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+/* ── Decorative circles for left panel ── */
+.deco-circle { position:absolute; border-radius:50%; background:rgba(96,165,250,0.12); pointer-events:none; }
+.deco-1 { width:320px; height:320px; top:-100px; right:-100px; }
+.deco-2 { width:200px; height:200px; bottom:60px; left:-60px; opacity:0.08; }
+.deco-3 { width:120px; height:120px; bottom:200px; right:40px; opacity:0.15; background:rgba(56,189,248,0.15); }

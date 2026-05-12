@@ -2,28 +2,26 @@
 
   <!-- LEFT PANEL -->
   <div class="auth-left">
+    <!-- Decorative circles (like dashboard header) -->
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+    <div class="deco-circle deco-3"></div>
+
     <div class="auth-left-inner">
       <div class="brand-mark">
-        <span class="brand-icon">
-          <i class="fa-solid fa-building-shield"></i>
-        </span>
+        <span class="brand-icon"><i class="fa-solid fa-building-shield"></i></span>
         <h3>Smart Office</h3>
       </div>
 
       <div class="auth-headline">
-        <h1>
-          Enterprise Access<br />
-          <span class="accent-word">Management</span>
-        </h1>
-        <p class="auth-sub">
-          Centralized control for devices, employees and access permissions.
-        </p>
+        <h1>Enterprise Access<br /><span class="accent-word">Management</span></h1>
+        <p class="auth-sub">Centralized control for devices, employees and access permissions.</p>
       </div>
 
       <ul class="auth-features">
         <li><i class="fa-solid fa-circle-check"></i> Real-time monitoring</li>
         <li><i class="fa-solid fa-circle-check"></i> Role-based access</li>
-        <li><i class="fa-solid fa-circle-check"></i> Reports & analytics</li>
+        <li><i class="fa-solid fa-circle-check"></i> Reports &amp; analytics</li>
         <li><i class="fa-solid fa-circle-check"></i> Secure system</li>
       </ul>
     </div>
@@ -38,63 +36,43 @@
         <p>Sign in to continue</p>
       </div>
 
-      <!-- ERROR -->
       <div class="alert-error" *ngIf="errorMessage">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        {{ errorMessage }}
+        <i class="fa-solid fa-circle-exclamation"></i> {{ errorMessage }}
       </div>
 
-      <!-- FORM -->
       <form [formGroup]="loginForm" (ngSubmit)="login()" class="auth-form">
 
-        <!-- EMAIL -->
         <div class="field-group">
           <label class="field-label">Email</label>
           <div class="field-input-wrap">
             <i class="fa-regular fa-envelope field-icon"></i>
-            <input
-              type="email"
-              formControlName="email"
-              placeholder="you@gmail.com"
-              class="field-input"
-              [class.field-error]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
-            />
+            <input type="email" formControlName="email" placeholder="you@gmail.com" class="field-input"
+              [class.field-error]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"/>
           </div>
-
-          <span class="field-error-msg"
-            *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+          <span class="field-error-msg" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
             Please enter a valid email
           </span>
         </div>
 
-        <!-- PASSWORD -->
         <div class="field-group">
           <label class="field-label">Password</label>
           <div class="field-input-wrap">
             <i class="fa-solid fa-lock field-icon"></i>
-            <input
-              type="password"
-              formControlName="password"
-              placeholder="Enter password"
-              class="field-input"
-              [class.field-error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
-            />
+            <input type="password" formControlName="password" placeholder="Enter password" class="field-input"
+              [class.field-error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"/>
           </div>
-
-          <span class="field-error-msg"
-            *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+          <span class="field-error-msg" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
             Password is required
           </span>
         </div>
 
-        <!-- BUTTON -->
+        <!-- BUTTON — fixed: no overflow, proper line-height -->
         <button type="submit" class="btn-signin" [disabled]="loading">
-          <span *ngIf="!loading">
-            Log In <i class="fa-solid fa-arrow-right ms-1"></i>
+          <span class="btn-content" *ngIf="!loading">
+            Log In &nbsp;<i class="fa-solid fa-arrow-right"></i>
           </span>
-
-          <span *ngIf="loading">
-            <i class="fa-solid fa-spinner fa-spin"></i> Logging in...
+          <span class="btn-content" *ngIf="loading">
+            <i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Signing in...
           </span>
         </button>
 

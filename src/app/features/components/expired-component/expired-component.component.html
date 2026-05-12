@@ -5,13 +5,12 @@
       <div class="header-row">
         <div class="header-title-group">
           <div class="header-icon-wrap">
-            <i class="fa-solid fa-hard-drive"></i>
+            <i class="fa-solid fa-users"></i>
           </div>
           <div>
             <h5 class="header-title">Expired Soon</h5>
           </div>
         </div>
-
         <div class="span">
           <span class="count-badge">
             {{ filteredList.length > 0 ? startValue : 0 }} -
@@ -36,25 +35,30 @@
 
     <!-- TOOLBAR -->
     <div class="toolbar">
-      <div class="toolbar-left">
+      <div class="date-filter-group">
         <!-- FROM DATE -->
-        <div class="date-filter">
-          <label class="toolbar-label">From:</label>
-         <input type="date" [(ngModel)]="fromDate"  />
+        <div class="date-field">
+          <label class="filter-label">FROM:</label>
+          <input type="date" class="date-input" [(ngModel)]="fromDate" />
         </div>
+
+        <div class="date-sep">—</div>
 
         <!-- TO DATE -->
-        <div class="date-filter">
-          <label class="toolbar-label">To:</label>
-         <input type="date" [(ngModel)]="toDate" />
+        <div class="date-field">
+          <label class="filter-label">TO:</label>
+          <input type="date" class="date-input" [(ngModel)]="toDate" />
         </div>
+
+        <button class="btn-show" (click)="onShowClick()">
+          <i class="fa-solid fa-magnifying-glass me-1"></i>
+          Show
+        </button>
       </div>
 
-      <div class="btn">
-        <button (click)="onShowClick()">Show</button>
-      </div>
       <div class="toolbar-right">
-        <label class="toolbar-label">Items:</label>
+        <label class="filter-label">Items:</label>
+
         <select (change)="onPageSizeChange($event)" class="select-sm">
           <option *ngFor="let size of [25, 50, 100]" [value]="size">
             {{ size }}
@@ -71,6 +75,7 @@
             <th *ngFor="let col of tableHeading">{{ col.title }}</th>
           </tr>
         </thead>
+
         <tbody>
           <tr
             *ngFor="
@@ -86,16 +91,29 @@
             "
           >
             <td>
-              <span class="sno-badge">{{
-                (pagesize.offset - 1) * pagesize.limit + i + 1
-              }}</span>
+              <span class="sno-badge">
+                {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
+              </span>
             </td>
+
+            <td >
+              {{ data.idd }}
+            </td>
+
+            <td class="fw-medium">
+              {{ data.name }}
+            </td>
+
+            <td >
+              {{ data.deviceId }}
+            </td>
+
             <td>
-              <span>{{ data.idd }}</span>
+              <span class="expiry-badge">
+                <i class="fa-regular fa-calendar me-1"></i>
+                {{ data.validToDate }}
+              </span>
             </td>
-            <td>{{ data.name }}</td>
-            <td>{{ data.deviceId }}</td>
-            <td>{{ data.validToDate }}</td>
           </tr>
         </tbody>
       </table>
@@ -103,7 +121,10 @@
 
     <!-- NO DATA -->
     <div class="no-data-msg" *ngIf="!filteredList.length">
-      <div class="no-data-icon"><i class="fa-solid fa-inbox"></i></div>
+      <div class="no-data-icon">
+        <i class="fa-solid fa-inbox"></i>
+      </div>
+
       No devices found
     </div>
   </div>
