@@ -42,15 +42,14 @@ export class BulkActivityComponent {
 
   get startValue(): number {
     return (
-      this.pagesize.offset * this.pagesize.limit -
-      (this.pagesize.limit - 1)
+      this.pagesize.offset * this.pagesize.limit - (this.pagesize.limit - 1)
     );
   }
 
   get lastValue(): number {
     return Math.min(
       this.startValue + this.pagesize.limit - 1,
-      this.pagesize.count
+      this.pagesize.count,
     );
   }
 
@@ -98,9 +97,7 @@ export class BulkActivityComponent {
 
   // CHECKBOX FUNCTIONS
   isChecked(device: any): boolean {
-    return this.selectedDevices.some(
-      (x) => x.deviceId === device.deviceId
-    );
+    return this.selectedDevices.some((x) => x.deviceId === device.deviceId);
   }
 
   onCheckboxChange(event: any, device: any) {
@@ -108,7 +105,7 @@ export class BulkActivityComponent {
       this.selectedDevices.push(device);
     } else {
       this.selectedDevices = this.selectedDevices.filter(
-        (x) => x.deviceId !== device.deviceId
+        (x) => x.deviceId !== device.deviceId,
       );
     }
 
@@ -143,38 +140,21 @@ export class BulkActivityComponent {
             return;
           }
 
-          const excelData = data.map(
-            (item: any, index: number) => ({
-              'S.No': index + 1,
+          const excelData = data.map((item: any, index: number) => ({
+            'S.No': index + 1,
 
-              'Device ID': item?.deviceId || 'NA',
-
-              'Device Full Name':
-                item?.deviceFName || 'NA',
-
-              'Device Short Name':
-                item?.deviceSName || 'NA',
-
-              'Device Direction':
-                item?.deviceDirection || 'NA',
-
-              'Serial Number':
-                item?.serialNumber || 'NA',
-
-              'Connection Type':
-                item?.connectionType || 'NA',
-
-              'IP Address':
-                item?.ipAddress || 'NA',
-
-              'Last Log Download':
-                item?.lastLogDownloadDate || 'NA',
-            })
-          );
+            'Device ID': item?.deviceId || 'NA',
+            'Device Full Name': item?.deviceFName || 'NA',
+            'Device Short Name': item?.deviceSName || 'NA',
+            'Device Direction': item?.deviceDirection || 'NA',
+            'Serial Number': item?.serialNumber || 'NA',
+            'Connection Type': item?.connectionType || 'NA',
+            'IP Address': item?.ipAddress || 'NA',
+            'Last Log Download': item?.lastLogDownloadDate || 'NA',
+          }));
 
           // SHEET
-          const ws =
-            XLSX.utils.json_to_sheet(excelData);
+          const ws = XLSX.utils.json_to_sheet(excelData);
 
           // COLUMN WIDTH
           ws['!cols'] = [
@@ -192,17 +172,10 @@ export class BulkActivityComponent {
           // WORKBOOK
           const wb = XLSX.utils.book_new();
 
-          XLSX.utils.book_append_sheet(
-            wb,
-            ws,
-            'Device List'
-          );
+          XLSX.utils.book_append_sheet(wb, ws, 'Device List');
 
           // DOWNLOAD
-          XLSX.writeFile(
-            wb,
-            'Device_List_Report.xlsx'
-          );
+          XLSX.writeFile(wb, 'Device_List_Report.xlsx');
         });
     } catch (error) {
       this.isExcelLoading = false;
@@ -224,10 +197,7 @@ export class BulkActivityComponent {
     }
   }
 
-  // =========================
   // UPLOAD EXCEL
-  // =========================
-
   uploadExcel() {
     if (!this.selectedFile) {
       return;
@@ -246,10 +216,7 @@ Inserted: ${res.totalInserted}
 Duplicate: ${res.totalDuplicate}
         `);
 
-        console.log(
-          'Duplicate Employees:',
-          res.duplicateEmployees
-        );
+        console.log('Duplicate Employees:', res.duplicateEmployees);
 
         // REFRESH TABLE
         this.getDeviceList();
