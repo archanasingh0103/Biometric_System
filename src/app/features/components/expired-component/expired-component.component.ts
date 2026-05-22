@@ -20,8 +20,6 @@ export class ExpiredComponentComponent {
   toDate: string = '';
   ngOnInit(): void {
     this.setInitialDeviceTable();
-
-    // load complete list initially
     this.getExpiringSoonList();
   }
 

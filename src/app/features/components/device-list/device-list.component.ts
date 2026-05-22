@@ -28,6 +28,7 @@ export class DeviceListComponent implements OnInit {
   }
   get lastValue(): number {
     return Math.min(
+      
       this.startValue + this.pagesize.limit - 1,
       this.pagesize.count,
     );
@@ -69,7 +70,6 @@ export class DeviceListComponent implements OnInit {
         this.pagesize.count = res?.body.totalRecords || 0;
       });
   }
-
   // Pagination Change
   onTablePageChange(event: number) {
     this.pagesize.offset = event;

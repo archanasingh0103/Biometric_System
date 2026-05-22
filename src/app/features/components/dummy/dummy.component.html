@@ -1,0 +1,15 @@
+<div>
+  <label class="filter-label">
+    <i class="fa-solid fa-bolt me-1"></i>Action
+  </label>
+
+  <select class="select-styled" [ngModel]="selectedAction">
+    <option value="">Select Action</option>
+    <option *ngFor="let item of actionOptions" [value]="item.value"></option>
+  </select>
+</div>
+
+<div>
+    <label>Excel</label>
+    <button (click)=""></button>
+</div>

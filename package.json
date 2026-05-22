@@ -20,12 +20,15 @@
     "@angular/router": "^19.2.0",
     "@ng-select/ng-select": "^18.0.0",
     "bootstrap": "^5.3.8",
+    "chart.js": "^4.5.1",
+    "ng2-charts": "^10.0.0",
     "ngx-pagination": "^6.0.3",
     "ngx-select-dropdown": "^3.3.2",
     "ngx-toastr": "^20.0.5",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.24",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

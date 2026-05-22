@@ -33,7 +33,8 @@ export class DashboardComponent {
       empWise: 'Employee Wise Device',
       deviceWise: 'Device Wise Employee',
       empList: 'Employee List',
-      expirySoon :'Expired Soon'
+      expirySoon: 'Expired Soon',
+      bulActivity:'Bulk Activity'
     },
     hi: {
       deviceList: 'डिवाइस सूची',

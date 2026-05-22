@@ -93,7 +93,6 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-
   // Link
   assignEmployeeDevice(payload: any): Observable<any> {
     return this.apiService
@@ -109,46 +108,54 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-expiringSoonList(
-  fromDate: string,
-  toDate:string,
-  pageNumber: number,
-  pageSize: number
-): Observable<any> {
+  expiringSoonList(
+    fromDate: string,
+    toDate: string,
+    pageNumber: number,
+    pageSize: number,
+  ): Observable<any> {
+    const url = API_CONSTANT.expiringSoonList
+      .replace('{fromDate}', fromDate.toString())
+      .replace('{toDate}', toDate.toString())
+      .replace('{pageNumber}', pageNumber.toString())
+      .replace('{pageSize}', pageSize.toString());
 
-  const url = API_CONSTANT.expiringSoonList
-    .replace('{fromDate}', fromDate.toString())
-    .replace('{toDate}',toDate.toString())
-    .replace('{pageNumber}', pageNumber.toString())
-    .replace('{pageSize}', pageSize.toString());
+    return this.apiService
+      .get(url)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
 
-  return this.apiService.get(url).pipe(
-    catchError((error: HttpErrorResponse) => of(error))
-  );
-}
+  getDashboardSummary(days: number, id: number): Observable<any> {
+    const url = API_CONSTANT.allActivity
+      .replace('{days}', days.toString())
+      .replace('{id}', id.toString());
 
- getDashboardSummary(days: number, id: number): Observable<any> {
-  const url = API_CONSTANT.allActivity
-    .replace('{days}', days.toString())
-    .replace('{id}', id.toString());
+    return this.apiService.get(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Dashboard API Error:', error);
+        return of(null);
+      }),
+    );
+  }
 
-  return this.apiService.get(url).pipe(
-    catchError((error: HttpErrorResponse) => {
-      console.error('Dashboard API Error:', error);
-      return of(null); 
-    })
-  );
-}
+  donutSummary(): Observable<any> {
+    const url = API_CONSTANT.donutList;
 
-donutSummary(): Observable<any> {
-  const url = API_CONSTANT.donutList;
+    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => {
+        console.error('Donut API Error:', error);
+        return of(null);
+      }),
+    );
+  }
 
-  return this.apiService.get(url).pipe(
-    catchError((error: HttpErrorResponse) => {
-      console.error('Donut API Error:', error);
-      return of(null);
-    })
-  );
-}
+  deviceEmployeeChart() {
+    const url = API_CONSTANT.deviceEmloyeeChart;
+    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
 
+  // bulkActivity
+  uploadExcel(payload:any) {
+    const url = API_CONSTANT.bulkActivity;
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
 }
