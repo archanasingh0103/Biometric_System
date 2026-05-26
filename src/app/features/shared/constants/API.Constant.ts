@@ -24,8 +24,8 @@ export const API_CONSTANT = {
 
   // EMPLOYEE MANAGEMENT
   addEmployee: 'WebAPI/AddEmployee?APIKey=280411042215',
-  companyList: 'WebAPI/GetCompanyList?APIKey=280411042215',
-  departmentList: 'WebAPI/GetDepartmentList?APIKey=280411042215',
+  companyList: 'Company/GetCompanyServiceList',
+  departmentList: 'Department',
   locationList: 'WebAPI/GetLocationList?APIKey=280411042215',
   designationList: 'WebAPI/GetDesignationList?APIKey=280411042215',
 };

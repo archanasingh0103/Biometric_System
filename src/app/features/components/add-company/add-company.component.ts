@@ -5,15 +5,17 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-add-company',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './add-company.component.html',
-  styleUrl: './add-company.component.css',
+  styleUrls: ['./add-company.component.css'],
 })
 export class AddCompanyComponent {
-  constructor(private commonService: CommmonService) {}
+  
+  constructor(private commonService: CommmonService) { }
 
-// employee key
-  employee: any = {
+  employee = {
+
     StaffCode: '',
     StaffName: '',
 
@@ -34,100 +36,75 @@ export class AddCompanyComponent {
     DOR: '',
   };
 
-// Dropdown List
+ // dropdown List
   companyList: any[] = [];
   departmentList: any[] = [];
   locationList: any[] = [];
   designationList: any[] = [];
 
-// employee list
-  employeeList: any[] = [];
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.getCompanies();
     this.getDepartments();
     this.getLocations();
     this.getDesignations();
-
-    this.getEmployees();
   }
 
-  // get company list
+  // company List
   getCompanies() {
     this.commonService.getCompanyList().subscribe({
       next: (res: any) => {
-        console.log('Company List:', res);
-
-        this.companyList = res?.data || res || [];
+        console.log('Company List => ', res);
+        this.companyList = res?.body?.data || [];
       },
-
       error: (err) => {
         console.log(err);
-      },
+      }
     });
   }
 
-  // get department list
+
+  // department List
   getDepartments() {
     this.commonService.getDepartmentList().subscribe({
       next: (res: any) => {
-        console.log('Department List:', res);
-
-        this.departmentList = res?.data || res || [];
+        console.log('Department List => ', res);
+        this.departmentList = res?.body?.data || [];
       },
-
       error: (err) => {
         console.log(err);
-      },
+      }
     });
   }
 
-  // get location list
+// location list
   getLocations() {
     this.commonService.getLocationList().subscribe({
       next: (res: any) => {
-        console.log('Location List:', res);
-
-        this.locationList = res?.data || res || [];
+        console.log('Location List => ', res);
+        this.locationList = res?.body?.data || [];
       },
-
       error: (err) => {
         console.log(err);
-      },
+      }
     });
+
   }
 
-  // get designation list
+// designation List
   getDesignations() {
     this.commonService.getDesignationList().subscribe({
       next: (res: any) => {
-        console.log('Designation List:', res);
-
-        this.designationList = res?.data || res || [];
+        console.log('Designation List => ', res);
+        this.designationList = res?.body?.data || [];
       },
-
       error: (err) => {
         console.log(err);
-      },
+      }
     });
   }
 
-  // get employee list
-  getEmployees() {
-    this.commonService.employeeList(1, 1000).subscribe({
-      next: (res: any) => {
-        console.log('Employee List:', res);
-
-        this.employeeList = res?.data || [];
-      },
-
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
-
-  //save employee
+// save Employee
   saveEmployee() {
     const payload = {
       StaffCode: this.employee.StaffCode,
@@ -145,31 +122,28 @@ export class AddCompanyComponent {
       DOB: this.employee.DOB,
       DOR: this.employee.DOR,
     };
-
     console.log('Payload:', payload);
-
     this.commonService.addEmployee(payload).subscribe({
       next: (res: any) => {
-        console.log('Employee Added:', res);
-
+        console.log('Employee Added => ', res);
         alert('Employee Added Successfully');
-
-        this.getEmployees();
-
         this.resetForm();
       },
-
       error: (err) => {
         console.log(err);
-
         alert('Something went wrong');
-      },
+      }
+
     });
+
   }
 
-  // resest form
+  // ================= RESET FORM =================
+
   resetForm() {
+
     this.employee = {
+
       StaffCode: '',
 
       StaffName: '',
@@ -196,7 +170,8 @@ export class AddCompanyComponent {
 
       DOB: '',
 
-      DOR: '3000-01-01',
-    };
+      DOR: '',
+
+    }
   }
 }

@@ -10,7 +10,7 @@ import { HttpService } from '../../http-service/http.service';
 export class CommmonService {
   constructor(private apiService: HttpService) {}
 
-//  Device list
+  //  Device list
   deviceList(page: number, pageSize: number): Observable<any> {
     const url = API_CONSTANT.deviceList
       .replace('${page}', page.toString())
@@ -20,7 +20,7 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-//  Employee list
+  //  Employee list
   employeeList(page: number = 1, pageSize: number = 1000): Observable<any> {
     const url = API_CONSTANT.employeeList
       .replace('${page}', page.toString())
@@ -49,7 +49,7 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-// Device Wise Employee 
+  // Device Wise Employee
   getDeviceWiseEmloyee(
     deviceId: string,
     page: number,
@@ -169,7 +169,7 @@ export class CommmonService {
 
   // COMPANY LIST
   getCompanyList(): Observable<any> {
-    const url = API_CONSTANT.companyList;
+    const url = API_CONSTANT.companyList
     return this.apiService
       .get(url)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
