@@ -1,0 +1,174 @@
+<div class="page-container">
+  <div class="data-card">
+
+    <!-- HEADER -->
+    <div class="card-header-bar">
+      <div class="header-row">
+        <div class="header-title-group">
+          <div class="header-icon-wrap">
+            <i class="fa-solid fa-user-plus"></i>
+          </div>
+          <div>
+            <h5 class="header-title">Employee Management</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-container">
+
+      <!--  Staff Code + Staff Name -->
+      <div class="form-row">
+        <div class="form-group">
+          <!-- <span class="required">*</span> -->
+          <label class="form-label">Staff Code </label>
+          <input type="text"
+            [(ngModel)]="employee.StaffCode"
+            class="custom-input"
+            placeholder="Enter Staff Code"/>
+        </div>
+        <div class="form-group">
+          <!-- <span class="required">*</span> -->
+          <label class="form-label">Staff Name </label>
+          <input type="text"
+            [(ngModel)]="employee.StaffName"
+            class="custom-input"
+            placeholder="Enter Staff Name"/>
+        </div>
+      </div>
+
+      <!-- Gender + Status -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" [(ngModel)]="employee.Gender" value="Male"/>
+              <span class="radio-label male-label">Male</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" [(ngModel)]="employee.Gender" value="Female"/>
+              <span class="radio-label female-label">Female</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" [(ngModel)]="employee.Gender" value="Other"/>
+              <span class="radio-label">Other</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select [(ngModel)]="employee.Status" class="custom-input">
+            <option value="">Select Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <!--  Company + Department -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Company</label>
+          <select [(ngModel)]="employee.CompanySName" class="custom-input">
+            <option value="">Select Company</option>
+            <option *ngFor="let company of companyList" [value]="company.BranchShortName">
+              {{ company.BranchShortName }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Department</label>
+          <select [(ngModel)]="employee.DepartmentSName" class="custom-input">
+            <option value="">Select Department</option>
+            <option *ngFor="let department of departmentList" [value]="department.DepartmentSName">
+              {{ department.DepartmentSName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!--  Location + Designation -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <select [(ngModel)]="employee.Location" class="custom-input">
+            <option value="">Select Location</option>
+            <option *ngFor="let location of locationList" [value]="location.LocationName">
+              {{ location.LocationName }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Designation</label>
+          <select [(ngModel)]="employee.Designation" class="custom-input">
+            <option value="">Select Designation</option>
+            <option *ngFor="let designation of designationList" [value]="designation.DesignationsName">
+              {{ designation.DesignationsName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!--  Grade + Team -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Grade</label>
+          <input type="text"
+            [(ngModel)]="employee.Grade"
+            class="custom-input"
+            placeholder="Enter Grade"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Team</label>
+          <input type="text"
+            [(ngModel)]="employee.Team"
+            class="custom-input"
+            placeholder="Enter Team"/>
+        </div>
+      </div>
+
+      <!-- DOJ + DOC -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">DOJ (Date of Joining)</label>
+          <input type="date"
+            [(ngModel)]="employee.DOJ"
+            class="custom-input"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">DOC (Date of Confirmation)</label>
+          <input type="date"
+            [(ngModel)]="employee.DOC"
+            class="custom-input"/>
+        </div>
+      </div>
+
+      <!--  DOB + DOR -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">DOB (Date of Birth)</label>
+          <input type="date"
+            [(ngModel)]="employee.DOB"
+            class="custom-input"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">DOR (Date of Retirement)</label>
+          <input type="date"
+            [(ngModel)]="employee.DOR"
+            class="custom-input"/>
+        </div>
+      </div>
+
+      <!-- SAVE BUTTON -->
+      <div class="btn-wrap">
+        <button class="save-btn" (click)="saveEmployee()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          Save Employee
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

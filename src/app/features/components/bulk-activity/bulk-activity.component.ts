@@ -13,32 +13,42 @@ import * as XLSX from 'xlsx';
 })
 export class BulkActivityComponent {
   deviceList: any[] = [];
-  tableHeading: any;
   filteredList: any[] = [];
+  tableHeading: any;
+
   isLoading: boolean = false;
 
   // CHECKBOX
   selectedDevices: any[] = [];
   isAllSelected = false;
 
-  // ACTION DROPDOWN
+  // ACTION
   selectedAction = '';
+
+  // FILE
+  selectedFile!: File;
 
   // EXCEL
   isExcelLoading = false;
-  selectedFile!: File;
 
+  // STORE UPLOAD RESPONSE
+  uploadResponseData: any = null;
+
+  // ACTION OPTIONS
   actionOptions = [
     { label: 'Access', value: 'access' },
     { label: 'DLink', value: 'dlink' },
     { label: 'Block', value: 'block' },
   ];
 
+  // PAGINATION
   pagesize = {
     limit: 25,
     offset: 1,
     count: 0,
   };
+
+  // ================= GETTERS =================
 
   get startValue(): number {
     return (
@@ -53,49 +63,78 @@ export class BulkActivityComponent {
     );
   }
 
+  // ================= CONSTRUCTOR =================
+
   constructor(private commonService: CommmonService) {}
+
+  // ================= INIT =================
 
   ngOnInit() {
     this.setInitialDeviceTable();
     this.getDeviceList();
   }
 
-  // TABLE HEADINGS
+  // ================= TABLE HEADERS =================
+
   setInitialDeviceTable() {
     this.tableHeading = [
-      { key: 'Sno', title: 'S.No.' },
-      { key: 'deviceFName', title: 'Device Full Name' },
+      {
+        key: 'Sno',
+        title: 'S.No.',
+      },
+      {
+        key: 'deviceFName',
+        title: 'Device Full Name',
+      },
     ];
   }
 
-  // DEVICE LIST API
+  // ================= DEVICE LIST =================
+
   getDeviceList() {
+    this.isLoading = true;
+
     this.commonService
       .deviceList(this.pagesize.offset, this.pagesize.limit)
-      .subscribe((res: any) => {
-        console.log('Device List:', res);
+      .subscribe({
+        next: (res: any) => {
+          console.log('Device List:', res);
 
-        this.isLoading = false;
+          this.isLoading = false;
 
-        this.deviceList = res?.body.data || [];
-        this.filteredList = [...this.deviceList];
-        this.pagesize.count = res?.body.totalRecords || 0;
+          this.deviceList = res?.body?.data || [];
+
+          this.filteredList = [...this.deviceList];
+
+          this.pagesize.count = res?.body?.totalRecords || 0;
+        },
+
+        error: (err: any) => {
+          this.isLoading = false;
+
+          console.log(err);
+        },
       });
   }
 
-  // PAGINATION
+  // ================= PAGINATION =================
+
   onTablePageChange(event: number) {
     this.pagesize.offset = event;
+
     this.getDeviceList();
   }
 
   onPageSizeChange(event: any) {
     this.pagesize.limit = +event.target.value;
+
     this.pagesize.offset = 1;
+
     this.getDeviceList();
   }
 
-  // CHECKBOX FUNCTIONS
+  // ================= CHECKBOX =================
+
   isChecked(device: any): boolean {
     return this.selectedDevices.some((x) => x.deviceId === device.deviceId);
   }
@@ -123,68 +162,8 @@ export class BulkActivityComponent {
     }
   }
 
-  // EXCEL DOWNLOAD
-  async downloadExcel() {
-    this.isExcelLoading = true;
+  // ================= FILE SELECT =================
 
-    try {
-      this.commonService
-        .deviceList(1, this.pagesize.count || 1000)
-        .subscribe((res: any) => {
-          this.isExcelLoading = false;
-
-          const data = res?.body?.data || [];
-
-          if (!data.length) {
-            console.log('No data for excel');
-            return;
-          }
-
-          const excelData = data.map((item: any, index: number) => ({
-            'S.No': index + 1,
-
-            'Device ID': item?.deviceId || 'NA',
-            'Device Full Name': item?.deviceFName || 'NA',
-            'Device Short Name': item?.deviceSName || 'NA',
-            'Device Direction': item?.deviceDirection || 'NA',
-            'Serial Number': item?.serialNumber || 'NA',
-            'Connection Type': item?.connectionType || 'NA',
-            'IP Address': item?.ipAddress || 'NA',
-            'Last Log Download': item?.lastLogDownloadDate || 'NA',
-          }));
-
-          // SHEET
-          const ws = XLSX.utils.json_to_sheet(excelData);
-
-          // COLUMN WIDTH
-          ws['!cols'] = [
-            { wch: 8 },
-            { wch: 15 },
-            { wch: 30 },
-            { wch: 25 },
-            { wch: 20 },
-            { wch: 20 },
-            { wch: 20 },
-            { wch: 20 },
-            { wch: 25 },
-          ];
-
-          // WORKBOOK
-          const wb = XLSX.utils.book_new();
-
-          XLSX.utils.book_append_sheet(wb, ws, 'Device List');
-
-          // DOWNLOAD
-          XLSX.writeFile(wb, 'Device_List_Report.xlsx');
-        });
-    } catch (error) {
-      this.isExcelLoading = false;
-
-      console.log(error);
-    }
-  }
-
-  // FILE SELECT
   onFileSelected(event: any) {
     const file = event.target.files[0];
 
@@ -193,38 +172,317 @@ export class BulkActivityComponent {
 
       console.log('Selected File:', file);
 
+      // AUTO UPLOAD
       this.uploadExcel();
     }
   }
 
-  // UPLOAD EXCEL
+  // ================= UPLOAD EXCEL =================
+
+  //   uploadExcel() {
+  //     // FILE CHECK
+  //     if (!this.selectedFile) {
+  //       alert('Please select excel file');
+
+  //       return;
+  //     }
+
+  //     // ACTION CHECK
+  //     if (!this.selectedAction) {
+  //       alert('Please select action');
+
+  //       return;
+  //     }
+
+  //     // DEVICE CHECK
+  //     if (!this.selectedDevices.length) {
+  //       alert('Please select atleast one device');
+
+  //       return;
+  //     }
+
+  //     // FORM DATA
+  //     const formData = new FormData();
+
+  //     // ACTION VALUE
+  //     let actionValue = '';
+
+  //     // ACCESS
+  //     if (this.selectedAction === 'access') {
+  //       actionValue = 'A';
+  //     }
+
+  //     // DLINK
+  //     else if (this.selectedAction === 'dlink') {
+  //       actionValue = 'D';
+  //     }
+
+  //     // BLOCK
+  //     else if (this.selectedAction === 'block') {
+  //       actionValue = 'B';
+  //     }
+
+  //     // APPEND ACTION
+  //     formData.append('Action', actionValue);
+
+  //     // APPEND DEVICES
+  //     // this.selectedDevices.forEach((device: any) => {
+  //     //   formData.append('Devices', device.serialNumber?.toString() || '');
+  //     // });
+
+  //     this.selectedDevices.forEach((device: any) => {
+
+  //   console.log('Selected Device:', device);
+
+  //   console.log('Serial Number:', device.serialNumber);
+
+  //   // NULL CHECK
+  //   if (device.serialNumber) {
+
+  //     formData.append(
+  //       'Devices',
+  //       device.serialNumber.toString().trim()
+  //     );
+
+  //   }
+
+  // });
+
+  //     // APPEND FILE
+  //     formData.append('File', this.selectedFile);
+
+  //     // DEBUG
+  //     console.log('======= FORM DATA =======');
+
+  //     formData.forEach((value, key) => {
+  //       console.log(key, value);
+  //     });
+
+  //     // API CALL
+  //     this.commonService.uploadExcel(formData).subscribe({
+  //       next: (res: any) => {
+  //         console.log('Upload Response:', res);
+
+  //         // RESPONSE
+  //         const response = res?.body;
+
+  //         // SAVE RESPONSE
+  //         this.uploadResponseData = response;
+
+  //         // SUCCESS
+  //         if (response?.status || response?.isSuccess) {
+  //           alert(
+  //             `Upload Completed
+
+  // Inserted : ${response?.totalInserted || 0}
+
+  // Duplicate : ${response?.totalDuplicate || 0}`,
+  //           );
+
+  //           // DUPLICATE DATA
+  //           console.log('Duplicate Data:', response?.duplicateData);
+
+  //           // REFRESH TABLE
+  //           this.getDeviceList();
+
+  //           // RESET FILE
+  //           this.selectedFile = null as any;
+  //         } else {
+  //           alert(response?.message || 'Upload Failed');
+  //         }
+  //       },
+
+  //       error: (err: any) => {
+  //         console.log('Upload Error:', err);
+
+  //         alert('Upload Failed');
+  //       },
+  //     });
+  //   }
+  // ================= UPLOAD EXCEL =================
+
   uploadExcel() {
+    // FILE CHECK
     if (!this.selectedFile) {
+      alert('Please select excel file');
+
       return;
     }
 
+    // ACTION CHECK
+    if (!this.selectedAction) {
+      alert('Please select action');
+
+      return;
+    }
+
+    // DEVICE CHECK
+    if (!this.selectedDevices.length) {
+      alert('Please select atleast one device');
+
+      return;
+    }
+
+    // FORM DATA
     const formData = new FormData();
 
-    formData.append('file', this.selectedFile);
+    // ACTION VALUE
+    let actionValue = '';
+
+    // ACCESS
+    if (this.selectedAction === 'access') {
+      actionValue = 'A';
+    }
+
+    // DLINK
+    else if (this.selectedAction === 'dlink') {
+      actionValue = 'D';
+    }
+
+    // BLOCK
+    else if (this.selectedAction === 'block') {
+      actionValue = 'B';
+    }
+
+    // APPEND ACTION
+    formData.append('Action', actionValue);
+
+    // ================= DEVICES =================
+
+    this.selectedDevices.forEach((device: any) => {
+      console.log('Selected Device:', device);
+
+      // TRY DIFFERENT POSSIBLE VALUES
+      const deviceValue =
+        device.serialNumber || device.machineId || device.deviceId;
+
+      console.log('Sending Device Value:', deviceValue);
+
+      // NULL / EMPTY CHECK
+      if (deviceValue && deviceValue !== '0') {
+        formData.append('Devices', deviceValue.toString().trim());
+      }
+    });
+
+    // APPEND FILE
+    formData.append('File', this.selectedFile);
+
+    // ================= DEBUG =================
+
+    console.log('======= FINAL FORM DATA =======');
+
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+
+    // ================= API CALL =================
 
     this.commonService.uploadExcel(formData).subscribe({
       next: (res: any) => {
         console.log('Upload Response:', res);
 
-        alert(`
-Inserted: ${res.totalInserted}
-Duplicate: ${res.totalDuplicate}
-        `);
+        // RESPONSE BODY
+        const response = res?.body;
 
-        console.log('Duplicate Employees:', res.duplicateEmployees);
+        // SAVE RESPONSE
+        this.uploadResponseData = response;
 
-        // REFRESH TABLE
-        this.getDeviceList();
+        // SUCCESS
+        if (response?.status || response?.isSuccess) {
+          alert(
+            `Upload Completed
+
+Inserted : ${response?.totalInserted || 0}
+
+Duplicate : ${response?.totalDuplicate || 0}`,
+          );
+
+          // DUPLICATE DATA
+          console.log('Duplicate Data:', response?.duplicateData);
+
+          // REFRESH TABLE
+          this.getDeviceList();
+
+          // RESET FILE
+          this.selectedFile = null as any;
+        }
+
+        // FAILED
+        else {
+          console.log('API MESSAGE:', response?.message);
+
+          alert(response?.message || 'Upload Failed');
+        }
       },
 
-      error: (err) => {
-        console.log(err);
+      error: (err: any) => {
+        console.log('Upload Error:', err);
+
+        alert('Upload Failed');
       },
     });
+  }
+
+  // ================= DOWNLOAD EXCEL =================
+
+  downloadExcel() {
+    // CHECK RESPONSE
+    if (!this.uploadResponseData) {
+      alert('Please upload excel first');
+
+      return;
+    }
+
+    this.isExcelLoading = true;
+
+    try {
+      // RESPONSE
+      const response = this.uploadResponseData;
+
+      // ACTION TYPE
+      let actionType = '';
+
+      if (this.selectedAction === 'access') {
+        actionType = 'Access';
+      } else if (this.selectedAction === 'dlink') {
+        actionType = 'DLink';
+      } else if (this.selectedAction === 'block') {
+        actionType = 'Block';
+      }
+
+      // DUPLICATE DATA
+      const duplicateData = response?.duplicateData || [];
+
+      // EXCEL DATA
+      const excelData = duplicateData.map((item: any, index: number) => ({
+        'S.No': index + 1,
+
+        'Action Type': actionType,
+
+        'Request Number': response?.requestNumber || '',
+
+        // 'Duplicate Message': item,
+      }));
+
+      // SHEET
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+
+      // COLUMN WIDTH
+      ws['!cols'] = [{ wch: 10 }, { wch: 20 }, { wch: 30 }, { wch: 60 }];
+
+      // WORKBOOK
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Bulk Activity Report');
+
+      // DOWNLOAD
+      XLSX.writeFile(wb, 'Bulk_Activity_Report.xlsx');
+
+      this.isExcelLoading = false;
+    } catch (error) {
+      this.isExcelLoading = false;
+
+      console.log(error);
+    }
   }
 }

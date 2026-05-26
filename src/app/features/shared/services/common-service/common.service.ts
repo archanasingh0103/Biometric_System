@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, pipe } from 'rxjs';
 import { API_CONSTANT } from '../../constants/API.Constant';
 import { HttpService } from '../../http-service/http.service';
 
@@ -10,7 +10,7 @@ import { HttpService } from '../../http-service/http.service';
 export class CommmonService {
   constructor(private apiService: HttpService) {}
 
-  // ─── Device list ──────────────────────────────────────────
+//  Device list
   deviceList(page: number, pageSize: number): Observable<any> {
     const url = API_CONSTANT.deviceList
       .replace('${page}', page.toString())
@@ -20,7 +20,7 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-  // ─── Employee list ────────────────────────────────────────
+//  Employee list
   employeeList(page: number = 1, pageSize: number = 1000): Observable<any> {
     const url = API_CONSTANT.employeeList
       .replace('${page}', page.toString())
@@ -30,7 +30,7 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-  // ─── Employee Wise Device ─────────────────────────────────
+  // Employee Wise Device
   getEmployeeWiseDevice(
     empCode: string,
     search: string = '',
@@ -49,7 +49,7 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-  // ─── Device Wise Employee ─────────────────────────────────
+// Device Wise Employee 
   getDeviceWiseEmloyee(
     deviceId: string,
     page: number,
@@ -68,28 +68,32 @@ export class CommmonService {
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-  // ─── Post APIs ────────────────────────────────────────────
+  // Post API
   updateEmployeeDeviceAccess(payload: any): Observable<any> {
+    const url = API_CONSTANT.accessEmployeeDevice;
     return this.apiService
-      .post(API_CONSTANT.accessEmployeeDevice, payload)
+      .post(url, payload)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
   updateDeviceWiseEmoployeeAccess(payload: any): Observable<any> {
+    const url = API_CONSTANT.accessDeviceWiseEmployee;
     return this.apiService
-      .post(API_CONSTANT.accessDeviceWiseEmployee, payload)
+      .post(url, payload)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
   employeeDropdown(): Observable<any> {
+    const url = API_CONSTANT.employeeDropdown;
     return this.apiService
-      .get(API_CONSTANT.employeeDropdown)
+      .get(url)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
   deviceDropdown(): Observable<any> {
+    const url = API_CONSTANT.deviceDropdown;
     return this.apiService
-      .get(API_CONSTANT.deviceDropdown)
+      .get(url)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
@@ -103,8 +107,9 @@ export class CommmonService {
   }
 
   removeEmployeeDevice(payload: any): Observable<any> {
+    const url = API_CONSTANT.removeEmployeeDevice;
     return this.apiService
-      .post(API_CONSTANT.removeEmployeeDevice, payload)
+      .post(url, payload)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
@@ -119,7 +124,6 @@ export class CommmonService {
       .replace('{toDate}', toDate.toString())
       .replace('{pageNumber}', pageNumber.toString())
       .replace('{pageSize}', pageSize.toString());
-
     return this.apiService
       .get(url)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
@@ -140,8 +144,8 @@ export class CommmonService {
 
   donutSummary(): Observable<any> {
     const url = API_CONSTANT.donutList;
-
-    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => {
+    return this.apiService.get(url).pipe(
+      catchError((error: HttpErrorResponse) => {
         console.error('Donut API Error:', error);
         return of(null);
       }),
@@ -150,12 +154,56 @@ export class CommmonService {
 
   deviceEmployeeChart() {
     const url = API_CONSTANT.deviceEmloyeeChart;
-    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
+    return this.apiService
+      .get(url)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
   // bulkActivity
-  uploadExcel(payload:any) {
+  uploadExcel(payload: any) {
     const url = API_CONSTANT.bulkActivity;
-    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+    return this.apiService
+      .post(url, payload)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // COMPANY LIST
+  getCompanyList(): Observable<any> {
+    const url = API_CONSTANT.companyList;
+    return this.apiService
+      .get(url)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // DEPARTMENT LIST
+  getDepartmentList(): Observable<any> {
+    const url = API_CONSTANT.departmentList;
+    return this.apiService
+      .get(url)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // LOCATION LIST
+  getLocationList(): Observable<any> {
+    const url = API_CONSTANT.locationList;
+    return this.apiService
+      .get(url)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // DESIGNATION LIST
+  getDesignationList(): Observable<any> {
+    const url = API_CONSTANT.designationList;
+    return this.apiService
+      .get(url)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // ADD EMPLOYEE
+  addEmployee(payload: any): Observable<any> {
+    const url = API_CONSTANT.addEmployee;
+    return this.apiService
+      .post(url, payload)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 }

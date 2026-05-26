@@ -7,6 +7,7 @@ import { EmployeeWiseDeviceComponent } from '../employee-wise-device/employee-wi
 import { HomeComponent } from '../home/home.component';
 import { ExpiredComponentComponent } from '../expired-component/expired-component.component';
 import { BulkActivityComponent } from '../bulk-activity/bulk-activity.component';
+import { AddCompanyComponent } from '../add-company/add-company.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
@@ -21,7 +22,8 @@ export const DASHBOARD_ROUTES: Routes = [
       { path: 'emp-list', component: EmployeeListComponent },
       { path: 'emp-with-device', component: EmployeeWiseDeviceComponent },
       { path: 'empiry-soon', component: ExpiredComponentComponent },
-      {path:'bulk-activity',component:BulkActivityComponent}
+      { path: 'bulk-activity', component: BulkActivityComponent },
+      {path:'add-company',component:AddCompanyComponent}
     ],
   },
 ];

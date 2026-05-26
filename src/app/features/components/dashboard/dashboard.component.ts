@@ -34,7 +34,9 @@ export class DashboardComponent {
       deviceWise: 'Device Wise Employee',
       empList: 'Employee List',
       expirySoon: 'Expired Soon',
-      bulActivity:'Bulk Activity'
+      bulkActivity: 'Bulk Activity',
+      addCompany:'Add Company'
+      
     },
     hi: {
       deviceList: 'डिवाइस सूची',

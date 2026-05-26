@@ -1,10 +1,8 @@
 <div class="page-container">
   <div class="data-card">
-
-    <!-- ================= HEADER ================= -->
+    <!-- header -->
     <div class="card-header-bar">
       <div class="header-row">
-
         <div class="header-title-group">
           <div class="header-icon-wrap">
             <i class="fa-solid fa-hard-drive"></i>
@@ -15,7 +13,7 @@
           </div>
         </div>
 
-        <!-- COUNT -->
+        <!-- count -->
         <div class="span">
           <span class="count-badge">
             {{ filteredList.length ? startValue : 0 }} -
@@ -24,7 +22,7 @@
           </span>
         </div>
 
-        <!-- PAGINATION -->
+        <!-- pagination -->
         <div class="header-pagination">
           <pagination-controls
             id="empId"
@@ -32,73 +30,46 @@
           >
           </pagination-controls>
         </div>
-
       </div>
     </div>
 
-    <!-- ================= FILTER BAR ================= -->
+    <!-- section 2 -->
     <div class="filter-bar">
-
-      <!-- LEFT -->
       <div class="filter-left">
-
-        <!-- ACTION DROPDOWN -->
+        <!-- action dropdown-->
         <div class="filter-group">
-
           <label class="filter-label">
             <i class="fa-solid fa-bolt me-1"></i>
             Action
           </label>
 
-          <select
-            class="select-styled"
-            [(ngModel)]="selectedAction"
-          >
+          <select class="select-styled" [(ngModel)]="selectedAction">
             <option value="">Select Action</option>
-
-            <option
-              *ngFor="let item of actionOptions"
-              [value]="item.value"
-            >
+            <option *ngFor="let item of actionOptions" [value]="item.value">
               {{ item.label }}
             </option>
-
           </select>
         </div>
-
       </div>
 
-      <!-- RIGHT -->
+      <!-- right -->
       <div class="filter-right">
-
-        <!-- PAGE SIZE -->
+        <!-- page size -->
         <div class="filter-group">
-
-          <label class="filter-label">
-            ITEMS
-          </label>
-
+          <label class="filter-label"> ITEMS </label>
           <select
             class="select-styled select-sm"
             (change)="onPageSizeChange($event)"
           >
-
-            <option
-              *ngFor="let size of [25, 50, 100]"
-              [value]="size"
-            >
+            <option *ngFor="let size of [25, 50, 100]" [value]="size">
               {{ size }}
             </option>
-
           </select>
         </div>
 
-        <!-- DOWNLOAD EXCEL -->
+        <!-- download excel -->
         <div class="filter-group btn-group-update">
-
-          <label class="filter-label opacity-0">
-            Excel
-          </label>
+          <label class="filter-label opacity-0"> Excel </label>
 
           <button
             class="btn btn-success"
@@ -107,21 +78,13 @@
           >
             <i class="fas fa-file-excel me-1"></i>
 
-            {{
-              isExcelLoading
-                ? 'Downloading...'
-                : 'Excel'
-            }}
-
+            {{ isExcelLoading ? "Downloading..." : "Excel" }}
           </button>
         </div>
 
         <!-- UPLOAD EXCEL -->
         <div class="filter-group btn-group-update">
-
-          <label class="filter-label opacity-0">
-            Upload
-          </label>
+          <label class="filter-label opacity-0"> Upload </label>
 
           <input
             type="file"
@@ -130,45 +93,30 @@
             hidden
             (change)="onFileSelected($event)"
           />
-
-          <button
-            class="btn btn-primary"
-            (click)="fileInput.click()"
-          >
+           
+          <button class="btn btn-primary" (click)="fileInput.click()">
             <i class="fa-solid fa-upload me-1"></i>
             Upload Excel
           </button>
-
         </div>
-
       </div>
     </div>
 
     <!-- ================= BODY ================= -->
     <div class="card-body-area">
-
       <!-- SELECTED COUNT -->
-      <div
-        class="mb-3"
-        *ngIf="selectedDevices.length > 0"
-      >
+      <div class="mb-3" *ngIf="selectedDevices.length > 0">
         <button class="btn-action-link">
           Selected: {{ selectedDevices.length }}
         </button>
       </div>
 
       <!-- ================= TABLE ================= -->
-      <div
-        class="table-responsive"
-        *ngIf="filteredList.length"
-      >
-
+      <div class="table-responsive" *ngIf="filteredList.length">
         <table class="custom-table">
-
           <!-- TABLE HEADER -->
           <thead>
             <tr>
-
               <!-- SELECT ALL -->
               <th>
                 <input
@@ -182,13 +130,11 @@
               <th *ngFor="let col of tableHeading">
                 {{ col.title }}
               </th>
-
             </tr>
           </thead>
 
           <!-- TABLE BODY -->
           <tbody>
-
             <tr
               *ngFor="
                 let data of filteredList
@@ -202,7 +148,6 @@
                 let i = index
               "
             >
-
               <!-- CHECKBOX -->
               <td>
                 <input
@@ -215,12 +160,7 @@
               <!-- S NO -->
               <td>
                 <span class="sno-badge">
-                  {{
-                    (pagesize.offset - 1)
-                      * pagesize.limit
-                      + i
-                      + 1
-                  }}
+                  {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
                 </span>
               </td>
 
@@ -287,27 +227,19 @@
                   data.lastLogDownloadDate || "-"
                 }}
               </td> -->
-
             </tr>
-
           </tbody>
         </table>
       </div>
 
       <!-- ================= NO DATA ================= -->
-      <div
-        class="no-data-msg"
-        *ngIf="!filteredList.length"
-      >
-
+      <div class="no-data-msg" *ngIf="!filteredList.length">
         <div class="no-data-icon">
           <i class="fa-solid fa-inbox"></i>
         </div>
 
         No devices found
-
       </div>
-
     </div>
   </div>
 </div>
