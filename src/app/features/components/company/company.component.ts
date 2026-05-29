@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommmonService } from '../../shared/services/common-service/common.service';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-company',
   imports: [NgxPaginationModule, FormsModule, CommonModule],
@@ -15,7 +15,6 @@ export class CompanyComponent {
   filteredList: any[] = [];
   isLoading: boolean = false;
   searchText = '';
-
 
   tableHeading = [
     { key: 'Sno', title: 'S.No.' },
@@ -47,7 +46,10 @@ export class CompanyComponent {
     responsiblePerson: '',
   };
 
-  constructor(private commonService: CommmonService) { }
+  constructor(
+    private commonService: CommmonService,
+    private toastr: ToastrService,
+  ) {}
 
   ngOnInit(): void {
     this.getComapnyList();
@@ -56,20 +58,26 @@ export class CompanyComponent {
   getComapnyList() {
     this.isLoading = true;
 
-    this.commonService.newCompanyList(this.pagesize.offset, this.pagesize.limit,this.searchText,).subscribe({
-      next: (res: any) => {
-        console.log('Company List:', res);
-        this.comapnyList = res?.body?.data || [];
-        this.filteredList = [...this.comapnyList];
-        this.pagesize.count = this.comapnyList.length;
-        this.isLoading = false;
-      },
+    this.commonService
+      .newCompanyList(
+        this.pagesize.offset,
+        this.pagesize.limit,
+        this.searchText,
+      )
+      .subscribe({
+        next: (res: any) => {
+          console.log('Company List:', res);
+          this.comapnyList = res?.body?.data || [];
+          this.filteredList = [...this.comapnyList];
+          this.pagesize.count = this.comapnyList.length;
+          this.isLoading = false;
+        },
 
-      error: (err: any) => {
-        console.log(err);
-        this.isLoading = false;
-      },
-    });
+        error: (err: any) => {
+          console.log(err);
+          this.isLoading = false;
+        },
+      });
   }
 
   get startValue(): number {
@@ -81,7 +89,7 @@ export class CompanyComponent {
 
     return Math.min(last, this.pagesize.count);
   }
-   onSearch(event: any) {
+  onSearch(event: any) {
     this.searchText = event.target.value;
     this.getComapnyList();
   }
@@ -134,17 +142,19 @@ export class CompanyComponent {
         const responseData = res?.body || res;
 
         if (responseData?.isSuccess) {
-          alert('Company Added Successfully');
+          this.toastr.success('Company Added Successfully');
 
           this.getComapnyList();
 
           this.resetForm();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+          // alert(responseData?.message || 'Something went wrong');
+          this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
         console.log('API Error:', err);
+        this.toastr.error('API Error');
       },
     });
   }
@@ -192,16 +202,16 @@ export class CompanyComponent {
       next: (res: any) => {
         console.log('Update Response:', res);
 
-        const responseData = res?.body ;
+        const responseData = res?.body;
 
         if (responseData?.isSuccess) {
-          alert('Company Updated Successfully');
+          this.toastr.success('Company Updated Successfully');
 
           this.getComapnyList();
 
           this.resetForm();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+         this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
@@ -209,7 +219,6 @@ export class CompanyComponent {
       },
     });
   }
-
 
   // DELETE
   deleteData(data: any) {
@@ -225,17 +234,17 @@ export class CompanyComponent {
         console.log('Delete Response:', res);
         const responseData = res?.body || res;
         if (responseData?.isSuccess) {
-          alert('Company Deleted Successfully');
+          this.toastr.success('Company Deleted Successfully');
           // refresh list
           this.getComapnyList();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+          this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
         console.log('Delete Error:', err);
 
-        alert('API Error');
+        this.toastr.error('API Error');
       },
     });
   }

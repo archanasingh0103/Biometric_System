@@ -216,8 +216,6 @@ requestSuccess(): Observable<any> {
   
 
   // Company API
-// common.service.ts
-
 newCompanyList(
   pageNumber: number,
   pageSize: number,
@@ -252,6 +250,8 @@ newCompanyList(
     return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
+
+
   // Department Api
   departmentList(pageNumber:number,pageSize:number,search:string)
   {
@@ -278,32 +278,14 @@ newCompanyList(
     return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 
-  // Loaction Api
-  locationList(): Observable<any>
-  {
-    const url = API_CONSTANT.getLoactionList
-    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
-  }
-  createLocation(payload:any): Observable<any>
-  {
-    const url = API_CONSTANT.createLocation
-    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
-  }
-  updateLocation(payload: any): Observable<any>
-  {
-    const url = API_CONSTANT.updateLocation
-    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
-  }
-  deleteLoaction(id:number): Observable<any>
-  {
-    const url = API_CONSTANT.deleteLocation
-    return this.apiService.post(url, id).pipe(catchError((error: HttpErrorResponse) => of(error)));
-  }
 
   // Designation API
-  designationList(): Observable<any>
+  newDesignationList(pageNumber:number,pageSize:number,search:string): Observable<any>
   {
     const url = API_CONSTANT.getDesignationList
+      .replace('{pageNumber}', pageNumber.toString())
+      .replace('{pageSize}', pageSize.toString())
+      .replace("{search}",search)
    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
   createDesignation(payload:any): Observable<any>
@@ -319,7 +301,35 @@ newCompanyList(
 
   deleteDesignation(id: number): Observable<any>
   {
-    const url = API_CONSTANT.deleteDesignation
-    return this.apiService.post(url, id).pipe(catchError((error: HttpErrorResponse) => of(error)));
+     const url = `${API_CONSTANT.deleteDesignation}${id}`;
+    return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
+
+
+  // Loaction Api
+  locationList(pageNumber:number,pageSize:number,search:string): Observable<any>
+  {
+    const url = API_CONSTANT.getLoactionList
+      .replace('{pageNumber}', pageNumber.toString())
+      .replace('{pageSize}', pageSize.toString())
+      .replace("{search}",search)
+    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  createLocation(payload:any): Observable<any>
+  {
+    const url = API_CONSTANT.createLocation
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  updateLocation(payload: any): Observable<any>
+  {
+    const url = API_CONSTANT.updateLocation
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  deleteLoaction(id:number): Observable<any>
+  {
+     const url = API_CONSTANT.deleteLocation
+      .replace('{id}', id.toString());
+    return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
 }

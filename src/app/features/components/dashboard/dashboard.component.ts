@@ -37,7 +37,9 @@ export class DashboardComponent {
       bulkActivity: 'Bulk Activity',
       addCompany: 'Add Company',
       compapny: 'Company',
-      department:'Department'
+      department: 'Department',
+      designation: 'Designation',
+      location:'Location'
       
     },
     hi: {

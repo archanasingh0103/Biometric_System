@@ -9,14 +9,14 @@
           </div>
 
           <div>
-            <h5 class="header-title">Company List</h5>
+            <h5 class="header-title">Location List</h5>
           </div>
         </div>
 
         <!-- COUNT -->
         <div class="span">
           <span class="count-badge">
-          {{ filteredList.length > 0 ? startValue : 0 }} -
+            {{ filteredList.length > 0 ? startValue : 0 }} -
             {{
               filteredList.length > 0
                 ? filteredList.length < lastValue
@@ -24,7 +24,7 @@
                   : lastValue
                 : 0
             }}
-            of {{ filteredList.length }} company
+            of {{ filteredList.length }} location
           </span>
         </div>
 
@@ -46,7 +46,7 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Search Company..."
+          placeholder="Search Location..."
           (input)="onSearch($event)"
         />
       </div>
@@ -76,7 +76,7 @@
             (click)="resetForm()"
           >
             <i class="fa-solid fa-plus me-1"></i>
-            Add Company
+            Add Location
           </button>
         </div>
       </div>
@@ -106,7 +106,7 @@
                         id: 'empId',
                         itemsPerPage: pagesize.limit,
                         currentPage: pagesize.offset,
-                        totalItems: pagesize.count
+                        totalItems: pagesize.count,
                       };
                 let i = index
               "
@@ -117,24 +117,10 @@
                   {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
                 </span>
               </td>
-
-              <!-- COMPANY NAME -->
-              <td>{{ data.companyFName }}</td>
-
-              <!-- SHORT NAME -->
-              <td>{{ data.companySName }}</td>
-
-              <!-- ADDRESS -->
-              <td>{{ data.companyAddress || '-' }}</td>
-
-              <!-- EMAIL -->
-              <td>{{ data.companyeMail || '-' }}</td>
-
-              <!-- WEBSITE -->
-              <td>{{ data.companyWebsite || '-' }}</td>
-
-              <!-- STATUS -->
-              <td>{{ data.recordStatus }}</td>
+              <td>{{ data.locationName }}</td>
+              <td>{{ data.locationCode }}</td>
+              <td>{{ data.leaveApprovalWorkFlowId || "-" }}</td>
+              <td>{{ data.odApprovalWorkFlowId || "-" }}</td>
 
               <!-- ACTION -->
               <td>
@@ -142,6 +128,8 @@
                   <!-- EDIT -->
                   <button
                     class="icon-btn edit-btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#companyModal"
                     (click)="editData(data)"
                   >
                     <i class="fa-solid fa-pen-to-square"></i>
@@ -167,7 +155,7 @@
           <i class="fa-solid fa-inbox"></i>
         </div>
 
-        No Company Found
+        No Location Found
       </div>
     </div>
   </div>
@@ -186,7 +174,7 @@
       <!-- HEADER -->
       <div class="modal-header">
         <h5 class="modal-title" id="companyModalLabel">
-          {{ company.companyId ? 'Update Company' : 'Add Company' }}
+          {{ location.locationId ? "Update Location" : "Add Location" }}
         </h5>
 
         <button
@@ -201,73 +189,49 @@
         <div class="row">
           <!-- COMPANY FIRST NAME -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Company First Name</label>
+            <label class="form-label">Location Name</label>
 
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="company.companyFName"
-              placeholder="Enter Company First Name"
+              [(ngModel)]="location.locationName"
+              placeholder="Enter Location Name"
             />
           </div>
 
           <!-- COMPANY SHORT NAME -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Company Short Name</label>
+            <label class="form-label">Location Code</label>
 
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="company.companySName"
-              placeholder="Enter Company Short Name"
+              [(ngModel)]="location.locationCode"
+              placeholder="Enter Location Code"
             />
           </div>
 
           <!-- ADDRESS -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Address</label>
+            <label class="form-label">Leave Approval Work Flow Id</label>
 
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="company.companyAddress"
+              [(ngModel)]="location.leaveApprovalWorkFlowId"
               placeholder="Enter Address"
             />
           </div>
 
           <!-- EMAIL -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Email</label>
+            <label class="form-label">Od Approval Work Flow Id</label>
 
             <input
               type="email"
               class="form-control"
-              [(ngModel)]="company.companyeMail"
+              [(ngModel)]="location.odApprovalWorkFlowId"
               placeholder="Enter Email"
-            />
-          </div>
-
-          <!-- WEBSITE -->
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Website</label>
-
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="company.companyWebsite"
-              placeholder="Enter Website"
-            />
-          </div>
-
-          <!-- RESPONSIBLE PERSON -->
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Responsible Person</label>
-
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="company.responsiblePerson"
-              placeholder="Enter Responsible Person"
             />
           </div>
         </div>
@@ -275,11 +239,7 @@
 
       <!-- FOOTER -->
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
 
@@ -287,9 +247,9 @@
         <button
           type="button"
           class="btn btn-primary"
-          (click)="company.companyId ? updateCompanyData() : openAddForm()"
+          (click)="location.locationId ? updateLocationData() : openAddForm()"
         >
-          {{ company.companyId ? 'Update' : 'Save' }}
+          {{ location.locationId ? "Update" : "Save" }}
         </button>
       </div>
     </div>

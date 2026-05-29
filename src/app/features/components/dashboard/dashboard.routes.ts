@@ -10,6 +10,8 @@ import { BulkActivityComponent } from '../bulk-activity/bulk-activity.component'
 import { AddCompanyComponent } from '../add-company/add-company.component';
 import { CompanyComponent } from '../company/company.component';
 import { DepartmentComponent } from '../department/department.component';
+import { DesignationComponent } from '../designation/designation.component';
+import { LocationComponent } from '../location/location.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
@@ -27,7 +29,9 @@ export const DASHBOARD_ROUTES: Routes = [
       { path: 'bulk-activity', component: BulkActivityComponent },
       { path: 'add-company', component: AddCompanyComponent },
       { path: 'compapny', component: CompanyComponent },
-      {path:'department',component:DepartmentComponent}
+      { path: 'department', component: DepartmentComponent },
+      { path: 'designation', component: DesignationComponent },
+      {path:'location',component:LocationComponent}
     ],
   },
 ];

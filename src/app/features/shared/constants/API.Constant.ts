@@ -32,10 +32,7 @@ export const API_CONSTANT = {
   
 
   //Company API
-// API.Constant.ts
-
-getComapnyList:
-'Company/GetCompanyServiceList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',
+  getComapnyList:'Company/GetCompanyServiceList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',
   createCompany: 'Company/CreateCompanyService',
   updateCompany: 'Company/UpdateCompanyService',
   deleteComapny: 'Company/DeleteCompanyService?id={id}',
@@ -45,16 +42,18 @@ getComapnyList:
   createDepartment: 'Department/CreateDepartment',
   updateDepartment: 'Department/UpdateDepartment',
   deleteDepartment: 'Department/DeleteDepartment?id={id}',
+
+    // Designation Api
+  getDesignationList: 'Designations/GetDesignationList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',
+  createDesignation: 'Designations/CreateDesignations',
+  updateDesignation: 'Designations/UpdateDesignation',
+  deleteDesignation:'Designations/DeleteDesignation',
   
   // Location Api
-  getLoactionList: '',
-  createLocation: '',
-  updateLocation: '',
-  deleteLocation: '',
+  getLoactionList: 'Location/GetLocationList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',
+  createLocation: 'Location/CreateLocation',
+  updateLocation: 'Location/UpdateLocation',
+  deleteLocation: 'Location/DeleteLocation?id={id}'
   
-  // Designation Api
-  getDesignationList: '',
-  createDesignation: '',
-  updateDesignation: '',
-  deleteDesignation:''
+
 };

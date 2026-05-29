@@ -3,7 +3,7 @@ import { CommmonService } from '../../shared/services/common-service/common.serv
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-department',
   imports: [FormsModule, CommonModule, NgxPaginationModule],
@@ -41,7 +41,7 @@ export class DepartmentComponent {
     departmenteMail: '',
   };
 
-  constructor(private commonService: CommmonService) { }
+  constructor(private commonService: CommmonService, private toastr: ToastrService,) { }
 
   ngOnInit(): void {
     this.getDepartmentList();
@@ -120,13 +120,13 @@ export class DepartmentComponent {
         const responseData = res?.body || res;
 
         if (responseData?.isSuccess) {
-          alert('Department Added Successfully');
+           this.toastr.success('Department Added Successfully');
 
           this.getDepartmentList();
 
           this.resetForm();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+       this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
@@ -173,13 +173,13 @@ export class DepartmentComponent {
         const responseData = res?.body ;
 
         if (responseData?.isSuccess) {
-          alert('Department Updated Successfully');
+          this.toastr.success('Department Updated Successfully');
 
           this.getDepartmentList();
 
           this.resetForm();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+         this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
@@ -203,17 +203,17 @@ export class DepartmentComponent {
         console.log('Delete Response:', res);
         const responseData = res?.body || res;
         if (responseData?.isSuccess) {
-          alert('Company Deleted Successfully');
+           this.toastr.success('Department Deleted Successfully');
           // refresh list
           this.getDepartmentList();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+       this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
         console.log('Delete Error:', err);
 
-        alert('API Error');
+        this.toastr.error('API Error');
       },
     });
   }

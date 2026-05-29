@@ -66,7 +66,7 @@
           <button
             class="btn btn-update"
             data-bs-toggle="modal"
-            data-bs-target="#companyModal"
+            data-bs-target="#departmentModal"
             (click)="resetForm()"
           >
             <i class="fa-solid fa-plus me-1"></i>
@@ -100,7 +100,7 @@
                         id: 'empId',
                         itemsPerPage: pagesize.limit,
                         currentPage: pagesize.offset,
-                        totalItems: pagesize.count
+                        totalItems: pagesize.count,
                       };
                 let i = index
               "
@@ -113,16 +113,13 @@
               </td>
               <td>{{ data.departmentFName }}</td>
               <td>{{ data.departmentSName }}</td>
-              <td>{{ data.description || '-' }}</td>
-              <td>{{ data.recordStatus || '-' }}</td>
+              <td>{{ data.description || "-" }}</td>
+              <td>{{ data.recordStatus || "-" }}</td>
               <!-- ACTION -->
               <td>
                 <div class="action-buttons">
                   <!-- EDIT -->
-                  <button
-                    class="icon-btn edit-btn"
-                    (click)="editData(data)"
-                  >
+                  <button class="icon-btn edit-btn" (click)="editData(data)">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
 
@@ -161,12 +158,11 @@
   aria-hidden="true"
 >
   <div class="modal-dialog modal-lg modal-dialog-centered">
-
     <div class="modal-content">
       <!-- HEADER -->
       <div class="modal-header">
         <h5 class="modal-title" id="departmentModalLabel">
-          {{ department.departmentId ? 'Update Department' : 'Add Department' }}
+          {{ department.departmentId ? "Update Department" : "Add Department" }}
         </h5>
 
         <button
@@ -180,7 +176,7 @@
       <div class="modal-body">
         <div class="row">
           <!-- COMPANY FIRST NAME -->
-           <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-3">
             <label class="form-label">Department First Name</label>
 
             <input
@@ -189,10 +185,10 @@
               [(ngModel)]="department.departmentFName"
               placeholder="Enter Company First Name"
             />
-          </div> 
+          </div>
 
           <!-- COMPANY SHORT NAME -->
-           <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-3">
             <label class="form-label">Department Short Name</label>
 
             <input
@@ -204,7 +200,7 @@
           </div>
 
           <!-- ADDRESS -->
-           <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-3">
             <label class="form-label">Description</label>
 
             <input
@@ -213,7 +209,7 @@
               [(ngModel)]="department.description"
               placeholder="Enter Description"
             />
-          </div> 
+          </div>
 
           <!-- Record Status -->
           <div class="col-md-6 mb-3">
@@ -225,9 +221,9 @@
               [(ngModel)]="department.recordStatus"
               placeholder="Enter Responsible Person"
             />
-          </div> 
+          </div>
 
-           <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-3">
             <label class="form-label">Department Mail</label>
 
             <input
@@ -236,30 +232,27 @@
               [(ngModel)]="department.departmenteMail"
               placeholder="Enter Department Mail"
             />
-          </div> 
+          </div>
         </div>
       </div>
 
       <!-- FOOTER -->
       <div class="modal-footer">
-         <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
 
         <!-- SAVE / UPDATE -->
-         <button
+        <button
           type="button"
           class="btn btn-primary"
-          (click)="department.departmentId ? updateDepartmentData() : openAddForm()"
+          (click)="
+            department.departmentId ? updateDepartmentData() : openAddForm()
+          "
         >
-          {{ department.departmentId ? 'Update' : 'Save' }}
-        </button> 
+          {{ department.departmentId ? "Update" : "Save" }}
+        </button>
       </div>
     </div>
   </div>
 </div>
-
