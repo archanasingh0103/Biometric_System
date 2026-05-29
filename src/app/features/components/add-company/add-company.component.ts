@@ -11,24 +11,21 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./add-company.component.css'],
 })
 export class AddCompanyComponent {
-  
-  constructor(private commonService: CommmonService) { }
-
+  constructor(private commonService: CommmonService) {}
   employee = {
-
     StaffCode: '',
     StaffName: '',
 
-    Gender: 'Male',
-    Status: 'Working',
+    Gender: '',
+    Status: '',
 
     CompanySName: '',
     DepartmentSName: '',
     Location: '',
     Designation: '',
 
-    Grade: 'Default',
-    Team: 'Default',
+    Grade: '',
+    Team: '',
 
     DOJ: '',
     DOC: '',
@@ -36,12 +33,30 @@ export class AddCompanyComponent {
     DOR: '',
   };
 
- // dropdown List
+  genderOptions = [
+    {
+      label: 'Male',
+      value: 'Male',
+      class: 'male-label',
+    },
+    {
+      label: 'Female',
+      value: 'Female',
+      class: 'female-label',
+    },
+    {
+      label: 'Other',
+      value: 'Other',
+      class: 'other-label',
+    },
+  ];
+
+  // dropdown List
   companyList: any[] = [];
   departmentList: any[] = [];
   locationList: any[] = [];
   designationList: any[] = [];
-
+  buttonMessage: string = 'Submit';
 
   ngOnInit() {
     this.getCompanies();
@@ -59,10 +74,9 @@ export class AddCompanyComponent {
       },
       error: (err) => {
         console.log(err);
-      }
+      },
     });
   }
-
 
   // department List
   getDepartments() {
@@ -73,11 +87,11 @@ export class AddCompanyComponent {
       },
       error: (err) => {
         console.log(err);
-      }
+      },
     });
   }
 
-// location list
+  // location list
   getLocations() {
     this.commonService.getLocationList().subscribe({
       next: (res: any) => {
@@ -86,12 +100,11 @@ export class AddCompanyComponent {
       },
       error: (err) => {
         console.log(err);
-      }
+      },
     });
-
   }
 
-// designation List
+  // designation List
   getDesignations() {
     this.commonService.getDesignationList().subscribe({
       next: (res: any) => {
@@ -100,78 +113,77 @@ export class AddCompanyComponent {
       },
       error: (err) => {
         console.log(err);
-      }
-    });
-  }
-
-// save Employee
-  saveEmployee() {
-    const payload = {
-      StaffCode: this.employee.StaffCode,
-      StaffName: this.employee.StaffName,
-      Gender: this.employee.Gender,
-      Status: this.employee.Status,
-      CompanySName: this.employee.CompanySName,
-      DepartmentSName: this.employee.DepartmentSName,
-      Location: this.employee.Location,
-      Designation: this.employee.Designation,
-      Grade: this.employee.Grade,
-      Team: this.employee.Team,
-      DOJ: this.employee.DOJ,
-      DOC: this.employee.DOC,
-      DOB: this.employee.DOB,
-      DOR: this.employee.DOR,
-    };
-    console.log('Payload:', payload);
-    this.commonService.addEmployee(payload).subscribe({
-      next: (res: any) => {
-        console.log('Employee Added => ', res);
-        alert('Employee Added Successfully');
-        this.resetForm();
       },
-      error: (err) => {
-        console.log(err);
-        alert('Something went wrong');
-      }
-
     });
-
   }
 
-  // ================= RESET FORM =================
+submitButton() {
+  this.commonService.requestSuccess().subscribe({
+    next: (res: any) => {
+      const response = res.body || res;
+      console.log("Request Response:", response);
+      if (response.isSuccess) {
+        this.buttonMessage = response.message;
+      }
+    },
+    error: (err) => {
+      console.log(err);
+      this.buttonMessage = 'Request Failed';
+    },
+  });
+}
 
-  resetForm() {
+  // save Employee
+  // submitButton() {
+  //   const payload = {
+  //     StaffCode: this.employee.StaffCode,
+  //     StaffName: this.employee.StaffName,
+  //     Gender: this.employee.Gender,
+  //     Status: this.employee.Status,
+  //     CompanySName: this.employee.CompanySName,
+  //     DepartmentSName: this.employee.DepartmentSName,
+  //     Location: this.employee.Location,
+  //     Designation: this.employee.Designation,
+  //     Grade: this.employee.Grade,
+  //     Team: this.employee.Team,
+  //     DOJ: this.employee.DOJ,
+  //     DOC: this.employee.DOC,
+  //     DOB: this.employee.DOB,
+  //     DOR: this.employee.DOR,
+  //   };
+  //   console.log('Payload:', payload);
+  //   this.commonService.addEmployee(payload).subscribe({
+  //     next: (res: any) => {
+  //       console.log('Employee Added => ', res);
+  //       // alert('Employee Added Successfully');
+  //       this.resetForm();
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //       alert('Something went wrong');
+  //     }
 
-    this.employee = {
+  //   });
 
-      StaffCode: '',
+  // }
 
-      StaffName: '',
-
-      Gender: 'Male',
-
-      Status: 'Working',
-
-      CompanySName: '',
-
-      DepartmentSName: '',
-
-      Location: '',
-
-      Designation: '',
-
-      Grade: 'Default',
-
-      Team: 'Default',
-
-      DOJ: '',
-
-      DOC: '',
-
-      DOB: '',
-
-      DOR: '',
-
-    }
-  }
+  // reset form
+  // resetForm() {
+  //   this.employee = {
+  //     StaffCode: '',
+  //     StaffName: '',
+  //     Gender: 'Male',
+  //     Status: 'Working',
+  //     CompanySName: '',
+  //     DepartmentSName: '',
+  //     Location: '',
+  //     Designation: '',
+  //     Grade: 'Default',
+  //     Team: 'Default',
+  //     DOJ: '',
+  //     DOC: '',
+  //     DOB: '',
+  //     DOR: '',
+  //   }
+  // }
 }

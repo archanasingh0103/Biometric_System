@@ -206,4 +206,120 @@ export class CommmonService {
       .post(url, payload)
       .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
+requestSuccess(): Observable<any> {
+  const url = API_CONSTANT.requestSuccess;
+
+  return this.apiService
+    .post(url, {})
+    .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  
+
+  // Company API
+// common.service.ts
+
+newCompanyList(
+  pageNumber: number,
+  pageSize: number,
+  search: string
+): Observable<any> {
+  const url = API_CONSTANT.getComapnyList
+    .replace('{pageNumber}', pageNumber.toString())
+    .replace('{pageSize}', pageSize.toString())
+    .replace('{search}', search);
+
+  return this.apiService
+    .get(url)
+    .pipe(
+      catchError((error: HttpErrorResponse) => of(error))
+    );
+
+}
+  addCompany(payload:any): Observable<any>
+  {
+    const url = API_CONSTANT.createCompany
+    return this.apiService.post(url,payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  updateCompany(payload:any): Observable<any>
+  {
+    const url = API_CONSTANT.updateCompany
+    return this.apiService.post(url,payload).pipe(catchError((error:HttpErrorResponse)=>of(error)))
+  }
+  deleteCompany(id:number): Observable<any>
+  {
+    const url = API_CONSTANT.deleteComapny
+      .replace('{id}', id.toString());
+    return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // Department Api
+  departmentList(pageNumber:number,pageSize:number,search:string)
+  {
+    const url = API_CONSTANT.getDepartmentList
+      .replace('{pageNumber}', pageNumber.toString())
+      .replace('{pageSize}', pageSize.toString())
+    .replace('{search}',search)
+    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  createDepartment(payload:any): Observable<any>
+  {
+    const url = API_CONSTANT.createDepartment
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  updateDepartment(payload: any): Observable<any>
+  {
+    const url = API_CONSTANT.updateDepartment
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  deleteDepartment(id:number): Observable<any>
+  {
+    const url = API_CONSTANT.deleteComapny
+      .replace('{id}', id.toString());
+    return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // Loaction Api
+  locationList(): Observable<any>
+  {
+    const url = API_CONSTANT.getLoactionList
+    return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  createLocation(payload:any): Observable<any>
+  {
+    const url = API_CONSTANT.createLocation
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  updateLocation(payload: any): Observable<any>
+  {
+    const url = API_CONSTANT.updateLocation
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  deleteLoaction(id:number): Observable<any>
+  {
+    const url = API_CONSTANT.deleteLocation
+    return this.apiService.post(url, id).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  // Designation API
+  designationList(): Observable<any>
+  {
+    const url = API_CONSTANT.getDesignationList
+   return this.apiService.get(url).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  createDesignation(payload:any): Observable<any>
+  {
+    const url = API_CONSTANT.createDesignation
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+  updateDesignation(payload:any): Observable<any>
+  {
+    const url = API_CONSTANT.updateDesignation
+    return this.apiService.post(url, payload).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+  deleteDesignation(id: number): Observable<any>
+  {
+    const url = API_CONSTANT.deleteDesignation
+    return this.apiService.post(url, id).pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
 }

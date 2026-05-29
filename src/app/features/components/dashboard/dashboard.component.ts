@@ -35,7 +35,9 @@ export class DashboardComponent {
       empList: 'Employee List',
       expirySoon: 'Expired Soon',
       bulkActivity: 'Bulk Activity',
-      addCompany:'Add Company'
+      addCompany: 'Add Company',
+      compapny: 'Company',
+      department:'Department'
       
     },
     hi: {

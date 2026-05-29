@@ -1,0 +1,291 @@
+<div class="page-container">
+  <div class="data-card">
+    <!-- HEADER -->
+    <div class="card-header-bar">
+      <div class="header-row">
+        <div class="header-title-group">
+          <div class="header-icon-wrap">
+            <i class="fa-solid fa-hard-drive"></i>
+          </div>
+
+          <div>
+            <h5 class="header-title">Company List</h5>
+          </div>
+        </div>
+
+        <!-- COUNT -->
+        <div class="span">
+          <span class="count-badge">
+            {{ filteredList.length ? startValue : 0 }} -
+            {{ filteredList.length ? lastValue : 0 }}
+            of {{ pagesize.count }} company
+          </span>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="header-pagination">
+          <pagination-controls
+            id="empId"
+            (pageChange)="onTablePageChange($event)"
+          >
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="filter-left">
+        <!-- SEARCH -->
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Company..."
+          (input)="onSearch($event)"
+        />
+      </div>
+
+      <!-- RIGHT -->
+      <div class="filter-right">
+        <!-- PAGE SIZE -->
+        <div class="filter-group">
+          <label class="filter-label">ITEMS</label>
+
+          <select
+            class="select-styled select-sm"
+            (change)="onPageSizeChange($event)"
+          >
+            <option *ngFor="let size of [25, 50, 100]" [value]="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+
+        <!-- ADD BUTTON -->
+        <div class="filter-group btn-group-update">
+          <button
+            class="btn btn-update"
+            data-bs-toggle="modal"
+            data-bs-target="#companyModal"
+            (click)="resetForm()"
+          >
+            <i class="fa-solid fa-plus me-1"></i>
+            Add Company
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body-area">
+      <!-- TABLE -->
+      <div class="table-responsive" *ngIf="filteredList.length">
+        <table class="custom-table">
+          <!-- TABLE HEADER -->
+          <thead>
+            <tr>
+              <th *ngFor="let col of tableHeading">
+                {{ col.title }}
+              </th>
+            </tr>
+          </thead>
+
+          <!-- TABLE BODY -->
+          <tbody>
+            <tr
+              *ngFor="
+                let data of filteredList
+                  | paginate
+                    : {
+                        id: 'empId',
+                        itemsPerPage: pagesize.limit,
+                        currentPage: pagesize.offset,
+                        totalItems: pagesize.count
+                      };
+                let i = index
+              "
+            >
+              <!-- S.NO -->
+              <td>
+                <span class="sno-badge">
+                  {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
+                </span>
+              </td>
+
+              <!-- COMPANY NAME -->
+              <td>{{ data.companyFName }}</td>
+
+              <!-- SHORT NAME -->
+              <td>{{ data.companySName }}</td>
+
+              <!-- ADDRESS -->
+              <td>{{ data.companyAddress || '-' }}</td>
+
+              <!-- EMAIL -->
+              <td>{{ data.companyeMail || '-' }}</td>
+
+              <!-- WEBSITE -->
+              <td>{{ data.companyWebsite || '-' }}</td>
+
+              <!-- STATUS -->
+              <td>{{ data.recordStatus }}</td>
+
+              <!-- ACTION -->
+              <td>
+                <div class="action-buttons">
+                  <!-- EDIT -->
+                  <button
+                    class="icon-btn edit-btn"
+                    (click)="editData(data)"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+
+                  <!-- DELETE -->
+                  <button
+                    class="icon-btn delete-btn"
+                    (click)="deleteData(data)"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- NO DATA -->
+      <div class="no-data-msg" *ngIf="!filteredList.length">
+        <div class="no-data-icon">
+          <i class="fa-solid fa-inbox"></i>
+        </div>
+
+        No Company Found
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div
+  class="modal fade"
+  id="companyModal"
+  tabindex="-1"
+  aria-labelledby="companyModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <!-- HEADER -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="companyModalLabel">
+          {{ company.companyId ? 'Update Company' : 'Add Company' }}
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+        <div class="row">
+          <!-- COMPANY FIRST NAME -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Company First Name</label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="company.companyFName"
+              placeholder="Enter Company First Name"
+            />
+          </div>
+
+          <!-- COMPANY SHORT NAME -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Company Short Name</label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="company.companySName"
+              placeholder="Enter Company Short Name"
+            />
+          </div>
+
+          <!-- ADDRESS -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Address</label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="company.companyAddress"
+              placeholder="Enter Address"
+            />
+          </div>
+
+          <!-- EMAIL -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+
+            <input
+              type="email"
+              class="form-control"
+              [(ngModel)]="company.companyeMail"
+              placeholder="Enter Email"
+            />
+          </div>
+
+          <!-- WEBSITE -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Website</label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="company.companyWebsite"
+              placeholder="Enter Website"
+            />
+          </div>
+
+          <!-- RESPONSIBLE PERSON -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Responsible Person</label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="company.responsiblePerson"
+              placeholder="Enter Responsible Person"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+
+        <!-- SAVE / UPDATE -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="company.companyId ? updateCompanyData() : openAddForm()"
+        >
+          {{ company.companyId ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

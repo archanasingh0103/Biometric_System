@@ -257,6 +257,15 @@ body.dark-theme .btn-wrap {
   border-top-color: #1e293b !important;
 }
 
+
+
+.save-btn {
+  min-width: 220px;
+  color: white;
+  overflow: visible;
+  white-space: nowrap;
+}
+
 /* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */

@@ -8,6 +8,8 @@ import { HomeComponent } from '../home/home.component';
 import { ExpiredComponentComponent } from '../expired-component/expired-component.component';
 import { BulkActivityComponent } from '../bulk-activity/bulk-activity.component';
 import { AddCompanyComponent } from '../add-company/add-company.component';
+import { CompanyComponent } from '../company/company.component';
+import { DepartmentComponent } from '../department/department.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
@@ -23,7 +25,9 @@ export const DASHBOARD_ROUTES: Routes = [
       { path: 'emp-with-device', component: EmployeeWiseDeviceComponent },
       { path: 'empiry-soon', component: ExpiredComponentComponent },
       { path: 'bulk-activity', component: BulkActivityComponent },
-      {path:'add-company',component:AddCompanyComponent}
+      { path: 'add-company', component: AddCompanyComponent },
+      { path: 'compapny', component: CompanyComponent },
+      {path:'department',component:DepartmentComponent}
     ],
   },
 ];

@@ -19,7 +19,6 @@
       <!--  Staff Code + Staff Name -->
       <div class="form-row">
         <div class="form-group">
-          <!-- <span class="required">*</span> -->
           <label class="form-label">Staff Code </label>
           <input
             type="text"
@@ -29,7 +28,6 @@
           />
         </div>
         <div class="form-group">
-          <!-- <span class="required">*</span> -->
           <label class="form-label">Staff Name </label>
           <input
             type="text"
@@ -41,7 +39,7 @@
       </div>
 
       <!-- Gender + Status -->
-      <div class="form-row">
+      <!-- <div class="form-row">
         <div class="form-group">
           <label class="form-label">Gender</label>
           <div class="radio-group">
@@ -65,32 +63,51 @@
         </div>
         <div class="form-group">
           <label class="form-label">Status</label>
-          <select [(ngModel)]="employee.Status" class="custom-input">
-            <option value="">Select Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
+           <input
+            type="text"
+            [(ngModel)]="employee.Status"
+            class="custom-input"
+            placeholder="Enter Status"
+          />
+        </div>
+      </div> -->
+
+      <!-- we can write another way -->
+      <div class="form-row">
+        <!-- Gender -->
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+
+          <div class="radio-group">
+            <label class="radio-option" *ngFor="let gender of genderOptions">
+              <input
+                type="radio"
+                [(ngModel)]="employee.Gender"
+                [value]="gender.value"
+                name="gender"
+              />
+              <span class="radio-label" [ngClass]="gender.class">
+                {{ gender.label }}
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <input
+            type="text"
+            [(ngModel)]="employee.Status"
+            class="custom-input"
+            placeholder="Enter Status"
+          />
         </div>
       </div>
-
       <!--  Company + Department -->
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Company</label>
-          <!-- <select
-            [(ngModel)]="employee.CompanySName"
-            name="CompanySName"
-            class="form-control custom-input"
-          >
-            <option value="">Select Company</option>
-
-            <option
-              *ngFor="let company of companyList"
-              [value]="company.companySName"
-            >
-              {{ company.companySName }}
-            </option>
-          </select> -->
           <select
             [(ngModel)]="employee.CompanySName"
             name="CompanySName"
@@ -105,11 +122,6 @@
               {{ company.companySName }}
             </option>
           </select>
-
-          <!-- DEBUG -->
-          <!-- <div *ngFor="let company of companyList">
-            {{ company | json }}
-          </div> -->
         </div>
         <div class="form-group">
           <label class="form-label">Department</label>
@@ -133,9 +145,9 @@
             <option value="">Select Location</option>
             <option
               *ngFor="let location of locationList"
-              [value]="location.LocationName"
+              [value]="location.locationName"
             >
-              {{ location.LocationName }}
+              {{ location.locationName }}
             </option>
           </select>
         </div>
@@ -145,9 +157,9 @@
             <option value="">Select Designation</option>
             <option
               *ngFor="let designation of designationList"
-              [value]="designation.DesignationsName"
+              [value]="designation.designationsName"
             >
-              {{ designation.DesignationsName }}
+              {{ designation.designationsName }}
             </option>
           </select>
         </div>
@@ -200,10 +212,16 @@
       </div>
 
       <!-- SAVE BUTTON -->
-      <div class="btn-wrap">
-        <button class="save-btn" (click)="saveEmployee()">
+      <!-- <div class="btn-wrap">
+        <button class="save-btn" (click)="  submitButton()">
           <i class="fa-solid fa-floppy-disk"></i>
-          Save Employee
+        Submit
+        </button>
+      </div> -->
+      <div class="btn-wrap">
+        <button class="save-btn" (click)="submitButton()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ buttonMessage }}
         </button>
       </div>
     </div>

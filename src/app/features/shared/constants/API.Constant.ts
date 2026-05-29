@@ -24,8 +24,37 @@ export const API_CONSTANT = {
 
   // EMPLOYEE MANAGEMENT
   addEmployee: 'WebAPI/AddEmployee?APIKey=280411042215',
-  companyList: 'Company/GetCompanyServiceList',
-  departmentList: 'Department',
-  locationList: 'WebAPI/GetLocationList?APIKey=280411042215',
-  designationList: 'WebAPI/GetDesignationList?APIKey=280411042215',
+  companyList: 'Company/GetComapnyDropdown',
+  departmentList: 'Department/DepartmentDropdown',
+  locationList: 'Location/GetLocationDropdown',
+  designationList: 'Designations/GetDesignationsDropdown',
+  requestSuccess: 'Designations/RequestSuccess',
+  
+
+  //Company API
+// API.Constant.ts
+
+getComapnyList:
+'Company/GetCompanyServiceList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',
+  createCompany: 'Company/CreateCompanyService',
+  updateCompany: 'Company/UpdateCompanyService',
+  deleteComapny: 'Company/DeleteCompanyService?id={id}',
+  
+  // Department API
+  getDepartmentList: 'Department/GetDepartmentList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',
+  createDepartment: 'Department/CreateDepartment',
+  updateDepartment: 'Department/UpdateDepartment',
+  deleteDepartment: 'Department/DeleteDepartment?id={id}',
+  
+  // Location Api
+  getLoactionList: '',
+  createLocation: '',
+  updateLocation: '',
+  deleteLocation: '',
+  
+  // Designation Api
+  getDesignationList: '',
+  createDesignation: '',
+  updateDesignation: '',
+  deleteDesignation:''
 };
