@@ -27,7 +27,6 @@ export class ExpiredComponentComponent {
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
-
     return `${year}-${month}-${day}`;
   }
 
@@ -50,7 +49,6 @@ export class ExpiredComponentComponent {
 
   constructor(private commonService: CommmonService) {}
 
-  // Table headings
   setInitialDeviceTable() {
     this.tableHeading = [
       { key: 'Sno', title: 'S.No.' },
@@ -90,15 +88,6 @@ export class ExpiredComponentComponent {
       });
   }
 
-  // onShowClick() {
-  //   if (!this.fromDate || !this.toDate) {
-  //     alert("Please select From and To date");
-  //     return;
-  //   }
-
-  //   this.pagesize.offset = 1; // reset pagination
-  //   this.getExpiringSoonList();
-  // }
   onShowClick() {
     if (!this.fromDate || !this.toDate) {
       Swal.fire({
@@ -112,11 +101,10 @@ export class ExpiredComponentComponent {
     }
 
     console.log('API CALL');
-    this.pagesize.offset = 1; // reset pagination
+    this.pagesize.offset = 1; 
     this.getExpiringSoonList();
   }
 
-  // Pagination Change
   onTablePageChange(event: number) {
     this.pagesize.offset = event;
     this.getExpiringSoonList();

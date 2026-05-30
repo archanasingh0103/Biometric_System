@@ -4,9 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommmonService } from '../../shared/services/common-service/common.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+
 @Component({
   selector: 'app-company',
-  imports: [NgxPaginationModule, FormsModule, CommonModule],
+  standalone: true,
+  imports: [
+    NgxPaginationModule,
+    FormsModule,
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+  ],
   templateUrl: './company.component.html',
   styleUrl: './company.component.css',
 })
@@ -49,6 +60,7 @@ export class CompanyComponent {
   constructor(
     private commonService: CommmonService,
     private toastr: ToastrService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +69,6 @@ export class CompanyComponent {
 
   getComapnyList() {
     this.isLoading = true;
-
     this.commonService
       .newCompanyList(
         this.pagesize.offset,
@@ -86,9 +97,9 @@ export class CompanyComponent {
 
   get lastValue(): number {
     const last = this.startValue + this.comapnyList.length - 1;
-
     return Math.min(last, this.pagesize.count);
   }
+
   onSearch(event: any) {
     this.searchText = event.target.value;
     this.getComapnyList();
@@ -134,24 +145,24 @@ export class CompanyComponent {
     };
 
     console.log('Add Company Payload:', payload);
-
     this.commonService.addCompany(payload).subscribe({
       next: (res: any) => {
         console.log('Add Company:', res);
-
         const responseData = res?.body || res;
-
         if (responseData?.isSuccess) {
           this.toastr.success('Company Added Successfully');
-
           this.getComapnyList();
-
           this.resetForm();
+          const modalElement = document.getElementById('companyModal');
+          const modalInstance = (window as any).bootstrap.Modal.getInstance(
+            modalElement,
+          );
+          modalInstance?.hide();
         } else {
-          // alert(responseData?.message || 'Something went wrong');
           this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
+
       error: (err: any) => {
         console.log('API Error:', err);
         this.toastr.error('API Error');
@@ -173,8 +184,6 @@ export class CompanyComponent {
       isMetro: data.isMetro,
       responsiblePerson: data.responsiblePerson,
     };
-
-    // OPEN MODAL
     const modal = new (window as any).bootstrap.Modal(
       document.getElementById('companyModal'),
     );
@@ -197,21 +206,21 @@ export class CompanyComponent {
     };
 
     console.log('Update Payload:', payload);
-
     this.commonService.updateCompany(payload).subscribe({
       next: (res: any) => {
         console.log('Update Response:', res);
-
         const responseData = res?.body;
-
         if (responseData?.isSuccess) {
           this.toastr.success('Company Updated Successfully');
-
           this.getComapnyList();
-
           this.resetForm();
+          const modalElement = document.getElementById('companyModal');
+          const modalInstance = (window as any).bootstrap.Modal.getInstance(
+            modalElement,
+          );
+          modalInstance?.hide();
         } else {
-         this.toastr.warning(responseData?.message || 'Something went wrong');
+          this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
@@ -220,32 +229,37 @@ export class CompanyComponent {
     });
   }
 
-  // DELETE
   deleteData(data: any) {
-    console.log('Delete Data:', data);
-    const isConfirm = confirm(
-      `Are you sure you want to delete ${data.companyFName} ?`,
-    );
-    if (!isConfirm) {
-      return;
-    }
-    this.commonService.deleteCompany(data.companyId).subscribe({
-      next: (res: any) => {
-        console.log('Delete Response:', res);
-        const responseData = res?.body || res;
-        if (responseData?.isSuccess) {
-          this.toastr.success('Company Deleted Successfully');
-          // refresh list
-          this.getComapnyList();
-        } else {
-          this.toastr.warning(responseData?.message || 'Something went wrong');
-        }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Delete Company',
+        message: `Are you sure you want to delete ${data.companyFName}?`,
       },
-      error: (err: any) => {
-        console.log('Delete Error:', err);
+    });
 
-        this.toastr.error('API Error');
-      },
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.commonService.deleteCompany(data.companyId).subscribe({
+          next: (res: any) => {
+            console.log('Delete Response:', res);
+            const responseData = res?.body || res;
+            if (responseData?.isSuccess) {
+              this.toastr.success('Company Deleted Successfully');
+              this.getComapnyList();
+            } else {
+              this.toastr.warning(
+                responseData?.message || 'Something went wrong',
+              );
+            }
+          },
+
+          error: (err: any) => {
+            console.log('Delete Error:', err);
+            this.toastr.error('API Error');
+          },
+        });
+      }
     });
   }
 }

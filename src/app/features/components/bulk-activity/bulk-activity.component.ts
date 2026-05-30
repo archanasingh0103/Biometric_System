@@ -15,40 +15,24 @@ export class BulkActivityComponent {
   deviceList: any[] = [];
   filteredList: any[] = [];
   tableHeading: any;
-
   isLoading: boolean = false;
-
-  // CHECKBOX
   selectedDevices: any[] = [];
   isAllSelected = false;
-
-  // ACTION
   selectedAction = '';
-
-  // FILE
   selectedFile!: File;
-
-  // EXCEL
   isExcelLoading = false;
-
-  // STORE UPLOAD RESPONSE
   uploadResponseData: any = null;
-
-  // ACTION OPTIONS
   actionOptions = [
     { label: 'Access', value: 'access' },
     { label: 'DLink', value: 'dlink' },
     { label: 'Block', value: 'block' },
   ];
 
-  // PAGINATION
   pagesize = {
     limit: 25,
     offset: 1,
     count: 0,
   };
-
-  // ================= GETTERS =================
 
   get startValue(): number {
     return (
@@ -63,18 +47,12 @@ export class BulkActivityComponent {
     );
   }
 
-  // ================= CONSTRUCTOR =================
-
   constructor(private commonService: CommmonService) {}
-
-  // ================= INIT =================
 
   ngOnInit() {
     this.setInitialDeviceTable();
     this.getDeviceList();
   }
-
-  // ================= TABLE HEADERS =================
 
   setInitialDeviceTable() {
     this.tableHeading = [
@@ -89,52 +67,38 @@ export class BulkActivityComponent {
     ];
   }
 
-  // ================= DEVICE LIST =================
-
   getDeviceList() {
     this.isLoading = true;
-
     this.commonService
       .deviceList(this.pagesize.offset, this.pagesize.limit)
       .subscribe({
         next: (res: any) => {
-          console.log('Device List:', res);
-
+          // console.log('Device List:', res);
           this.isLoading = false;
-
           this.deviceList = res?.body?.data || [];
-
           this.filteredList = [...this.deviceList];
-
           this.pagesize.count = res?.body?.totalRecords || 0;
         },
 
         error: (err: any) => {
           this.isLoading = false;
-
-          console.log(err);
+          // console.log(err);
         },
       });
   }
 
-  // ================= PAGINATION =================
-
   onTablePageChange(event: number) {
     this.pagesize.offset = event;
-
     this.getDeviceList();
   }
 
   onPageSizeChange(event: any) {
     this.pagesize.limit = +event.target.value;
-
     this.pagesize.offset = 1;
-
     this.getDeviceList();
   }
 
-  // ================= CHECKBOX =================
-
+  // checkbox
   isChecked(device: any): boolean {
     return this.selectedDevices.some((x) => x.deviceId === device.deviceId);
   }
@@ -162,22 +126,16 @@ export class BulkActivityComponent {
     }
   }
 
-  // ================= FILE SELECT =================
-
+  // select file
   onFileSelected(event: any) {
     const file = event.target.files[0];
-
     if (file) {
       this.selectedFile = file;
-
       console.log('Selected File:', file);
-
       // AUTO UPLOAD
       this.uploadExcel();
     }
   }
-
-  // ================= UPLOAD EXCEL =================
 
   //   uploadExcel() {
   //     // FILE CHECK
@@ -305,14 +263,12 @@ export class BulkActivityComponent {
     // FILE CHECK
     if (!this.selectedFile) {
       alert('Please select excel file');
-
       return;
     }
 
     // ACTION CHECK
     if (!this.selectedAction) {
       alert('Please select action');
-
       return;
     }
 
@@ -325,10 +281,8 @@ export class BulkActivityComponent {
 
     // FORM DATA
     const formData = new FormData();
-
     // ACTION VALUE
     let actionValue = '';
-
     // ACCESS
     if (this.selectedAction === 'access') {
       actionValue = 'A';
@@ -347,8 +301,7 @@ export class BulkActivityComponent {
     // APPEND ACTION
     formData.append('Action', actionValue);
 
-    // ================= DEVICES =================
-
+    // devices
     this.selectedDevices.forEach((device: any) => {
       console.log('Selected Device:', device);
 
@@ -391,18 +344,13 @@ export class BulkActivityComponent {
         if (response?.status || response?.isSuccess) {
           alert(
             `Upload Completed
-
-Inserted : ${response?.totalInserted || 0}
-
-Duplicate : ${response?.totalDuplicate || 0}`,
+            Inserted : ${response?.totalInserted || 0}
+            Duplicate : ${response?.totalDuplicate || 0}`,
           );
-
           // DUPLICATE DATA
           console.log('Duplicate Data:', response?.duplicateData);
-
           // REFRESH TABLE
           this.getDeviceList();
-
           // RESET FILE
           this.selectedFile = null as any;
         }
@@ -423,18 +371,15 @@ Duplicate : ${response?.totalDuplicate || 0}`,
     });
   }
 
-  // ================= DOWNLOAD EXCEL =================
-
+  // download Excel
   downloadExcel() {
     // CHECK RESPONSE
     if (!this.uploadResponseData) {
       alert('Please upload excel first');
-
       return;
     }
 
     this.isExcelLoading = true;
-
     try {
       // RESPONSE
       const response = this.uploadResponseData;

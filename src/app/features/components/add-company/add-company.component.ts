@@ -51,7 +51,6 @@ export class AddCompanyComponent {
     },
   ];
 
-  // dropdown List
   companyList: any[] = [];
   departmentList: any[] = [];
   locationList: any[] = [];
@@ -65,7 +64,6 @@ export class AddCompanyComponent {
     this.getDesignations();
   }
 
-  // company List
   getCompanies() {
     this.commonService.getCompanyList().subscribe({
       next: (res: any) => {
@@ -91,7 +89,7 @@ export class AddCompanyComponent {
     });
   }
 
-  // location list
+
   getLocations() {
     this.commonService.getLocationList().subscribe({
       next: (res: any) => {
@@ -132,58 +130,4 @@ submitButton() {
     },
   });
 }
-
-  // save Employee
-  // submitButton() {
-  //   const payload = {
-  //     StaffCode: this.employee.StaffCode,
-  //     StaffName: this.employee.StaffName,
-  //     Gender: this.employee.Gender,
-  //     Status: this.employee.Status,
-  //     CompanySName: this.employee.CompanySName,
-  //     DepartmentSName: this.employee.DepartmentSName,
-  //     Location: this.employee.Location,
-  //     Designation: this.employee.Designation,
-  //     Grade: this.employee.Grade,
-  //     Team: this.employee.Team,
-  //     DOJ: this.employee.DOJ,
-  //     DOC: this.employee.DOC,
-  //     DOB: this.employee.DOB,
-  //     DOR: this.employee.DOR,
-  //   };
-  //   console.log('Payload:', payload);
-  //   this.commonService.addEmployee(payload).subscribe({
-  //     next: (res: any) => {
-  //       console.log('Employee Added => ', res);
-  //       // alert('Employee Added Successfully');
-  //       this.resetForm();
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //       alert('Something went wrong');
-  //     }
-
-  //   });
-
-  // }
-
-  // reset form
-  // resetForm() {
-  //   this.employee = {
-  //     StaffCode: '',
-  //     StaffName: '',
-  //     Gender: 'Male',
-  //     Status: 'Working',
-  //     CompanySName: '',
-  //     DepartmentSName: '',
-  //     Location: '',
-  //     Designation: '',
-  //     Grade: 'Default',
-  //     Team: 'Default',
-  //     DOJ: '',
-  //     DOC: '',
-  //     DOB: '',
-  //     DOR: '',
-  //   }
-  // }
 }

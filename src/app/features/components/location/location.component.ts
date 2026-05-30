@@ -3,10 +3,14 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommmonService } from '../../shared/services/common-service/common.service';
-
+import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-location',
-  imports: [FormsModule, CommonModule, NgxPaginationModule],
+  imports: [FormsModule, CommonModule, NgxPaginationModule,MatDialogModule,
+    MatButtonModule,],
   templateUrl: './location.component.html',
   styleUrl: './location.component.css',
 })
@@ -53,7 +57,8 @@ export class LocationComponent {
     locationFullAddress: '',
   };
 
-  constructor(private commonService: CommmonService) {}
+  constructor(private commonService: CommmonService, private toastr: ToastrService,private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.getLocationList();
@@ -125,7 +130,13 @@ export class LocationComponent {
       locationFullAddress: '',
     };
   }
-
+ closeModal() {
+    const modalElement = document.getElementById('locationModal');
+    const modalInstance = (window as any).bootstrap.Modal.getInstance(
+      modalElement,
+    );
+    modalInstance?.hide();
+  }
 
   openAddForm() {
     const payload = {
@@ -144,17 +155,17 @@ export class LocationComponent {
     };
 
     console.log('Create Payload:', payload);
-
     this.commonService.createLocation(payload).subscribe({
       next: (res: any) => {
         console.log('Create Response:', res);
         const responseData = res?.body || res;
-        if (responseData?.isSuccess) {
-          alert('Location Added Successfully');
+        if (responseData?.isSuccess) {;
+          this.toastr.success('Location Added Successfully');
           this.getLocationList();
           this.resetForm();
+          this.closeModal();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+          this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
@@ -166,7 +177,6 @@ export class LocationComponent {
 
   editData(data: any) {
     console.log('Edit Data:', data);
-
     this.location = {
       locationId: data.locationId || 0,
       locationName: data.locationName || '',
@@ -188,7 +198,6 @@ export class LocationComponent {
     const modal = new (window as any).bootstrap.Modal(
       document.getElementById('locationModal'),
     );
-
     modal.show();
   }
 
@@ -205,14 +214,13 @@ export class LocationComponent {
       clutureTimeZoneName: this.location.clutureTimeZoneName,
       clutureName: this.location.clutureName,
     };
-
     console.log('Update Payload:', payload);
     this.commonService.updateLocation(payload).subscribe({
       next: (res: any) => {
         console.log('Update Response:', res);
         const responseData = res?.body || res;
         if (responseData?.isSuccess) {
-          alert('Location Updated Successfully');
+          this.toastr.success('Location Updated Successfully');
           this.getLocationList();
           this.resetForm();
           // CLOSE MODAL
@@ -223,7 +231,7 @@ export class LocationComponent {
 
           modal?.hide();
         } else {
-          alert(responseData?.message || 'Something went wrong');
+         this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
 
@@ -233,31 +241,35 @@ export class LocationComponent {
     });
   }
 
-  deleteData(data: any) {
-
-    console.log('Delete Data:', data);
-    const isConfirm = confirm(
-      `Are you sure you want to delete ${data.locationName} ?`,
-    );
-    if (!isConfirm) {
-      return;
-    }
-    this.commonService.deleteLoaction(data.locationId).subscribe({
-      next: (res: any) => {
-        console.log('Delete Response:', res);
-        const responseData = res?.body || res;
-        if (responseData?.isSuccess) {
-          alert('Location Deleted Successfully');
-          this.getLocationList();
-        } else {
-          alert(responseData?.message || 'Something went wrong');
-        }
-      },
-      error: (err: any) => {
-        console.log('Delete Error:', err);
-
-        alert('API Error');
-      },
+   deleteData(data: any) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Delete Location',
+        message: `Are you sure you want to delete ${data.locationName}?`
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.commonService.deleteLoaction(data.locationId).subscribe({
+          next: (res: any) => {
+            console.log('Delete Response:', res);
+            const responseData = res?.body || res;
+            if (responseData?.isSuccess) {
+              this.toastr.success('Location Deleted Successfully');
+              this.getLocationList();
+            } else {
+              this.toastr.warning(
+                responseData?.message || 'Something went wrong'
+              );
+            }
+          },
+          error: (err: any) => {
+            console.log('Delete Error:', err);
+            this.toastr.error('API Error');
+          }
+        });
+      }
     });
   }
 }

@@ -1,6 +1,5 @@
 <div class="page-container">
   <div class="data-card">
-    <!-- header -->
     <div class="card-header-bar">
       <div class="header-row">
         <div class="header-title-group">
@@ -13,7 +12,6 @@
           </div>
         </div>
 
-        <!-- count -->
         <div class="span">
           <span class="count-badge">
             {{ filteredList.length ? startValue : 0 }} -
@@ -22,7 +20,6 @@
           </span>
         </div>
 
-        <!-- pagination -->
         <div class="header-pagination">
           <pagination-controls
             id="empId"
@@ -36,7 +33,6 @@
     <!-- section 2 -->
     <div class="filter-bar">
       <div class="filter-left">
-        <!-- action dropdown-->
         <div class="filter-group">
           <label class="filter-label">
             <i class="fa-solid fa-bolt me-1"></i>
@@ -54,7 +50,6 @@
 
       <!-- right -->
       <div class="filter-right">
-        <!-- page size -->
         <div class="filter-group">
           <label class="filter-label"> ITEMS </label>
           <select
@@ -70,7 +65,6 @@
         <!-- download excel -->
         <div class="filter-group btn-group-update">
           <label class="filter-label opacity-0"> Excel </label>
-
           <button
             class="btn btn-success"
             (click)="downloadExcel()"
@@ -102,22 +96,17 @@
       </div>
     </div>
 
-    <!-- ================= BODY ================= -->
     <div class="card-body-area">
-      <!-- SELECTED COUNT -->
       <div class="mb-3" *ngIf="selectedDevices.length > 0">
         <button class="btn-action-link">
           Selected: {{ selectedDevices.length }}
         </button>
       </div>
 
-      <!-- ================= TABLE ================= -->
       <div class="table-responsive" *ngIf="filteredList.length">
         <table class="custom-table">
-          <!-- TABLE HEADER -->
           <thead>
             <tr>
-              <!-- SELECT ALL -->
               <th>
                 <input
                   type="checkbox"
@@ -126,14 +115,12 @@
                 />
               </th>
 
-              <!-- DYNAMIC HEADERS -->
               <th *ngFor="let col of tableHeading">
                 {{ col.title }}
               </th>
             </tr>
           </thead>
 
-          <!-- TABLE BODY -->
           <tbody>
             <tr
               *ngFor="
@@ -148,7 +135,6 @@
                 let i = index
               "
             >
-              <!-- CHECKBOX -->
               <td>
                 <input
                   type="checkbox"
@@ -157,87 +143,24 @@
                 />
               </td>
 
-              <!-- S NO -->
               <td>
                 <span class="sno-badge">
                   {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
                 </span>
               </td>
 
-              <!-- DEVICE ID -->
-              <!-- <td>
-                <span>
-                  {{ data.deviceId }}
-                </span>
-              </td> -->
-
-              <!-- DEVICE FULL NAME -->
               <td>
                 {{ data.deviceFName }}
               </td>
-
-              <!-- DEVICE SHORT NAME -->
-              <!-- <td>
-                {{ data.deviceSName }}
-              </td> -->
-
-              <!-- DEVICE DIRECTION -->
-              <!-- <td>
-                {{
-                  data.deviceDirection || "-"
-                }}
-              </td> -->
-
-              <!-- SERIAL NUMBER -->
-              <!-- <td>
-                {{
-                  data.serialNumber || "-"
-                }}
-              </td> -->
-
-              <!-- CONNECTION TYPE -->
-              <!-- <td>
-
-                <span
-                  class="conn-badge"
-                  [class.conn-wired]="
-                    data.connectionType === 'Wired'
-                  "
-                  [class.conn-wireless]="
-                    data.connectionType !== 'Wired'
-                  "
-                >
-                  {{
-                    data.connectionType || "-"
-                  }}
-                </span>
-
-              </td> -->
-
-              <!-- IP ADDRESS -->
-              <!-- <td>
-                {{
-                  data.ipAddress || "-"
-                }}
-              </td> -->
-
-              <!-- LAST LOG DOWNLOAD -->
-              <!-- <td>
-                {{
-                  data.lastLogDownloadDate || "-"
-                }}
-              </td> -->
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- ================= NO DATA ================= -->
       <div class="no-data-msg" *ngIf="!filteredList.length">
         <div class="no-data-icon">
           <i class="fa-solid fa-inbox"></i>
         </div>
-
         No devices found
       </div>
     </div>

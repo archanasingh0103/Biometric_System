@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="data-card">
-    <!-- CARD HEADER -->
+  <!-- header -->
     <div class="card-header-bar">
       <div class="header-row">
         <div class="header-title-group">
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <!-- TOOLBAR -->
+    <!-- page change-->
     <div class="toolbar">
       <div class="toolbar-left"></div>
       <div class="toolbar-right">
@@ -74,9 +74,9 @@
                 (pagesize.offset - 1) * pagesize.limit + i + 1
               }}</span>
             </td>
-            <td>
+            <!-- <td>
               <span >{{ data.deviceId }}</span>
-            </td>
+            </td> -->
             <td >{{ data.deviceFName }}</td>
             <td>{{ data.deviceSName }}</td>
             <td>{{ data.deviceDirection || "-"}}</td>
@@ -92,16 +92,16 @@
                 {{ data.connectionType ||"-" }}
               </span>
             </td>
-            <td>
+            <!-- <td>
               <span >{{ data.ipAddress || "-"}}</span>
-            </td>
+            </td> -->
             <td >{{ data.lastLogDownloadDate }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- NO DATA -->
+    <!-- no data -->
     <div class="no-data-msg" *ngIf="!filteredList.length">
       <div class="no-data-icon"><i class="fa-solid fa-inbox"></i></div>
       No devices found

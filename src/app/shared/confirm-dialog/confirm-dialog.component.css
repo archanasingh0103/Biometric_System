@@ -1,0 +1,74 @@
+.custom-dialog {
+  padding: 25px;
+  text-align: center;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.dialog-icon {
+  width: 70px;
+  height: 70px;
+  background: #ffe5e5;
+  color: #e53935;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  font-size: 28px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #222;
+}
+
+p {
+  margin-top: 14px;
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+}
+
+p span {
+  font-weight: 600;
+  color: #111;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.cancel-btn,
+.delete-btn {
+  border: none;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  min-width: 110px;
+}
+
+.cancel-btn {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background: #ddd;
+}
+
+.delete-btn {
+  background: #e53935;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #c62828;
+}

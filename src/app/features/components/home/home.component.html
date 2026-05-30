@@ -1,10 +1,8 @@
 <div class="home-container">
-
-  <!-- ══════════════ HERO BANNER ══════════════ -->
   <div class="hero-banner">
     <div class="hero-left">
       <div class="hero-greeting">{{ greeting }},</div>
-      <div class="hero-username">{{ userName || 'Welcome Back' }}</div>
+      <div class="hero-username">{{ userName || "Welcome Back" }}</div>
       <div class="hero-sub">
         <i class="fa-solid fa-building-shield me-1"></i>
         Biometric Attendance System — Smart Office
@@ -18,12 +16,14 @@
     </div>
   </div>
 
-  <!-- ══════════════ ROW 1 — 5 STAT CARDS ══════════════ -->
+
   <div class="stat-row-5">
-    <a class="stat-card"
-       *ngFor="let s of allStats"
-       [routerLink]="s.route"
-       [class]="'stat-card card-' + s.color">
+    <a
+      class="stat-card"
+      *ngFor="let s of allStats"
+      [routerLink]="s.route"
+      [class]="'stat-card card-' + s.color"
+    >
       <div class="sc-top-bar" [class]="'bar-' + s.color"></div>
       <div class="sc-body">
         <div class="sc-icon" [class]="'icon-' + s.color">
@@ -44,10 +44,8 @@
     </a>
   </div>
 
-  <!-- ══════════════ ROW 2 — BARS + DONUT ══════════════ -->
+ 
   <div class="row2-wrap">
-
-    <!-- LEFT: Distribution Progress Bars -->
     <div class="bars-card">
       <div class="bars-header">
         <span class="bars-title">Device Distribution</span>
@@ -58,11 +56,15 @@
             <span class="bar-label">
               <span class="bar-dot dot-blue"></span>Total Devices
             </span>
-            <span class="bar-count">{{ loading ? '—' : (totalDevices | number) }}</span>
+            <span class="bar-count">{{
+              loading ? "—" : (totalDevices | number)
+            }}</span>
           </div>
           <div class="bar-track">
-            <div class="bar-fill fill-blue"
-                 [style.width]="loading ? '0%' : '100%'"></div>
+            <div
+              class="bar-fill fill-blue"
+              [style.width]="loading ? '0%' : '100%'"
+            ></div>
           </div>
         </div>
 
@@ -71,13 +73,17 @@
             <span class="bar-label">
               <span class="bar-dot dot-green"></span>Linked Devices
             </span>
-            <span class="bar-count">{{ loading ? '—' : (linkedDevices | number) }}</span>
+            <span class="bar-count">{{
+              loading ? "—" : (linkedDevices | number)
+            }}</span>
           </div>
           <div class="bar-track">
-            <div class="bar-fill fill-green"
-                 [style.width]="loading ? '0%' : linkedPct + '%'"></div>
+            <div
+              class="bar-fill fill-green"
+              [style.width]="loading ? '0%' : linkedPct + '%'"
+            ></div>
           </div>
-          <span class="bar-pct">{{ loading ? '' : linkedPct + '%' }}</span>
+          <span class="bar-pct">{{ loading ? "" : linkedPct + "%" }}</span>
         </div>
 
         <div class="bar-item">
@@ -85,13 +91,17 @@
             <span class="bar-label">
               <span class="bar-dot dot-red"></span>Unlinked Devices
             </span>
-            <span class="bar-count">{{ loading ? '—' : (unlinkedDevices | number) }}</span>
+            <span class="bar-count">{{
+              loading ? "—" : (unlinkedDevices | number)
+            }}</span>
           </div>
           <div class="bar-track">
-            <div class="bar-fill fill-red"
-                 [style.width]="loading ? '0%' : unlinkedPct + '%'"></div>
+            <div
+              class="bar-fill fill-red"
+              [style.width]="loading ? '0%' : unlinkedPct + '%'"
+            ></div>
           </div>
-          <span class="bar-pct">{{ loading ? '' : unlinkedPct + '%' }}</span>
+          <span class="bar-pct">{{ loading ? "" : unlinkedPct + "%" }}</span>
         </div>
 
         <div class="bar-item">
@@ -99,15 +109,18 @@
             <span class="bar-label">
               <span class="bar-dot dot-orange"></span>Expiring Soon
             </span>
-            <span class="bar-count">{{ loading ? '—' : (expiringSoon | number) }}</span>
+            <span class="bar-count">{{
+              loading ? "—" : (expiringSoon | number)
+            }}</span>
           </div>
           <div class="bar-track">
-            <div class="bar-fill fill-orange"
-                 [style.width]="loading ? '0%' : expiringPct + '%'"></div>
+            <div
+              class="bar-fill fill-orange"
+              [style.width]="loading ? '0%' : expiringPct + '%'"
+            ></div>
           </div>
-          <span class="bar-pct">{{ loading ? '' : expiringPct + '%' }}</span>
+          <span class="bar-pct">{{ loading ? "" : expiringPct + "%" }}</span>
         </div>
-
       </div>
     </div>
 
@@ -117,28 +130,49 @@
         <span class="chart-title">Device Status Distribution</span>
       </div>
       <div class="chart-card-body">
-
         <!-- SVG Donut -->
         <div class="donut-wrap">
           <svg viewBox="0 0 120 120" class="donut-svg">
             <!-- Red base (unlinked) -->
-            <circle cx="60" cy="60" r="44"
-              fill="none" stroke="#ef4444" stroke-width="16"/>
+            <circle
+              cx="60"
+              cy="60"
+              r="44"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="16"
+            />
             <!-- Green overlay (linked) -->
-            <circle cx="60" cy="60" r="44"
-              fill="none" stroke="#22c55e" stroke-width="16"
+            <circle
+              cx="60"
+              cy="60"
+              r="44"
+              fill="none"
+              stroke="#22c55e"
+              stroke-width="16"
               stroke-linecap="butt"
               [attr.stroke-dasharray]="linkedDash"
               [attr.stroke-dashoffset]="linkedOffset"
-              style="transition: stroke-dasharray 0.8s ease;"/>
+              style="transition: stroke-dasharray 0.8s ease"
+            />
             <!-- Center value -->
-            <text x="60" y="56" text-anchor="middle"
-              font-size="17" font-weight="800"
-              class="donut-center-num">
-              {{ loading ? '—' : totalDevices }}
+            <text
+              x="60"
+              y="56"
+              text-anchor="middle"
+              font-size="17"
+              font-weight="800"
+              class="donut-center-num"
+            >
+              {{ loading ? "—" : totalDevices }}
             </text>
-            <text x="60" y="70" text-anchor="middle"
-              font-size="7.5" class="donut-center-lbl">
+            <text
+              x="60"
+              y="70"
+              text-anchor="middle"
+              font-size="7.5"
+              class="donut-center-lbl"
+            >
               Total
             </text>
           </svg>
@@ -151,7 +185,7 @@
             <div class="legend-info">
               <span class="legend-name">Linked Devices</span>
               <span class="legend-val green-text">
-                {{ loading ? '—' : (linkedDevices | number) }}
+                {{ loading ? "—" : (linkedDevices | number) }}
                 <small>({{ linkedPct }}%)</small>
               </span>
             </div>
@@ -162,7 +196,7 @@
             <div class="legend-info">
               <span class="legend-name">Unlinked Devices</span>
               <span class="legend-val red-text">
-                {{ loading ? '—' : (unlinkedDevices | number) }}
+                {{ loading ? "—" : (unlinkedDevices | number) }}
                 <small>({{ unlinkedPct }}%)</small>
               </span>
             </div>
@@ -173,15 +207,12 @@
             <div class="legend-info">
               <span class="legend-name">Total</span>
               <span class="legend-val">
-                {{ loading ? '—' : (totalDevices | number) }}
+                {{ loading ? "—" : (totalDevices | number) }}
               </span>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
-  </div><!-- /row2-wrap -->
-
+  </div>
 </div>

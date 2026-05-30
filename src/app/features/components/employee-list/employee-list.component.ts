@@ -37,10 +37,8 @@ export class EmployeeListComponent {
     this.getEmployeeList();
   }
 
-  // GET EMPLOYEE LIST
   getEmployeeList() {
     this.isLoading = true;
-
     this.commonService
       .employeeList(this.pagesize.offset, this.pagesize.limit)
       .subscribe({
@@ -54,7 +52,6 @@ export class EmployeeListComponent {
 
           this.isLoading = false;
         },
-
         error: (err) => {
           console.log(err);
           this.isLoading = false;
@@ -62,27 +59,24 @@ export class EmployeeListComponent {
       });
   }
 
-  // PAGE CHANGE
+
   onTablePageChange(page: number) {
     this.pagesize.offset = page;
     this.getEmployeeList();
   }
 
-  // PAGE SIZE CHANGE
   onPageSizeChange(event: any) {
     this.pagesize.limit = +event.target.value;
     this.pagesize.offset = 1;
     this.getEmployeeList();
   }
 
-  // START VALUE
   get startValue(): number {
     return (
       (this.pagesize.offset - 1) * this.pagesize.limit + 1
     );
   }
 
-  // LAST VALUE
   get lastValue(): number {
     const last =
       this.startValue + this.employeeList.length - 1;

@@ -121,7 +121,7 @@
           <span>{{ translations[currentLang].empList }}</span>
         </a>
 
-         <a
+        <a
           routerLink="/dashboard/empiry-soon"
           routerLinkActive="active-link"
           class="nav-link"
@@ -130,7 +130,7 @@
           <span>{{ translations[currentLang].expirySoon }}</span>
         </a>
 
-          <a
+        <a
           routerLink="/dashboard/bulk-activity"
           routerLinkActive="active-link"
           class="nav-link"
@@ -139,54 +139,54 @@
           <span>{{ translations[currentLang].bulkActivity }}</span>
         </a>
 
-          <a
+        <a
           routerLink="/dashboard/add-company"
           routerLinkActive="active-link"
           class="nav-link"
         >
-          <i class="fa-solid fa-id-card nav-icon"></i>
+          <i class="fa-solid fa-circle-plus nav-icon"></i>
           <span>{{ translations[currentLang].addCompany }}</span>
         </a>
 
-          <a
-            routerLink="/dashboard/compapny"
-            routerLinkActive="active-link"
-            class="nav-link"
-            data-bs-dismiss="offcanvas"
-          >
-            <i class="fa-solid fa-users nav-icon"></i
-            ><span>{{ translations[currentLang].compapny }}</span>
-          </a>
+        <a
+          routerLink="/dashboard/compapny"
+          routerLinkActive="active-link"
+          class="nav-link"
+          data-bs-dismiss="offcanvas"
+        >
+          <i class="fa-solid fa-building nav-icon"></i>
+          <span>{{ translations[currentLang].compapny }}</span>
+        </a>
 
+        <a
+          routerLink="/dashboard/department"
+          routerLinkActive="active-link"
+          class="nav-link"
+          data-bs-dismiss="offcanvas"
+        >
+          <i class="fa-solid fa-layer-group nav-icon"></i>
+          <span>{{ translations[currentLang].department }}</span>
+        </a>
 
-           <a
-            routerLink="/dashboard/department"
-            routerLinkActive="active-link"
-            class="nav-link"
-            data-bs-dismiss="offcanvas"
-          >
-            <i class="fa-solid fa-users nav-icon"></i
-            ><span>{{ translations[currentLang].department }}</span>
-          </a>
+        <a
+          routerLink="/dashboard/designation"
+          routerLinkActive="active-link"
+          class="nav-link"
+          data-bs-dismiss="offcanvas"
+        >
+          <i class="fa-solid fa-id-badge nav-icon"></i>
+          <span>{{ translations[currentLang].designation }}</span>
+        </a>
 
-           <a
-            routerLink="/dashboard/designation"
-            routerLinkActive="active-link"
-            class="nav-link"
-            data-bs-dismiss="offcanvas"
-          >
-            <i class="fa-solid fa-users nav-icon"></i
-            ><span>{{ translations[currentLang].designation }}</span>
-          </a>
-           <a
-            routerLink="/dashboard/location"
-            routerLinkActive="active-link"
-            class="nav-link"
-            data-bs-dismiss="offcanvas"
-          >
-            <i class="fa-solid fa-users nav-icon"></i
-            ><span>{{ translations[currentLang].location }}</span>
-          </a>
+        <a
+          routerLink="/dashboard/location"
+          routerLinkActive="active-link"
+          class="nav-link"
+          data-bs-dismiss="offcanvas"
+        >
+          <i class="fa-solid fa-location-dot nav-icon"></i>
+          <span>{{ translations[currentLang].location }}</span>
+        </a>
       </div>
     </aside>
 
@@ -217,67 +217,108 @@
             routerLink="/dashboard/home"
             routerLinkActive="active-link"
             class="nav-link"
-            data-bs-dismiss="offcanvas"
           >
-            <i class="fa-solid fa-house nav-icon"></i
-            ><span>{{ translations[currentLang].home }}</span>
+            <i class="fa-solid fa-house nav-icon"></i>
+            <span>{{ translations[currentLang].home }}</span>
           </a>
           <a
             routerLink="/dashboard/device-list"
             routerLinkActive="active-link"
             class="nav-link"
-            data-bs-dismiss="offcanvas"
           >
-            <i class="fa-solid fa-hard-drive nav-icon"></i
-            ><span>{{ translations[currentLang].deviceList }}</span>
+            <i class="fa-solid fa-hard-drive nav-icon"></i>
+            <span>{{ translations[currentLang].deviceList }}</span>
           </a>
           <a
             routerLink="/dashboard/emp-with-device"
             routerLinkActive="active-link"
             class="nav-link"
-            data-bs-dismiss="offcanvas"
           >
-            <i class="fa-solid fa-id-card nav-icon"></i
-            ><span>{{ translations[currentLang].empWise }}</span>
+            <i class="fa-solid fa-id-card nav-icon"></i>
+            <span>{{ translations[currentLang].empWise }}</span>
           </a>
           <a
             routerLink="/dashboard/device-with-emp"
             routerLinkActive="active-link"
             class="nav-link"
-            data-bs-dismiss="offcanvas"
           >
-            <i class="fa-solid fa-building-user nav-icon"></i
-            ><span>{{ translations[currentLang].deviceWise }}</span>
+            <i class="fa-solid fa-building-user nav-icon"></i>
+            <span>{{ translations[currentLang].deviceWise }}</span>
           </a>
           <a
             routerLink="/dashboard/emp-list"
             routerLinkActive="active-link"
             class="nav-link"
-            data-bs-dismiss="offcanvas"
           >
-            <i class="fa-solid fa-users nav-icon"></i
-            ><span>{{ translations[currentLang].empList }}</span>
+            <i class="fa-solid fa-users nav-icon"></i>
+            <span>{{ translations[currentLang].empList }}</span>
           </a>
-          
-           <a
+
+          <a
+            routerLink="/dashboard/empiry-soon"
+            routerLinkActive="active-link"
+            class="nav-link"
+          >
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>{{ translations[currentLang].expirySoon }}</span>
+          </a>
+
+          <a
+            routerLink="/dashboard/bulk-activity"
+            routerLinkActive="active-link"
+            class="nav-link"
+          >
+            <i class="fa-solid fa-id-card nav-icon"></i>
+            <span>{{ translations[currentLang].bulkActivity }}</span>
+          </a>
+
+          <a
+            routerLink="/dashboard/add-company"
+            routerLinkActive="active-link"
+            class="nav-link"
+          >
+           <i class="fa-solid fa-circle-plus nav-icon"></i>
+            <span>{{ translations[currentLang].addCompany }}</span>
+          </a>
+
+          <a
             routerLink="/dashboard/compapny"
             routerLinkActive="active-link"
             class="nav-link"
             data-bs-dismiss="offcanvas"
           >
-            <i class="fa-solid fa-users nav-icon"></i
-            ><span>{{ translations[currentLang].compapny }}</span>
+            <i class="fa-solid fa-building nav-icon"></i>
+            <span>{{ translations[currentLang].compapny }}</span>
           </a>
 
-
-           <a
+          <a
             routerLink="/dashboard/department"
             routerLinkActive="active-link"
             class="nav-link"
             data-bs-dismiss="offcanvas"
           >
-            <i class="fa-solid fa-users nav-icon"></i
-            ><span>{{ translations[currentLang].department }}</span>
+            <i class="fa-solid fa-layer-group nav-icon"></i>
+            <span>{{ translations[currentLang].department }}</span>
+          </a>
+
+          <a
+            routerLink="/dashboard/designation"
+            routerLinkActive="active-link"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-id-badge nav-icon"></i>
+            <span>{{ translations[currentLang].designation }}</span>
+          </a>
+
+          <a
+            routerLink="/dashboard/location"
+            routerLinkActive="active-link"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-location-dot nav-icon"></i>
+            <span>{{ translations[currentLang].location }}</span>
           </a>
         </div>
       </div>

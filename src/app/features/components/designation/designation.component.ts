@@ -3,11 +3,19 @@ import { CommmonService } from '../../shared/services/common-service/common.serv
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// import { NgForOf } from "../../../../../node_modules/@angular/common/common_module.d-NEF7UaHr";
-
+import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-designation',
-  imports: [NgxPaginationModule, CommonModule, FormsModule],
+  imports: [
+    NgxPaginationModule,
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+  ],
   templateUrl: './designation.component.html',
   styleUrl: './designation.component.css',
 })
@@ -34,12 +42,16 @@ export class DesignationComponent implements OnInit {
   ];
 
   designation = {
-    designationId:0,
+    designationId: 0,
     designationsName: '',
     designationCode: '',
     normalNoticePeriodRequired: 0,
   };
-  constructor(private commonService: CommmonService) {}
+  constructor(
+    private commonService: CommmonService,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+  ) {}
   ngOnInit() {
     this.getdesignationList();
   }
@@ -92,11 +104,19 @@ export class DesignationComponent implements OnInit {
   }
   resetForm() {
     this.designation = {
-      designationId:0,
+      designationId: 0,
       designationsName: '',
       designationCode: '',
       normalNoticePeriodRequired: 0,
     };
+  }
+
+  closeModal() {
+    const modalElement = document.getElementById('designationModal');
+    const modalInstance = (window as any).bootstrap.Modal.getInstance(
+      modalElement,
+    );
+    modalInstance?.hide();
   }
 
   addForm() {
@@ -111,14 +131,13 @@ export class DesignationComponent implements OnInit {
       next: (res: any) => {
         this.isLoading = false;
         const responseData = res?.body || [];
-        if (responseData?.isSuccess)
-        {
-          alert('Designation added successfully');
+        if (responseData?.isSuccess) {
+          this.toastr.success('Designation Added Successfully');
           this.getdesignationList();
           this.resetForm();
-        }
-        else {
-          console.log(responseData?.message  || 'Something went wrong');   
+          this.closeModal();
+        } else {
+          this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error(err) {
@@ -133,70 +152,77 @@ export class DesignationComponent implements OnInit {
       designationId: data.designationId,
       designationsName: data.designationsName,
       designationCode: data.designationCode,
-      normalNoticePeriodRequired:data.normalNoticePeriodRequired
+      normalNoticePeriodRequired: data.normalNoticePeriodRequired,
     };
 
     // OPEN MODAL
     const modal = new (window as any).bootstrap.Modal(
-      document.getElementById('companyModal'),
+      document.getElementById('designationModal'),
     );
-
     modal.show();
   }
-  
-  updateDesignationData()
-  {
-    const payload = {
-      designationId: this.designation.designationId,
-      designationsName: this.designation.designationsName,
-      designationCode: this.designation.designationCode,
-      normalNoticePeriodRequired:this.designation.normalNoticePeriodRequired
-    }
-    console.log("Update Designation :", payload);
-    this.commonService.updateDesignation(payload).subscribe({
-      next: (res: any) => {
-        console.log("Update Response:", res);
-        const responseData = res?.body;
-        if (responseData?.isSuccess)
-        {
-          alert('Designation Update Successfully');
-        }
-        else {
-          alert(responseData?.message || 'Something went wrong ');
-        }
-      },
-      error(err) {
-        console.log(" Update Designation Error:",err); 
-      },
-    })
-    
-  }
 
-  deleteData(data: any) { 
-      
-    console.log("Data:", data);
-    const isConfirm = confirm(`Are you sure you Want to delete ${data.designationsName}?`,);
-    if (!confirm)
-    {
-      return;
-    }
-    this.commonService.deleteDesignation(data.designationId).subscribe({
-      next: (res: any) => {
-        console.log("Delete Designation:", res);
-        const responseData = res?.body || [];
-        if (responseData?.isSuccess)
-        {
-          alert(" Designation Deleteed Successfully");
-          this.getdesignationList();
-        }
-        else {
-          alert(responseData?.message || 'Something went wrong');
-        } 
+ updateDesignationData() {
+  const payload = {
+    designationId: this.designation.designationId,
+    designationsName: this.designation.designationsName,
+    designationCode: this.designation.designationCode,
+    normalNoticePeriodRequired: this.designation.normalNoticePeriodRequired,
+  };
+  console.log('Update Designation :', payload);
+  this.commonService.updateDesignation(payload).subscribe({
+    next: (res: any) => {
+      console.log('Update Response:', res);
+      const responseData = res?.body;
+
+      if (responseData?.isSuccess) {
+        this.toastr.success('Designation Updated Successfully');
+
+        this.getdesignationList(); 
+        this.resetForm();          
+        this.closeModal();        
+      } else {
+        this.toastr.warning(responseData?.message || 'Something went wrong');
+      }
+    },
+
+    error: (err: any) => {
+      console.log('Update Designation Error:', err);
+    },
+  });
+}
+
+  deleteData(data: any) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      disableClose: true,
+      data: {
+        title: 'Delete Designation',
+        message: `Are you sure you want to delete ${data.designationsName}?`,
       },
-      error(err) {
-        console.log("Delete Designation Error:",err);   
-      },
-    })
-    
-    }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.commonService.deleteDesignation(data.designationId).subscribe({
+          next: (res: any) => {
+            console.log('Delete Response:', res);
+            const responseData = res?.body || res;
+            if (responseData?.isSuccess) {
+              this.toastr.success('Designation Deleted Successfully');
+              this.getdesignationList();
+            } else {
+              this.toastr.warning(
+                responseData?.message || 'Something went wrong',
+              );
+            }
+          },
+          error: (err: any) => {
+            console.log('Delete Error:', err);
+            this.toastr.error('API Error');
+          },
+        });
+      }
+    });
+  }
 }

@@ -273,7 +273,7 @@ newCompanyList(
   }
   deleteDepartment(id:number): Observable<any>
   {
-    const url = API_CONSTANT.deleteComapny
+    const url = API_CONSTANT. deleteDepartment
       .replace('{id}', id.toString());
     return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
@@ -301,7 +301,8 @@ newCompanyList(
 
   deleteDesignation(id: number): Observable<any>
   {
-     const url = `${API_CONSTANT.deleteDesignation}${id}`;
+    const url = API_CONSTANT.deleteDesignation
+      .replace('{id}', id.toString());
     return this.apiService.post(url, {}).pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
 

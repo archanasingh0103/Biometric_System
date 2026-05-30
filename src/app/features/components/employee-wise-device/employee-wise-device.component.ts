@@ -19,16 +19,13 @@ declare var bootstrap: any;
 export class EmployeeWiseDeviceComponent {
   employeewithDevice: any[] = [];
   filteredDeviceList: any[] = [];
-
   private autoRefreshInterval: any;
   selectedEmployeeCode: string = '';
   selectedFilter = '';
   searchText = '';
-
   isLoading = false;
   showConfirmPopup = false;
   selectedRowData: any = null;
-
   dropdownOptions: any[] = [];
   dropdownConfig = {
     displayKey: 'employeeCode',
@@ -60,7 +57,7 @@ export class EmployeeWiseDeviceComponent {
 
   tableHeading = [
     { title: 'S No.' },
-    { title: 'Device ID' },
+    // { title: 'Device ID' },
     { title: 'Device Full Name' },
     { title: 'Serial Number' },
     { title: 'Link Status' },
@@ -89,13 +86,13 @@ export class EmployeeWiseDeviceComponent {
       //  12:05 AM trigger
       if (hours === 0 && minutes === 5) {
         if (this.selectedEmployeeCode) {
-          this.loadDevices(); // refresh API call
+          this.loadDevices(); 
         }
       }
-    }, 60000); // check every 1 minute
+    }, 60000); 
   }
 
-  // dropdown data
+
   getEmployeeDropdown() {
     this.commonService.employeeDropdown().subscribe((res: any) => {
       console.log('Employee dropdown:', res);
@@ -106,24 +103,18 @@ export class EmployeeWiseDeviceComponent {
 
   //  ngx dropdown gives object OR value
   onSelectEmployee(event: any) {
-    const emp = event?.value || event; //  IMPORTANT FIX
-
+    const emp = event?.value || event; 
     if (!emp) return;
-
     this.selectedEmployeeCode = emp.employeeCode;
-
     this.assignForm.employeeId = emp.employeeId || 0;
     this.assignForm.employeeCode = emp.employeeCode || '';
-
     this.pagesize.offset = 1;
     this.loadDevices();
   }
 
   loadDevices() {
     if (!this.selectedEmployeeCode) return;
-
     this.isLoading = true;
-
     this.commonService
       .getEmployeeWiseDevice(
         this.selectedEmployeeCode,
@@ -133,9 +124,7 @@ export class EmployeeWiseDeviceComponent {
       )
       .subscribe((res: any) => {
         this.isLoading = false;
-
         let list = res?.body?.data || [];
-
         if (this.selectedFilter !== '') {
           list = list.filter(
             (x: any) => String(x.Link) === this.selectedFilter,

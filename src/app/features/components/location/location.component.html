@@ -1,6 +1,5 @@
 <div class="page-container">
   <div class="data-card">
-    <!-- HEADER -->
     <div class="card-header-bar">
       <div class="header-row">
         <div class="header-title-group">
@@ -12,8 +11,7 @@
             <h5 class="header-title">Location List</h5>
           </div>
         </div>
-
-        <!-- COUNT -->
+        
         <div class="span">
           <span class="count-badge">
             {{ filteredList.length > 0 ? startValue : 0 }} -
@@ -28,7 +26,6 @@
           </span>
         </div>
 
-        <!-- PAGINATION -->
         <div class="header-pagination">
           <pagination-controls
             id="empId"
@@ -39,10 +36,8 @@
       </div>
     </div>
 
-    <!-- FILTER BAR -->
     <div class="filter-bar">
       <div class="filter-left">
-        <!-- SEARCH -->
         <input
           type="text"
           class="form-control"
@@ -53,7 +48,6 @@
 
       <!-- RIGHT -->
       <div class="filter-right">
-        <!-- PAGE SIZE -->
         <div class="filter-group">
           <label class="filter-label">ITEMS</label>
 
@@ -72,7 +66,7 @@
           <button
             class="btn btn-update"
             data-bs-toggle="modal"
-            data-bs-target="#companyModal"
+            data-bs-target="#locationModal"
             (click)="resetForm()"
           >
             <i class="fa-solid fa-plus me-1"></i>
@@ -84,10 +78,8 @@
 
     <!-- BODY -->
     <div class="card-body-area">
-      <!-- TABLE -->
       <div class="table-responsive" *ngIf="filteredList.length">
         <table class="custom-table">
-          <!-- TABLE HEADER -->
           <thead>
             <tr>
               <th *ngFor="let col of tableHeading">
@@ -96,7 +88,6 @@
             </tr>
           </thead>
 
-          <!-- TABLE BODY -->
           <tbody>
             <tr
               *ngFor="
@@ -111,7 +102,7 @@
                 let i = index
               "
             >
-              <!-- S.NO -->
+      
               <td>
                 <span class="sno-badge">
                   {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
@@ -122,20 +113,17 @@
               <td>{{ data.leaveApprovalWorkFlowId || "-" }}</td>
               <td>{{ data.odApprovalWorkFlowId || "-" }}</td>
 
-              <!-- ACTION -->
               <td>
                 <div class="action-buttons">
-                  <!-- EDIT -->
                   <button
                     class="icon-btn edit-btn"
                     data-bs-toggle="modal"
-                    data-bs-target="#companyModal"
+                    data-bs-target="#locationModal"
                     (click)="editData(data)"
                   >
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
 
-                  <!-- DELETE -->
                   <button
                     class="icon-btn delete-btn"
                     (click)="deleteData(data)"
@@ -164,16 +152,15 @@
 <!-- MODAL -->
 <div
   class="modal fade"
-  id="companyModal"
+  id="locationModal"
   tabindex="-1"
-  aria-labelledby="companyModalLabel"
+  aria-labelledby="locationModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
-      <!-- HEADER -->
       <div class="modal-header">
-        <h5 class="modal-title" id="companyModalLabel">
+        <h5 class="modal-title" id="locationModalLabel">
           {{ location.locationId ? "Update Location" : "Add Location" }}
         </h5>
 
@@ -187,10 +174,8 @@
       <!-- BODY -->
       <div class="modal-body">
         <div class="row">
-          <!-- COMPANY FIRST NAME -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Location Name</label>
-
             <input
               type="text"
               class="form-control"
@@ -199,10 +184,8 @@
             />
           </div>
 
-          <!-- COMPANY SHORT NAME -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Location Code</label>
-
             <input
               type="text"
               class="form-control"
@@ -211,10 +194,8 @@
             />
           </div>
 
-          <!-- ADDRESS -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Leave Approval Work Flow Id</label>
-
             <input
               type="text"
               class="form-control"
@@ -223,10 +204,8 @@
             />
           </div>
 
-          <!-- EMAIL -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Od Approval Work Flow Id</label>
-
             <input
               type="email"
               class="form-control"

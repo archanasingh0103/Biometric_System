@@ -1,6 +1,5 @@
 <div class="page-container">
   <div class="data-card">
-    <!-- CARD HEADER -->
     <div class="card-header-bar">
       <div class="header-row">
         <div class="header-title-group">
@@ -33,23 +32,17 @@
       </div>
     </div>
 
-    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="date-filter-group">
-        <!-- FROM DATE -->
         <div class="date-field">
           <label class="filter-label">FROM:</label>
           <input type="date" class="date-input" [(ngModel)]="fromDate" />
         </div>
-
         <div class="date-sep">—</div>
-
-        <!-- TO DATE -->
         <div class="date-field">
           <label class="filter-label">TO:</label>
           <input type="date" class="date-input" [(ngModel)]="toDate" />
         </div>
-
         <button class="btn-show" (click)="onShowClick()">
           <i class="fa-solid fa-magnifying-glass me-1"></i>
           Show
@@ -58,7 +51,6 @@
 
       <div class="toolbar-right">
         <label class="filter-label">Items:</label>
-
         <select (change)="onPageSizeChange($event)" class="select-sm">
           <option *ngFor="let size of [25, 50, 100]" [value]="size">
             {{ size }}
@@ -67,7 +59,6 @@
       </div>
     </div>
 
-    <!-- TABLE -->
     <div class="table-responsive">
       <table class="custom-table">
         <thead>
@@ -119,12 +110,10 @@
       </table>
     </div>
 
-    <!-- NO DATA -->
     <div class="no-data-msg" *ngIf="!filteredList.length">
       <div class="no-data-icon">
         <i class="fa-solid fa-inbox"></i>
       </div>
-
       No devices found
     </div>
   </div>

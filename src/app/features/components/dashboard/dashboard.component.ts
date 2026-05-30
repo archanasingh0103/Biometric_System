@@ -20,7 +20,7 @@ export class DashboardComponent {
   constructor(
     public router: Router,
     private authService: AuthService,
-      private toastr: ToastrService
+    private toastr: ToastrService,
   ) {}
 
   //  Language
@@ -28,7 +28,7 @@ export class DashboardComponent {
 
   translations: any = {
     en: {
-       home: 'Home',
+      home: 'Home',
       deviceList: 'Device List',
       empWise: 'Employee Wise Device',
       deviceWise: 'Device Wise Employee',
@@ -39,14 +39,21 @@ export class DashboardComponent {
       compapny: 'Company',
       department: 'Department',
       designation: 'Designation',
-      location:'Location'
-      
+      location: 'Location',
     },
     hi: {
+      home: 'होम',
       deviceList: 'डिवाइस सूची',
       empWise: 'कर्मचारी अनुसार डिवाइस',
       deviceWise: 'डिवाइस अनुसार कर्मचारी',
       empList: 'कर्मचारी सूची',
+      expirySoon: 'जल्द समाप्त होने वाला',
+      bulkActivity: 'बल्क गतिविधि',
+      addCompany: 'कर्मचारी प्रबंधन',
+      compapny: 'कंपनी',
+      department: 'विभाग',
+      designation: 'पदनाम',
+      location: 'स्थान',
     },
   };
 
@@ -86,7 +93,7 @@ export class DashboardComponent {
 
   //  Font Size
   fontSize: number = 16;
-  
+
   applyFontSize() {
     document.documentElement.style.fontSize = this.fontSize + 'px';
     localStorage.setItem('fontSize', this.fontSize.toString());
@@ -129,7 +136,7 @@ export class DashboardComponent {
     this.isLoggedIn = false;
     this.userName = '';
 
-    this.toastr.success('Logout Successful',);
+    this.toastr.success('Logout Successful');
 
     this.router.navigate(['/login']);
   }

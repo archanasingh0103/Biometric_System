@@ -1,13 +1,12 @@
 <div class="page-container">
   <div class="data-card">
-    <!-- HEADER -->
+    <!-- header -->
     <div class="card-header-bar">
       <div class="header-row">
         <div class="header-title-group">
           <div class="header-icon-wrap">
             <i class="fa-solid fa-id-card"></i>
           </div>
-
           <h5 class="header-title">Employee Wise Device</h5>
         </div>
         <div>
@@ -15,7 +14,6 @@
             {{ startValue }} - {{ lastValue }} of {{ pagesize.count }} devices
           </span>
         </div>
-
         <pagination-controls
           id="empId"
           (pageChange)="onTablePageChange($event)"
@@ -24,11 +22,13 @@
       </div>
     </div>
 
-    <!-- FILTER -->
+    <!-- filter -->
     <div class="filter-bar">
       <div class="filter-left">
         <div class="filter-group">
-          <label><i class="fa-solid fa-user-tie"></i> Employee</label>
+          <label class="filter-label">
+            <i class="fa-solid fa-hard-drive me-1"></i> Employee
+          </label>
           <ngx-select-dropdown
             [config]="dropdownConfig"
             [options]="dropdownOptions"
@@ -39,7 +39,9 @@
         </div>
 
         <div class="filter-group">
-          <label><i class="fa-solid fa-filter me-1"></i>Status</label>
+          <label class="filter-label"
+            ><i class="fa-solid fa-filter me-1"></i>Status</label
+          >
 
           <select
             class="select-styled"
@@ -55,7 +57,7 @@
 
       <div class="filter-right">
         <div class="filter-group">
-          <label>Search</label>
+          <label class="filter-label">Search</label>
           <input
             type="text"
             class="search-input"
@@ -65,22 +67,25 @@
           />
         </div>
         <div class="filter-group">
-          <label>Items</label>
-          <select class="select-styled" (change)="onPageSizeChange($event)">
-            <option [value]="25">25</option>
-            <option [value]="50">50</option>
-            <option [value]="100">100</option>
+          <label class="filter-label">ITEMS</label>
+          <select
+            class="select-styled select-sm"
+            (change)="onPageSizeChange($event)"
+          >
+            <option *ngFor="let size of [25, 50, 100]" [value]="size">
+              {{ size }}
+            </option>
           </select>
         </div>
       </div>
     </div>
 
-    <!-- BODY -->
+    <!-- table -->
     <div class="card-body-area">
       <div *ngIf="isLoading">Loading...</div>
 
       <div
-        class="table-responsive"
+        class="table-responsive table-scroll"
         *ngIf="!isLoading && filteredDeviceList.length"
       >
         <table class="custom-table">
@@ -107,14 +112,10 @@
               "
             >
               <td>
-                <!-- {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }} -->
                 <span class="sno-badge">
                   {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
                 </span>
               </td>
-
-              <td>{{ data.DeviceId }}</td>
-
               <td>{{ data.DeviceName }}</td>
 
               <td>{{ data.SerialNumber || "-" }}</td>
@@ -125,15 +126,6 @@
               <td>
                 {{ data.Link === "1" ? "Linked" : "Unlinked" }}
               </td>
-
-              <!-- <td>
-                <button
-                  (click)="handleAction(data)"
-                  [class]="data.status ? 'btn-action-dlink' : 'btn-action-link'"
-                >
-                  {{ data.status ? "DLink" : "Link" }}
-                </button>
-              </td> -->
               <td>
                 <button
                   (click)="handleAction(data)"
@@ -145,9 +137,6 @@
                 </button>
               </td>
 
-              <!-- <td>
-                {{ data.expiryDate || "-" }}
-              </td> -->
               <td>
                 {{
                   data.ValidToDate
@@ -185,13 +174,11 @@
         <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" *ngIf="selectedRowData">
-        <!-- FIXED Employee Code -->
         <div class="mb-3">
           <label>Employee Code</label>
           <input class="form-control" [value]="selectedEmployeeCode" readonly />
         </div>
 
-        <!-- FIXED Device Name -->
         <div class="mb-3">
           <label>Device Name</label>
           <input
@@ -201,7 +188,6 @@
           />
         </div>
 
-        <!-- FIXED Serial -->
         <div class="mb-3">
           <label>Serial Number</label>
           <input
@@ -238,16 +224,13 @@
   </div>
 </div>
 
-<!-- CONFIRM POPUP -->
+<!-- confirm popup -->
 <div class="custom-popup-backdrop" *ngIf="showConfirmPopup">
   <div class="custom-popup-box">
     <h4>Confirm Link</h4>
-
     <p>Are you sure you want to link this device?</p>
-
     <div class="popup-btn-group">
       <button class="btn btn-secondary" (click)="closePopup()">Cancel</button>
-
       <button class="btn btn-primary" (click)="confirmPopupAction()">
         Yes
       </button>

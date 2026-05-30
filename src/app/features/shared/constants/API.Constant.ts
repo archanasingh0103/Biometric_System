@@ -47,7 +47,7 @@ export const API_CONSTANT = {
   getDesignationList: 'Designations/GetDesignationList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',
   createDesignation: 'Designations/CreateDesignations',
   updateDesignation: 'Designations/UpdateDesignation',
-  deleteDesignation:'Designations/DeleteDesignation',
+  deleteDesignation:'Designations/DeleteDesignation?id={id}',
   
   // Location Api
   getLoactionList: 'Location/GetLocationList?pageNumber={pageNumber}&pageSize={pageSize}&search={search}',

@@ -35,7 +35,6 @@ export class DeviceWiseEmployeeComponent {
 
   tableHeading = [
     { title: 'S No.' },
-    { title: 'Employee Id' },
     { title: 'Employee Name' },
     { title: 'Employee Code' },
     { title: 'Link Status' },
@@ -48,25 +47,17 @@ export class DeviceWiseEmployeeComponent {
     this.getDeviceDropdown();
   }
 
-  // DEVICE DROPDOWN API
   getDeviceDropdown() {
     this.commonService.deviceDropdown().subscribe((res: any) => {
       console.log('Device Dropdown:', res);
-
-      // MAIN FIX
       this.deviceWithEmployee = res?.body || res || [];
     });
   }
 
-  // TABLE DATA API
   loadDevices() {
     if (!this.selectedDeviceId) return;
-
     this.isLoading = true;
-
     let linkValue: any = undefined;
-
-    // API returns Link = "1" / "0"
     if (this.selectedFilter === 'true') linkValue = true;
     if (this.selectedFilter === 'false') linkValue = false;
 
@@ -82,10 +73,7 @@ export class DeviceWiseEmployeeComponent {
         this.isLoading = false;
         console.log("Device Wise Emplpyee List:",res);
         const list = res?.body.data || [];
-
         this.filteredList = list;
-
-        // some APIs don't send TotalCount
         this.pagesize.count =
           list.length > 0 ? list[0]?.TotalCount || list.length : 0;
       });
@@ -119,8 +107,6 @@ export class DeviceWiseEmployeeComponent {
     this.loadDevices();
   }
 
-  // Replace toggleLink() method
-
   toggleLink(emp: any) {
     const payload = {
       employeeCode: emp.EmployeeCode,
@@ -129,12 +115,10 @@ export class DeviceWiseEmployeeComponent {
     };
 
     if (emp.Link == '1') {
-      // DLink API
       this.commonService.removeEmployeeDevice(payload).subscribe(() => {
         this.loadDevices();
       });
     } else {
-      // Link API
       const body = {
         employeeId: 0,
         employeeCode: emp.EmployeeCode,

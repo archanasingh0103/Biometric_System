@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="data-card">
-    <!-- ================= HEADER ================= -->
+   <!-- header section -->
     <div class="card-header-bar">
       <div class="header-row">
         <div class="header-title-group">
@@ -30,10 +30,8 @@
       </div>
     </div>
 
-    <!-- ================= FILTER BAR ================= -->
     <div class="filter-bar">
       <div class="filter-left">
-        <!-- Device Dropdown -->
         <div class="filter-group">
           <label class="filter-label">
             <i class="fa-solid fa-hard-drive me-1"></i> Device
@@ -41,11 +39,9 @@
           <select
             class="select-styled"
             [(ngModel)]="selectedDeviceId"
-            (change)="onSelectDevice($event)"
-            
+            (change)="onSelectDevice($event)" 
           >
             <option value="">Select Device</option>
-
             <option
               *ngFor="let device of deviceWithEmployee"
               [value]="device.deviceId"
@@ -55,12 +51,11 @@
           </select>
         </div>
 
-        <!-- Status Filter -->
+
         <div class="filter-group">
           <label class="filter-label">
             <i class="fa-solid fa-filter me-1"></i> Status
           </label>
-
           <select
             class="select-styled"
             [(ngModel)]="selectedFilter"
@@ -74,17 +69,6 @@
       </div>
 
       <div class="filter-right">
-        <!-- Search -->
-        <!-- <div class="search-wrap">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search employees..."
-            [(ngModel)]="searchText"
-            (input)="onSearchDevice()"
-          />
-        </div> -->
         <div class="filter-group">
           <label class="filter-label">Search</label>
 
@@ -100,7 +84,7 @@
           </div>
         </div>
 
-        <!-- Page Size -->
+      
         <div class="filter-group">
           <label class="filter-label">ITEMS</label>
           <select
@@ -115,9 +99,7 @@
       </div>
     </div>
 
-    <!-- ================= BODY ================= -->
     <div class="card-body-area">
-      <!-- TABLE -->
       <div class="table-responsive" *ngIf="filteredList.length">
         <table class="custom-table">
           <thead>
@@ -142,19 +124,12 @@
                 let i = index
               "
             >
-              <!-- S NO -->
               <td>
                 <span class="sno-badge">
                   {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
                 </span>
               </td>
 
-              <!-- EMP ID -->
-              <td>
-                <span>{{ data.EmployeeCode }}</span>
-              </td>
-
-              <!-- NAME -->
               <td>
                 <div class="emp-name-cell">
                   <span class="emp-avatar">
@@ -165,13 +140,9 @@
                   </span>
                 </div>
               </td>
-
-              <!-- CODE -->
               <td>
                 <span>{{ data.EmployeeCode }}</span>
               </td>
-
-              <!-- status -->
               <td>
                 <span
                   [class.badge-link]="data.Link == '1'"
@@ -182,12 +153,10 @@
                     [class.fa-check]="data.Link == '1'"
                     [class.fa-xmark]="data.Link != '1'"
                   ></i>
-                  <!-- {{ data.status ? "Linked" : "Unlinked" }} -->
                   {{ data.Link == "1" ? "Linked" : "Unlinked" }}
                 </span>
               </td>
 
-              <!-- action -->
               <td>
                 <button
                   [class]="
@@ -195,7 +164,6 @@
                   "
                   (click)="toggleLink(data)"
                 >
-                  <!-- {{ data.status ? "DLink" : "Link" }} -->
                   {{ data.Link == "1" ? "DLink" : "Link" }}
                 </button>
               </td>

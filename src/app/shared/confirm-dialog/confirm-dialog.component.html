@@ -1,0 +1,26 @@
+<div class="custom-dialog">
+
+  <div class="dialog-icon">
+    <i class="fa-solid fa-trash"></i>
+  </div>
+
+  <h2>{{ data.title }}</h2>
+
+  <p>
+    Are you sure you want to delete
+    <span>{{ data.companyName }}</span> ?
+  </p>
+
+  <div class="dialog-actions">
+
+    <button class="cancel-btn" (click)="onCancel()">
+      Cancel
+    </button>
+
+    <button class="delete-btn" (click)="onConfirm()">
+      Delete
+    </button>
+
+  </div>
+
+</div>

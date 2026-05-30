@@ -10,42 +10,32 @@ import { CommmonService } from '../../shared/services/common-service/common.serv
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
- // ───────────────── CLOCK ─────────────────
   currentTime = '';
   currentDate = '';
   greeting = '';
   userName = '';
   private clockTimer: any;
 
-  // ───────────────── LOADING ─────────────────
   loading = true;
   donutLoading = true;
 
-  // ───────────────── CARD DATA ─────────────────
   totalEmployees = 0;
   activeEmployees = 0;
   totalDevices = 0;
   expiringSoon = 0;
   unlinkedDevices = 0;
 
-  // ───────────────── DONUT DATA ─────────────────
   linkedDevices = 0;
   unlinkedDonut = 0;
   totalDonut = 0;
 
-  // ───────────────── SVG DONUT ─────────────────
   readonly R = 44;
   readonly C = 2 * Math.PI * this.R;
 
   constructor(private svc: CommmonService) {}
-
-  // ───────────────── INIT ─────────────────
   ngOnInit(): void {
     this.startClock();
-
     const raw = localStorage.getItem('userData');
-
     if (raw) {
       try {
         this.userName = JSON.parse(raw)?.email || 'User';
@@ -53,7 +43,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.userName = 'User';
       }
     }
-
     this.loadDashboard();
     this.loadDonut();
   }
@@ -62,10 +51,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     clearInterval(this.clockTimer);
   }
 
-  // ───────────────── CLOCK ─────────────────
   startClock(): void {
     this.tick();
-
     this.clockTimer = setInterval(() => {
       this.tick();
     }, 1000);
@@ -73,16 +60,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   tick(): void {
     const now = new Date();
-
     const h = now.getHours();
-
     this.greeting =
       h < 12
         ? 'Good Morning'
         : h < 17
         ? 'Good Afternoon'
         : 'Good Evening';
-
     this.currentTime = now.toLocaleTimeString('en-IN', {
       hour: '2-digit',
       minute: '2-digit',
@@ -97,77 +81,51 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ───────────────── DASHBOARD API ─────────────────
   loadDashboard(): void {
     this.loading = true;
-
     this.svc.getDashboardSummary(1, 0).subscribe({
       next: (res: any) => {
-
         console.log('Dashboard Response:', res);
-
         const d = res?.body?.data || {};
-
         this.totalEmployees = d.totalEmployees || 0;
-
         this.activeEmployees = d.activeEmployees || 0;
-
         this.totalDevices = d.totalDevices || 0;
-
         this.expiringSoon = d.deviceExpiringSoon || 0;
-
         this.unlinkedDevices = d.totalUnlinkedUser || 0;
-
         this.loading = false;
       },
-
       error: (err) => {
         console.error('Dashboard Error:', err);
-
         this.loading = false;
       },
     });
   }
 
-  // ───────────────── DONUT API ─────────────────
   loadDonut(): void {
     this.donutLoading = true;
-
     this.svc.donutSummary().subscribe({
       next: (res: any) => {
-
         console.log('Donut Response:', res);
-
         const d = res?.body || {};
-
         this.totalDonut = d.totalDevices || 0;
-
         const distribution = d.distribution || [];
-
         const linked = distribution.find(
           (x: any) => x.label === 'Linked Devices'
         );
-
         const unlinked = distribution.find(
           (x: any) => x.label === 'Unlinked Devices'
         );
-
         this.linkedDevices = linked?.count || 0;
-
         this.unlinkedDonut = unlinked?.count || 0;
-
         this.donutLoading = false;
       },
-
       error: (err) => {
         console.error('Donut Error:', err);
-
         this.donutLoading = false;
       },
     });
   }
 
-  // ───────────────── DONUT PERCENTAGES ─────────────────
   get linkedPct(): number {
     return this.totalDonut
       ? Math.round((this.linkedDevices / this.totalDonut) * 100)
@@ -189,13 +147,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   // ───────────────── SVG STROKES ─────────────────
   get linkedDash(): string {
     const value = (this.linkedPct / 100) * this.C;
-
     return `${value} ${this.C - value}`;
   }
 
   get unlinkedDash(): string {
     const value = (this.unlinkedPct / 100) * this.C;
-
     return `${value} ${this.C - value}`;
   }
 

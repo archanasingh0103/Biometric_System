@@ -4,18 +4,27 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-department',
-  imports: [FormsModule, CommonModule, NgxPaginationModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    NgxPaginationModule,
+    MatDialogModule,
+    MatButtonModule,
+  ],
   templateUrl: './department.component.html',
-  styleUrl: './department.component.css'
+  styleUrl: './department.component.css',
 })
 export class DepartmentComponent {
- departmentList: any[] = [];
+  departmentList: any[] = [];
   filteredList: any[] = [];
   isLoading: boolean = false;
   searchText = '';
-
 
   tableHeading = [
     { key: 'Sno', title: 'S.No.' },
@@ -41,7 +50,11 @@ export class DepartmentComponent {
     departmenteMail: '',
   };
 
-  constructor(private commonService: CommmonService, private toastr: ToastrService,) { }
+  constructor(
+    private commonService: CommmonService,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.getDepartmentList();
@@ -49,21 +62,25 @@ export class DepartmentComponent {
 
   getDepartmentList() {
     this.isLoading = true;
-
-    this.commonService.departmentList(this.pagesize.offset, this.pagesize.limit,this.searchText,).subscribe({
-      next: (res: any) => {
-        console.log('Department List:', res);
-        this.departmentList = res?.body?.data || [];
-        this.filteredList = [...this.departmentList];
-        this.pagesize.count = this.departmentList.length;
-        this.isLoading = false;
-      },
-
-      error: (err: any) => {
-        console.log(err);
-        this.isLoading = false;
-      },
-    });
+    this.commonService
+      .departmentList(
+        this.pagesize.offset,
+        this.pagesize.limit,
+        this.searchText,
+      )
+      .subscribe({
+        next: (res: any) => {
+          console.log('Department List:', res);
+          this.departmentList = res?.body?.data || [];
+          this.filteredList = [...this.departmentList];
+          this.pagesize.count = this.departmentList.length;
+          this.isLoading = false;
+        },
+        error: (err: any) => {
+          console.log(err);
+          this.isLoading = false;
+        },
+      });
   }
 
   get startValue(): number {
@@ -75,7 +92,7 @@ export class DepartmentComponent {
 
     return Math.min(last, this.pagesize.count);
   }
-   onSearch(event: any) {
+  onSearch(event: any) {
     this.searchText = event.target.value;
     this.getDepartmentList();
   }
@@ -102,31 +119,31 @@ export class DepartmentComponent {
     };
   }
 
+ closeModal() {
+  const modalElement = document.getElementById('departmentModal');
+  const modalInstance = (window as any).bootstrap.Modal.getInstance(modalElement);
+  modalInstance?.hide();
+}
   openAddForm() {
     const payload = {
       departmentSName: this.department.departmentSName,
       departmentFName: this.department.departmentFName,
       description: this.department.description,
       recordStatus: this.department.recordStatus,
-      departmenteMail: this.department.departmenteMail
+      departmenteMail: this.department.departmenteMail,
     };
-
     console.log('Add Department Payload:', payload);
-
     this.commonService.createDepartment(payload).subscribe({
       next: (res: any) => {
         console.log('Add Department:', res);
-
         const responseData = res?.body || res;
-
         if (responseData?.isSuccess) {
-           this.toastr.success('Department Added Successfully');
-
+          this.toastr.success('Department Added Successfully');
           this.getDepartmentList();
-
           this.resetForm();
+          this.closeModal();
         } else {
-       this.toastr.warning(responseData?.message || 'Something went wrong');
+          alert(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
@@ -145,16 +162,14 @@ export class DepartmentComponent {
       recordStatus: data.recordStatus,
       departmenteMail: data.departmenteMail,
     };
-
     // OPEN MODAL
     const modal = new (window as any).bootstrap.Modal(
       document.getElementById('departmentModal'),
     );
-
     modal.show();
   }
 
- updateDepartmentData(){
+  updateDepartmentData() {
     const payload = {
       departmentId: this.department.departmentId,
       departmentFName: this.department.departmentFName,
@@ -163,23 +178,18 @@ export class DepartmentComponent {
       recordStatus: this.department.recordStatus,
       departmenteMail: this.department.departmenteMail,
     };
-
     console.log('Update Payload:', payload);
-
     this.commonService.updateDepartment(payload).subscribe({
       next: (res: any) => {
         console.log('Update Response:', res);
-
-        const responseData = res?.body ;
-
+        const responseData = res?.body;
         if (responseData?.isSuccess) {
           this.toastr.success('Department Updated Successfully');
-
           this.getDepartmentList();
-
           this.resetForm();
+          this.closeModal();
         } else {
-         this.toastr.warning(responseData?.message || 'Something went wrong');
+          this.toastr.warning(responseData?.message || 'Something went wrong');
         }
       },
       error: (err: any) => {
@@ -189,32 +199,37 @@ export class DepartmentComponent {
   }
 
 
-  // DELETE
   deleteData(data: any) {
-    console.log('Delete Data:', data);
-    const isConfirm = confirm(
-      `Are you sure you want to delete ${data.departmentFName} ?`,
-    );
-    if (!isConfirm) {
-      return;
-    }
-    this.commonService.deleteDepartment(data.departmentId).subscribe({
-      next: (res: any) => {
-        console.log('Delete Response:', res);
-        const responseData = res?.body || res;
-        if (responseData?.isSuccess) {
-           this.toastr.success('Department Deleted Successfully');
-          // refresh list
-          this.getDepartmentList();
-        } else {
-       this.toastr.warning(responseData?.message || 'Something went wrong');
-        }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      disableClose: true,
+      data: {
+        title: 'Delete Department',
+        message: `Are you sure you want to delete ${data.departmentFName}?`,
       },
-      error: (err: any) => {
-        console.log('Delete Error:', err);
+    });
 
-        this.toastr.error('API Error');
-      },
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.commonService.deleteDepartment(data.departmentId).subscribe({
+        next: (res: any) => {
+          console.log('DELETE RESPONSE:', res);
+          const responseData = res?.body || res;
+          if (responseData?.isSuccess) {
+            this.toastr.success('Department Deleted Successfully');
+            this.getDepartmentList();
+            this.pagesize.offset = 1;
+          } else {
+            this.toastr.warning(
+              responseData?.message || 'Something went wrong',
+            );
+          }
+        },
+        error: (err: any) => {
+          console.log('DELETE ERROR:', err);
+          this.toastr.error('API Error while deleting');
+        },
+      });
     });
   }
 }

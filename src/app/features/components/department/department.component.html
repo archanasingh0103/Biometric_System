@@ -1,6 +1,5 @@
 <div class="page-container">
   <div class="data-card">
-    <!-- HEADER -->
     <div class="card-header-bar">
       <div class="header-row">
         <div class="header-title-group">
@@ -13,7 +12,6 @@
           </div>
         </div>
 
-        <!-- COUNT -->
         <div class="span">
           <span class="count-badge">
             {{ filteredList.length ? startValue : 0 }} -
@@ -22,7 +20,6 @@
           </span>
         </div>
 
-        <!-- PAGINATION -->
         <div class="header-pagination">
           <pagination-controls
             id="empId"
@@ -33,24 +30,19 @@
       </div>
     </div>
 
-    <!-- FILTER BAR -->
     <div class="filter-bar">
       <div class="filter-left">
-        <!-- SEARCH -->
         <input
           type="text"
           class="form-control"
-          placeholder="Search Company..."
+          placeholder="Search Department..."
           (input)="onSearch($event)"
         />
       </div>
 
-      <!-- RIGHT -->
       <div class="filter-right">
-        <!-- PAGE SIZE -->
         <div class="filter-group">
           <label class="filter-label">ITEMS</label>
-
           <select
             class="select-styled select-sm"
             (change)="onPageSizeChange($event)"
@@ -61,7 +53,6 @@
           </select>
         </div>
 
-        <!-- ADD BUTTON -->
         <div class="filter-group btn-group-update">
           <button
             class="btn btn-update"
@@ -78,10 +69,8 @@
 
     <!-- BODY -->
     <div class="card-body-area">
-      <!-- TABLE -->
       <div class="table-responsive" *ngIf="filteredList.length">
         <table class="custom-table">
-          <!-- TABLE HEADER -->
           <thead>
             <tr>
               <th *ngFor="let col of tableHeading">
@@ -89,8 +78,6 @@
               </th>
             </tr>
           </thead>
-
-          <!-- TABLE BODY -->
           <tbody>
             <tr
               *ngFor="
@@ -105,7 +92,6 @@
                 let i = index
               "
             >
-              <!-- S.NO -->
               <td>
                 <span class="sno-badge">
                   {{ (pagesize.offset - 1) * pagesize.limit + i + 1 }}
@@ -114,16 +100,12 @@
               <td>{{ data.departmentFName }}</td>
               <td>{{ data.departmentSName }}</td>
               <td>{{ data.description || "-" }}</td>
-              <td>{{ data.recordStatus || "-" }}</td>
-              <!-- ACTION -->
+              <td>{{ data.recordStatus || "-" }}</td>>
               <td>
                 <div class="action-buttons">
-                  <!-- EDIT -->
                   <button class="icon-btn edit-btn" (click)="editData(data)">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-
-                  <!-- DELETE -->
                   <button
                     class="icon-btn delete-btn"
                     (click)="deleteData(data)"
@@ -136,8 +118,6 @@
           </tbody>
         </table>
       </div>
-
-      <!-- NO DATA -->
       <div class="no-data-msg" *ngIf="!filteredList.length">
         <div class="no-data-icon">
           <i class="fa-solid fa-inbox"></i>
@@ -159,7 +139,6 @@
 >
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
-      <!-- HEADER -->
       <div class="modal-header">
         <h5 class="modal-title" id="departmentModalLabel">
           {{ department.departmentId ? "Update Department" : "Add Department" }}
@@ -172,13 +151,10 @@
         ></button>
       </div>
 
-      <!-- BODY -->
       <div class="modal-body">
         <div class="row">
-          <!-- COMPANY FIRST NAME -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Department First Name</label>
-
             <input
               type="text"
               class="form-control"
@@ -187,10 +163,8 @@
             />
           </div>
 
-          <!-- COMPANY SHORT NAME -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Department Short Name</label>
-
             <input
               type="text"
               class="form-control"
@@ -199,10 +173,8 @@
             />
           </div>
 
-          <!-- ADDRESS -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Description</label>
-
             <input
               type="text"
               class="form-control"
@@ -211,10 +183,8 @@
             />
           </div>
 
-          <!-- Record Status -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Responsible Person</label>
-
             <input
               type="text"
               class="form-control"
@@ -225,7 +195,6 @@
 
           <div class="col-md-6 mb-3">
             <label class="form-label">Department Mail</label>
-
             <input
               type="text"
               class="form-control"
@@ -236,13 +205,10 @@
         </div>
       </div>
 
-      <!-- FOOTER -->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
-
-        <!-- SAVE / UPDATE -->
         <button
           type="button"
           class="btn btn-primary"
