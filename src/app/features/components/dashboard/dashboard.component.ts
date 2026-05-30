@@ -23,9 +23,7 @@ export class DashboardComponent {
     private toastr: ToastrService,
   ) {}
 
-  //  Language
   selectedLanguage: string = 'English';
-
   translations: any = {
     en: {
       home: 'Home',
@@ -58,7 +56,6 @@ export class DashboardComponent {
   };
 
   currentLang: string = 'en';
-
   changeLanguage(lang: string) {
     this.currentLang = lang;
     this.selectedLanguage = lang === 'en' ? 'English' : 'हिंदी';
@@ -66,10 +63,8 @@ export class DashboardComponent {
 
   //  Dark Mode
   isDarkMode: boolean = false;
-
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
-
     if (this.isDarkMode) {
       document.body.classList.add('dark-theme');
       localStorage.setItem('theme', 'dark');
@@ -91,7 +86,6 @@ export class DashboardComponent {
     this.isDarkMode = false;
   }
 
-  //  Font Size
   fontSize: number = 16;
 
   applyFontSize() {
@@ -128,7 +122,6 @@ export class DashboardComponent {
     }
   }
 
-  //  Logout
   logout() {
     this.authService.logout();
     localStorage.removeItem('userData');
