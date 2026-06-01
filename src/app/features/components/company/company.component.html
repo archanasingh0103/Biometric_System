@@ -4,7 +4,7 @@
       <div class="header-row">
         <div class="header-title-group">
           <div class="header-icon-wrap">
-            <i class="fa-solid fa-hard-drive"></i>
+            <i class="fa-solid fa-building nav-icon"></i>
           </div>
 
           <div>
@@ -14,7 +14,7 @@
 
         <div class="span">
           <span class="count-badge">
-          {{ filteredList.length > 0 ? startValue : 0 }} -
+            {{ filteredList.length > 0 ? startValue : 0 }} -
             {{
               filteredList.length > 0
                 ? filteredList.length < lastValue
@@ -35,7 +35,6 @@
         </div>
       </div>
     </div>
-
 
     <div class="filter-bar">
       <div class="filter-left">
@@ -95,7 +94,7 @@
                         id: 'empId',
                         itemsPerPage: pagesize.limit,
                         currentPage: pagesize.offset,
-                        totalItems: pagesize.count
+                        totalItems: pagesize.count,
                       };
                 let i = index
               "
@@ -107,16 +106,13 @@
               </td>
               <td>{{ data.companyFName }}</td>
               <td>{{ data.companySName }}</td>
-              <td>{{ data.companyAddress || '-' }}</td>
-              <td>{{ data.companyeMail || '-' }}</td>
-              <td>{{ data.companyWebsite || '-' }}</td>
+              <td>{{ data.companyAddress || "-" }}</td>
+              <td>{{ data.companyeMail || "-" }}</td>
+              <td>{{ data.companyWebsite || "-" }}</td>
               <td>{{ data.recordStatus }}</td>
               <td>
                 <div class="action-buttons">
-                  <button
-                    class="icon-btn edit-btn"
-                    (click)="editData(data)"
-                  >
+                  <button class="icon-btn edit-btn" (click)="editData(data)">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
                   <button
@@ -155,7 +151,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="companyModalLabel">
-          {{ company.companyId ? 'Update Company' : 'Add Company' }}
+          {{ company.companyId ? "Update Company" : "Add Company" }}
         </h5>
 
         <button
@@ -233,11 +229,7 @@
       </div>
 
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
 
@@ -246,7 +238,7 @@
           class="btn btn-primary"
           (click)="company.companyId ? updateCompanyData() : openAddForm()"
         >
-          {{ company.companyId ? 'Update' : 'Save' }}
+          {{ company.companyId ? "Update" : "Save" }}
         </button>
       </div>
     </div>

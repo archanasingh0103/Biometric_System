@@ -1,4 +1,5 @@
 <div class="home-container">
+  <!-- HERO BANNER -->
   <div class="hero-banner">
     <div class="hero-left">
       <div class="hero-greeting">{{ greeting }},</div>
@@ -16,7 +17,7 @@
     </div>
   </div>
 
-
+  <!-- 5 STAT CARDS -->
   <div class="stat-row-5">
     <a
       class="stat-card"
@@ -31,9 +32,9 @@
         </div>
         <div class="sc-info">
           <div class="sc-value">
-            <ng-container *ngIf="!loading; else skelTpl">
-              {{ s.value | number }}
-            </ng-container>
+            <ng-container *ngIf="!loading; else skelTpl">{{
+              s.value | number
+            }}</ng-container>
             <ng-template #skelTpl><span class="skel"></span></ng-template>
           </div>
           <div class="sc-label">{{ s.label }}</div>
@@ -44,8 +45,9 @@
     </a>
   </div>
 
- 
+  <!-- ROW 2: VERTICAL BAR CHART + DONUT -->
   <div class="row2-wrap">
+    <!-- section-1 -->
     <div class="bars-card">
       <div class="bars-header">
         <span class="bars-title">Device Distribution</span>
@@ -124,16 +126,15 @@
       </div>
     </div>
 
-    <!-- RIGHT: Donut Chart -->
+    <!-- section-2 -->
+       <!-- RIGHT: Donut Chart -->
     <div class="chart-card">
       <div class="chart-card-header">
         <span class="chart-title">Device Status Distribution</span>
       </div>
       <div class="chart-card-body">
-        <!-- SVG Donut -->
         <div class="donut-wrap">
           <svg viewBox="0 0 120 120" class="donut-svg">
-            <!-- Red base (unlinked) -->
             <circle
               cx="60"
               cy="60"
@@ -142,7 +143,6 @@
               stroke="#ef4444"
               stroke-width="16"
             />
-            <!-- Green overlay (linked) -->
             <circle
               cx="60"
               cy="60"
@@ -155,7 +155,6 @@
               [attr.stroke-dashoffset]="linkedOffset"
               style="transition: stroke-dasharray 0.8s ease"
             />
-            <!-- Center value -->
             <text
               x="60"
               y="56"
@@ -177,8 +176,6 @@
             </text>
           </svg>
         </div>
-
-        <!-- Legend -->
         <div class="donut-legend">
           <div class="legend-item">
             <span class="legend-dot dot-green"></span>
@@ -206,12 +203,87 @@
             <span class="legend-dot dot-gray"></span>
             <div class="legend-info">
               <span class="legend-name">Total</span>
-              <span class="legend-val">
-                {{ loading ? "—" : (totalDevices | number) }}
-              </span>
+              <span class="legend-val">{{
+                loading ? "—" : (totalDevices | number)
+              }}</span>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+     <!-- section-3 -->
+      <!-- LEFT: Vertical Bar Chart (image jaisa — single blue, Y-axis, grid lines) -->
+    <div class="bars-card">
+
+      <div class="bars-header">
+        <span class="bars-title">Device Distribution</span>
+        <br>
+        <span class="bars-subtitle">Employees linked per device</span>
+      </div>
+
+      <!-- Skeleton -->
+      <div class="vchart-skeleton" *ngIf="chartLoading">
+        <div class="skel-bars">
+          <div
+            class="skel-bar"
+            *ngFor="let h of [60, 90, 45, 30, 100, 50, 70]"
+            [style.height]="h + 'px'"
+          ></div>
+        </div>
+        <div class="skel-xaxis"></div>
+      </div>
+
+      <!-- Chart -->
+      <div class="vchart-container" *ngIf="!chartLoading">
+        <!-- Y-axis labels -->
+        <div class="y-axis">
+          <span class="y-label" *ngFor="let t of yTicks">{{ t }}</span>
+        </div>
+
+        <!-- Chart area: grid lines + bars -->
+        <div class="chart-area">
+          <!-- Horizontal grid lines -->
+          <div class="grid-lines">
+            <div class="grid-line" *ngFor="let t of yTicks"></div>
+          </div>
+
+          <!-- Bars row -->
+          <div class="bars-row">
+            <div class="bar-col" *ngFor="let d of chartData; let i = index">
+              <div class="bar-wrapper">
+                <!-- Count above bar -->
+                <span class="bar-top-label" *ngIf="d.employeeCount > 0">
+                  {{ d.employeeCount }}
+                </span>
+                <!-- The bar itself -->
+                <div
+                  class="vbar"
+                  [style.height]="barHeightPct(d.employeeCount) + '%'"
+                  [title]="d.deviceName + ': ' + d.employeeCount + ' employees'"
+                ></div>
+              </div>
+
+              <!-- X-axis label -->
+              <div class="x-label" [title]="d.deviceName">
+                {{
+                  d.deviceName.length > 9
+                    ? (d.deviceName | slice: 0 : 8) + "…"
+                    : d.deviceName
+                }}
+              </div>
+            </div>
+          </div>
+
+          <!-- X-axis baseline -->
+          <div class="x-axis-line"></div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="chart-empty" *ngIf="!chartLoading && chartData.length === 0">
+        <i class="fa-solid fa-chart-bar"></i>
+        <p>No device data available</p>
       </div>
     </div>
   </div>

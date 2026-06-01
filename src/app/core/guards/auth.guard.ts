@@ -1,15 +1,15 @@
-import { CanActivateChildFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
-export const authGuard: CanActivateChildFn = (route, state) => {
-   const auth = inject(AuthService);
+export const authGuard: CanActivateFn = (route, state) => {
+  const auth = inject(AuthService);
   const router = inject(Router);
 
   if (auth.isLoggedIn()) {
+     console.log('TOKEN FOUND');
     return true;
   }
-
-  router.navigate(['/login']);
-  return false;
+  console.log('NO TOKEN');
+  return router.createUrlTree(['/login']);
 };

@@ -15,24 +15,32 @@ export class HomeComponent implements OnInit, OnDestroy {
   greeting = '';
   userName = '';
   private clockTimer: any;
-
-  loading = true;
   donutLoading = true;
+  loading = true;
+  chartLoading = true;
 
+  // ── Dashboard API data ──────────────────────────────────
   totalEmployees = 0;
   activeEmployees = 0;
   totalDevices = 0;
   expiringSoon = 0;
   unlinkedDevices = 0;
 
+  // ── Donut data ──────────────────────────────────────────
   linkedDevices = 0;
   unlinkedDonut = 0;
   totalDonut = 0;
+
+  // ── Bar chart data (GetDeviceEmployeeChart) ─────────────
+  // Swagger: { devices: [{ deviceName, employeeCount }] }
+  chartData: { deviceName: string; employeeCount: number }[] = [];
+  chartMax = 1;
 
   readonly R = 44;
   readonly C = 2 * Math.PI * this.R;
 
   constructor(private svc: CommmonService) {}
+
   ngOnInit(): void {
     this.startClock();
     const raw = localStorage.getItem('userData');
@@ -45,6 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.loadDashboard();
     this.loadDonut();
+    this.loadChart();
   }
 
   ngOnDestroy(): void {
@@ -53,26 +62,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   startClock(): void {
     this.tick();
-    this.clockTimer = setInterval(() => {
-      this.tick();
-    }, 1000);
+    this.clockTimer = setInterval(() => this.tick(), 1000);
   }
 
   tick(): void {
     const now = new Date();
     const h = now.getHours();
     this.greeting =
-      h < 12
-        ? 'Good Morning'
-        : h < 17
-        ? 'Good Afternoon'
-        : 'Good Evening';
+      h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
     this.currentTime = now.toLocaleTimeString('en-IN', {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
     });
-
     this.currentDate = now.toLocaleDateString('en-IN', {
       weekday: 'long',
       year: 'numeric',
@@ -81,6 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  // ── API 1: Dashboard Summary ─────────────────────────────
   loadDashboard(): void {
     this.loading = true;
     this.svc.getDashboardSummary(1, 0).subscribe({
@@ -101,6 +104,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  // ── API 2: Donut ─────────────────────────────────────────
   loadDonut(): void {
     this.donutLoading = true;
     this.svc.donutSummary().subscribe({
@@ -110,10 +114,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.totalDonut = d.totalDevices || 0;
         const distribution = d.distribution || [];
         const linked = distribution.find(
-          (x: any) => x.label === 'Linked Devices'
+          (x: any) => x.label === 'Linked Devices',
         );
         const unlinked = distribution.find(
-          (x: any) => x.label === 'Unlinked Devices'
+          (x: any) => x.label === 'Unlinked Devices',
         );
         this.linkedDevices = linked?.count || 0;
         this.unlinkedDonut = unlinked?.count || 0;
@@ -126,40 +130,73 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  // ── API 3: Device Employee Bar Chart ─────────────────────
+  // Response: { isSuccess, devices: [{ deviceName, employeeCount }] }
+  loadChart(): void {
+    this.chartLoading = true;
+    this.svc.deviceEmployeeChart().subscribe({
+      next: (res: any) => {
+        const raw: { deviceName: string; employeeCount: number }[] =
+          res?.devices ?? res?.body?.devices ?? [];
+
+        // Keep API order, filter empty if needed
+        this.chartData = raw;
+
+        // Max for Y-axis scaling — minimum 1 to avoid div/0
+        this.chartMax = raw.length
+          ? Math.max(...raw.map((d) => d.employeeCount), 1)
+          : 1;
+
+        this.chartLoading = false;
+      },
+      error: () => {
+        this.chartLoading = false;
+      },
+    });
+  }
+
+  // ── Y-axis ticks: 0 → chartMax in 5 steps ────────────────
+  get yTicks(): number[] {
+    const step = Math.ceil(this.chartMax / 5) || 1;
+    const ticks: number[] = [];
+    for (let i = 5; i >= 0; i--) {
+      ticks.push(i * step);
+    }
+    return ticks;
+  }
+
+  // ── Bar height as % of chart area ─────────────────────────
+  barHeightPct(count: number): number {
+    if (this.chartMax === 0) return 0;
+    const pct = (count / this.chartMax) * 100;
+    return count > 0 ? Math.max(pct, 3) : 0;
+  }
+
+  // ── Donut helpers ─────────────────────────────────────────
   get linkedPct(): number {
     return this.totalDonut
       ? Math.round((this.linkedDevices / this.totalDonut) * 100)
       : 0;
   }
-
   get unlinkedPct(): number {
     return this.totalDonut
       ? Math.round((this.unlinkedDonut / this.totalDonut) * 100)
       : 0;
   }
-
   get expiringPct(): number {
     return this.totalDonut
       ? Math.round((this.expiringSoon / this.totalDonut) * 100)
       : 0;
   }
-
-  // ───────────────── SVG STROKES ─────────────────
   get linkedDash(): string {
-    const value = (this.linkedPct / 100) * this.C;
-    return `${value} ${this.C - value}`;
+    const v = (this.linkedPct / 100) * this.C;
+    return `${v} ${this.C - v}`;
   }
-
-  get unlinkedDash(): string {
-    const value = (this.unlinkedPct / 100) * this.C;
-    return `${value} ${this.C - value}`;
-  }
-
   get linkedOffset(): string {
     return `${this.C * 0.25}`;
   }
 
-  // ───────────────── STAT CARDS ─────────────────
+  // ── 5 Stat Cards ──────────────────────────────────────────
   get allStats() {
     return [
       {
@@ -170,7 +207,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         route: '/dashboard/emp-list',
         desc: 'Registered employees',
       },
-
       {
         label: 'Total Devices',
         value: this.totalDevices,
@@ -179,7 +215,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         route: '/dashboard/device-list',
         desc: 'Registered biometric devices',
       },
-
       {
         label: 'Active Employees',
         value: this.activeEmployees,
@@ -188,7 +223,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         route: '/dashboard/device-with-emp',
         desc: 'Employee-device links active',
       },
-
       {
         label: 'Unlinked Users',
         value: this.unlinkedDevices,
@@ -197,7 +231,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         route: '/dashboard/emp-with-device',
         desc: 'Pending device assignments',
       },
-
       {
         label: 'Expiring Soon',
         value: this.expiringSoon,

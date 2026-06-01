@@ -203,7 +203,6 @@ body.dark-theme ::ng-deep ngx-select-dropdown .ngx-dropdown-button {
     width: 100% !important;
   }
 }
-*/
 
 /* Panel — KEY FIX: position:fixed so DevTools don't push it */
 .dropdown-panel {
